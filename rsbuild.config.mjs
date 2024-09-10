@@ -9,5 +9,8 @@ export default defineConfig({
       use: ['postcss-loader'],
       type: 'css'
     }
-  ]
+  ],
+  html: {
+    template: './src/index.html'
+  }
 })

@@ -1,10 +1,14 @@
+import { Route, Switch } from 'wouter'
 import './App.css'
+import { Login } from './auth/login'
+import { Register } from './auth/register'
 
 const App = () => {
   return (
-    <div className='w-full h-screen flex justify-center items-center bg-black text-white'>
-      <h1>Ferreteria</h1>
-    </div>
+    <Switch>
+      <Route path='/login' component={Login} />
+      <Route path='/register' component={Register} />
+    </Switch>
   )
 }
 
