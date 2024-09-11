@@ -1,16 +1,36 @@
-import { Link } from 'wouter'
+import { Link, Redirect } from 'wouter'
+import { supabase } from '../db/supabase'
+import { useSession } from './session'
 
 export function Login () {
+  const { session } = useSession()
+
+  if (session) {
+    return (
+      <Redirect to='/dashboard' />
+    )
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const form = new FormData(e.target)
+    const email = form.get('user-email')
+    const password = form.get('user-password')
+
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    console.log({ data, error })
+  }
+
   return (
     <div className='w-full background-gradient min-h-screen flex flex-col items-center justify-center'>
-      <section className='rounded-lg shadow-lg bg-white px-8 py-10 w-[520px] mx-auto border'>
+      <section className='rounded-lg shadow-xl bg-white px-8 py-10 w-[520px] mx-auto border'>
         <div className='text-center'>
           <h1 className='font-semibold text-2xl'>¡Bienvenido de Nuevo!</h1>
           <p className='text-zinc-600 text-sm mt-1'>
             Inicia sesión con tu cuenta para acceder al sistema.
           </p>
         </div>
-        <form className='mt-8'>
+        <form className='mt-8' onSubmit={handleSubmit}>
           <label className='flex flex-col gap-2'>
             <span className='text-sm font-semibold'>Correo electrónico</span>
             <input
@@ -33,7 +53,7 @@ export function Login () {
           </label>
           <button
             type='submit'
-            className='mt-8 w-full bg-purple-500 text-white font-semibold py-2 rounded-md hover:bg-purple-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 transition-colors'
+            className='mt-8 w-full bg-purple-500 text-white font-semibold py-2 rounded-md hover:bg-purple-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 transition-colors text-sm'
           >
             Iniciar sesión
           </button>
