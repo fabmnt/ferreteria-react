@@ -4,7 +4,9 @@ import { supabase } from '../db/supabase'
 
 export const useSessionStore = create((set) => ({
   session: null,
+  employee: null,
   setSession: (session) => set({ session }),
+  setEmployee: (employee) => set({ employee }),
   clearSession: () => set({ session: null }),
 }))
 

@@ -1,20 +1,20 @@
+import { useEffect } from 'react'
 import { Link } from 'wouter'
-import { cn } from '../utils/cn'
-import { useSession } from '../hooks/useSession'
-import { useEffect, useState } from 'react'
+import { useSessionStore } from '../hooks/useSession'
 import { getEmployee } from '../services/users'
+import { cn } from '../utils/cn'
 
 export function DashboardLayout({ children }) {
-  const { session } = useSession()
-  const [user, setUser] = useState(null)
+  const session = useSessionStore((state) => state.session)
+  const employee = useSessionStore((state) => state.employee)
+  const setEmployee = useSessionStore((state) => state.setEmployee)
 
   useEffect(() => {
     if (session == null) {
       return
     }
-
     getEmployee(session.user.id).then(({ data }) => {
-      setUser(data ? data[0] : null)
+      setEmployee(data ? data[0] : null)
     })
   }, [session])
 
@@ -34,7 +34,7 @@ export function DashboardLayout({ children }) {
             >
               Dashboard
             </Link>
-            {user?.roles.role === 'admin' && (
+            {employee?.roles.role === 'admin' && (
               <Link
                 className={(active) =>
                   cn(
@@ -50,7 +50,7 @@ export function DashboardLayout({ children }) {
           </nav>
           <div className='mb-2 mt-auto'>
             <p className='text-sm'>
-              {user?.name} {user?.last_name}
+              {employee?.name} {employee?.last_name}
             </p>
             <p className='text-xs text-neutral-500'>{session?.user.email}</p>
           </div>

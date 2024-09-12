@@ -1,14 +1,21 @@
-import { Link, Redirect } from 'wouter'
-import { supabase } from '../db/supabase'
-import { useSession } from '../hooks/useSession'
 import { useEffect, useState } from 'react'
+import { Link, useLocation } from 'wouter'
 import { Spinner } from '../components/Spinner'
+import { supabase } from '../db/supabase'
+import { useSessionStore } from '../hooks/useSession'
 
 export function Login() {
-  const { session } = useSession()
   const [loading, setLoading] = useState(false)
+  const [, navigate] = useLocation()
+  const session = useSessionStore((state) => state.session)
   const [error, setError] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
+
+  useEffect(() => {
+    if (session) {
+      navigate('/')
+    }
+  }, [session])
 
   useEffect(() => {
     if (error == null) {
@@ -25,10 +32,6 @@ export function Login() {
       setErrorMessage(null)
     }, 5000)
   }, [error])
-
-  if (session) {
-    return <Redirect to='/' />
-  }
 
   const handleSubmit = async (e) => {
     setLoading(true)

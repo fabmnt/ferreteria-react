@@ -1,14 +1,8 @@
-import { Redirect, useLocation } from 'wouter'
-import { useSession } from '../hooks/useSession'
+import { useLocation } from 'wouter'
 import { supabase } from '../db/supabase'
 
 export function Dashboard() {
-  const { session } = useSession()
   const [, setLocation] = useLocation()
-
-  if (session == null) {
-    return <Redirect to='/login' />
-  }
 
   const handleClick = async () => {
     const { error } = await supabase.auth.signOut()
