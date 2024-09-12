@@ -1,8 +1,16 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { create } from 'zustand'
 import { supabase } from '../db/supabase'
 
+export const useSessionStore = create((set) => ({
+  session: null,
+  setSession: (session) => set({ session }),
+  clearSession: () => set({ session: null })
+}))
+
 export function useSession () {
-  const [session, setSession] = useState()
+  const session = useSessionStore((state) => state.session)
+  const setSession = useSessionStore((state) => state.setSession)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {

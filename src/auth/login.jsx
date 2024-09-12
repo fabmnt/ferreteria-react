@@ -1,24 +1,50 @@
 import { Link, Redirect } from 'wouter'
 import { supabase } from '../db/supabase'
-import { useSession } from './session'
+import { useSession } from '../hooks/useSession'
+import { useEffect, useState } from 'react'
+import { Spinner } from '../components/Spinner'
 
 export function Login () {
   const { session } = useSession()
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
+
+  useEffect(() => {
+    if (error == null) {
+      return
+    }
+
+    if (error === 'invalid_credentials') {
+      setErrorMessage('Credenciales incorrectas')
+    } else {
+      setErrorMessage('Ocurrió un error inesperado')
+    }
+
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
+  }, [error])
 
   if (session) {
     return (
-      <Redirect to='/dashboard' />
+      <Redirect to='/' />
     )
   }
 
   const handleSubmit = async (e) => {
+    setLoading(true)
     e.preventDefault()
     const form = new FormData(e.target)
     const email = form.get('user-email')
     const password = form.get('user-password')
 
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
-    console.log({ data, error })
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+
+    if (error) {
+      setError(error.code)
+    }
+    setLoading(false)
   }
 
   return (
@@ -51,11 +77,18 @@ export function Login () {
               className='placeholder:text-sm text-zinc-800 px-2 py-1.5 border rounded-md border-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500'
             />
           </label>
+          <div>
+            {errorMessage && (
+              <p className='text-red-500 text-sm mt-2'>
+                {errorMessage}
+              </p>
+            )}
+          </div>
           <button
             type='submit'
-            className='mt-8 w-full bg-purple-500 text-white font-semibold py-2 rounded-md hover:bg-purple-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 transition-colors text-sm'
+            className='mt-8 w-full flex gap-2 justify-center items-center bg-purple-500 text-white font-semibold py-2 rounded-md hover:bg-purple-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 transition-colors text-sm'
           >
-            Iniciar sesión
+            {loading && <Spinner />} <span>Iniciar sesión</span>
           </button>
 
           <p className='text-sm text-center mt-4'>
