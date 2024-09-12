@@ -5,10 +5,10 @@ import { supabase } from '../db/supabase'
 export const useSessionStore = create((set) => ({
   session: null,
   setSession: (session) => set({ session }),
-  clearSession: () => set({ session: null })
+  clearSession: () => set({ session: null }),
 }))
 
-export function useSession () {
+export function useSession() {
   const session = useSessionStore((state) => state.session)
   const setSession = useSessionStore((state) => state.setSession)
 
@@ -18,7 +18,7 @@ export function useSession () {
     })
 
     const {
-      data: { subscription }
+      data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
     })

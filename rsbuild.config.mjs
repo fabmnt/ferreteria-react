@@ -7,10 +7,10 @@ export default defineConfig({
     {
       test: /\.css$/,
       use: ['postcss-loader'],
-      type: 'css'
-    }
+      type: 'css',
+    },
   ],
   html: {
-    template: './src/index.html'
-  }
+    template: './src/index.html',
+  },
 })

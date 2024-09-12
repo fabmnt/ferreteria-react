@@ -2,14 +2,12 @@ import { Redirect, useLocation } from 'wouter'
 import { useSession } from '../hooks/useSession'
 import { supabase } from '../db/supabase'
 
-export function Dashboard () {
+export function Dashboard() {
   const { session } = useSession()
   const [, setLocation] = useLocation()
 
   if (session == null) {
-    return (
-      <Redirect to='/login' />
-    )
+    return <Redirect to='/login' />
   }
 
   const handleClick = async () => {
