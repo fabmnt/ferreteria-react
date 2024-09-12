@@ -13,7 +13,7 @@ export function Register() {
     if (error == null) {
       return
     }
-    console.log(error)
+
     if (error === 'user_already_exists') {
       setErrorMessage('El correo electrónico ya está registrado')
     } else {
