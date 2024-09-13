@@ -4,9 +4,9 @@ import './App.css'
 import { Login } from './auth/login'
 import { Register } from './auth/register'
 import { Dashboard } from './dashboard/page'
+import { supabase } from './db/supabase'
 import { useSessionStore } from './hooks/session'
 import { DashboardLayout } from './layouts/dashboard'
-import { supabase } from './db/supabase'
 
 const App = () => {
   const setSession = useSessionStore((state) => state.setSession)
