@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'wouter'
 import { supabase } from '../db/supabase'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Spinner } from '../components/Spinner'
 
 export function Register() {
@@ -15,17 +15,23 @@ export function Register() {
     }
 
     if (error === 'user_already_exists') {
-      setErrorMessage('El correo electrónico ya está registrado')
+      setErrorMessage('El correo electrónico ya está registrado.')
+    } else if (error === 'weak_password') {
+      setErrorMessage('La contraseña es muy débil.')
     } else {
-      setErrorMessage('Ocurrió un error inesperado')
+      setErrorMessage('Ocurrió un error inesperado, intenta de nuevo más tarde.')
     }
 
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       setErrorMessage(null)
     }, 5000)
+
+    return () => {
+      clearTimeout(timeout)
+    }
   }, [error])
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = useCallback(async (e) => {
     setLoading(true)
     e.preventDefault()
     const form = new FormData(e.target)
@@ -57,7 +63,7 @@ export function Register() {
     }
 
     setLocation('/')
-  }
+  }, [])
 
   return (
     <div className='background-gradient flex min-h-screen w-full flex-col items-center justify-center'>

@@ -10,14 +10,15 @@ import { supabase } from './db/supabase'
 
 const App = () => {
   const setSession = useSessionStore((state) => state.setSession)
-  const [, navigate] = useLocation()
+  const [location, navigate] = useLocation()
 
   useEffect(() => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
-      if (session == null) {
+      const validRoutes = ['/register']
+      if (session == null && !validRoutes.includes(location)) {
         navigate('/login')
       }
     })
@@ -40,6 +41,10 @@ const App = () => {
       <DashboardLayout>
         <Route
           path='/'
+          component={Dashboard}
+        />
+        <Route
+          path='/users'
           component={Dashboard}
         />
       </DashboardLayout>

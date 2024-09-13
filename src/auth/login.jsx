@@ -6,9 +6,9 @@ import { useSessionStore } from '../hooks/session'
 
 export function Login() {
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
   const [, navigate] = useLocation()
   const session = useSessionStore((state) => state.session)
-  const [error, setError] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
@@ -25,15 +25,20 @@ export function Login() {
     if (error === 'invalid_credentials') {
       setErrorMessage('Credenciales incorrectas')
     } else {
-      setErrorMessage('Ocurrió un error inesperado')
+      setErrorMessage('Ocurrió un error inesperado, intenta de nuevo más tarde.')
     }
 
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       setErrorMessage(null)
+      setError(null)
     }, 5000)
+
+    return () => clearTimeout(timeout)
   }, [error])
 
   const handleSubmit = async (e) => {
+    setError(null)
+    setErrorMessage(null)
     setLoading(true)
     e.preventDefault()
     const form = new FormData(e.target)
