@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Link } from 'wouter'
-import { useSessionStore } from '../hooks/useSession'
+import { useSessionStore } from '../hooks/session'
 import { getEmployee } from '../services/users'
 import { cn } from '../utils/cn'
 

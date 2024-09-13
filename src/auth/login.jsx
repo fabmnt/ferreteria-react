@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'wouter'
 import { Spinner } from '../components/Spinner'
 import { supabase } from '../db/supabase'
-import { useSessionStore } from '../hooks/useSession'
+import { useSessionStore } from '../hooks/session'
 
 export function Login() {
   const [loading, setLoading] = useState(false)

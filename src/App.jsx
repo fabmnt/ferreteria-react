@@ -4,7 +4,7 @@ import './App.css'
 import { Login } from './auth/login'
 import { Register } from './auth/register'
 import { Dashboard } from './dashboard/page'
-import { useSessionStore } from './hooks/useSession'
+import { useSessionStore } from './hooks/session'
 import { DashboardLayout } from './layouts/dashboard'
 import { supabase } from './db/supabase'
 
