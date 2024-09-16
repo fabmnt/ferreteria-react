@@ -7,6 +7,7 @@ import { Dashboard } from './dashboard/page'
 import { supabase } from './db/supabase'
 import { useSessionStore } from './hooks/session'
 import { DashboardLayout } from './layouts/dashboard'
+import { UsersPage } from './users/components/page'
 
 const App = () => {
   const setSession = useSessionStore((state) => state.setSession)
@@ -45,7 +46,7 @@ const App = () => {
         />
         <Route
           path='/users'
-          component={Dashboard}
+          component={UsersPage}
         />
       </DashboardLayout>
     </Switch>

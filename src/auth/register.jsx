@@ -46,7 +46,7 @@ export function Register() {
       setLoading(false)
       return
     }
-    const newEmployee = { user_id: data.user.id, name, last_name: lastname, role_id: 3 }
+    const newEmployee = { user_id: data.user.id, name, last_name: lastname, email, role_id: 3 }
     const { error: insertError } = await supabase.from('employees').insert([newEmployee])
 
     if (insertError) {
