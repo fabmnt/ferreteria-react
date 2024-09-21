@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { AiOutlineDelete } from 'react-icons/ai'
-import { useSessionStore } from '../../hooks/session'
+import { useSessionStore } from '../../store/session'
 import { deleteUser, logout } from '../../services/auth'
 import { getEmployees, getRoles, updateEmployeeRole, verifyEmployee } from '../../services/users'
 
 export function UsersPage() {
   const [employees, setEmployees] = useState([])
   const [selectedRoles, setSelectedRoles] = useState([])
-  const [revalidate, setRevalidate] = useState(false)
+  const [shouldRevalidate, revalidate] = useState(false)
   const [roles, setRoles] = useState([])
   const session = useSessionStore((state) => state.session)
 
@@ -27,13 +27,16 @@ export function UsersPage() {
       }
       setRoles(data)
     })
-  }, [revalidate])
+  }, [shouldRevalidate])
 
   const handleVerifyEmployee = async (employeeId) => {
     const { error } = await verifyEmployee(employeeId)
-    if (error == null) {
-      setRevalidate((r) => !r)
+
+    if (error) {
+      return
     }
+
+    revalidate((r) => !r)
   }
 
   const handleUpdateEmployeeRole = async (employeeId, roleId) => {
@@ -43,7 +46,7 @@ export function UsersPage() {
       return
     }
 
-    setRevalidate((r) => !r)
+    revalidate((r) => !r)
   }
 
   const handleDeleteEmployee = async (userId) => {
@@ -57,7 +60,7 @@ export function UsersPage() {
       await logout()
     }
 
-    setRevalidate((r) => !r)
+    revalidate((r) => !r)
   }
 
   const getRoleByEmployeeId = (employeeId) => {
@@ -78,7 +81,7 @@ export function UsersPage() {
   return (
     <div className='w-full pl-4'>
       <div className='mb-4'>
-        <h1 className='text-xl font-semibold'>Usuarios</h1>
+        <h2 className='text-xl font-semibold'>Usuarios</h2>
         <p className='text-sm text-zinc-500'>Lista de los usuarios del sistema</p>
       </div>
       <table className='w-full table-auto text-left text-sm'>
@@ -116,12 +119,12 @@ export function UsersPage() {
               <td>{employee.last_name}</td>
               <td>{employee.email}</td>
               <td>
-                <form className='mx-auto max-w-sm'>
+                <form className='mx-auto max-w-sm text-xs'>
                   <select
                     onChange={(e) => updateEmployeeRoleState(employee.id, e.target.value)}
                     value={getRoleByEmployeeId(employee.id)}
                     id='user-roles'
-                    className='block rounded-lg border border-gray-300 bg-gray-50 p-1 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500'
+                    className='block rounded-lg border border-gray-300 bg-gray-50 p-1 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500'
                   >
                     {roles.map((role) => (
                       <option
@@ -137,7 +140,7 @@ export function UsersPage() {
               <td>{new Date(employee.created_at).toDateString()}</td>
               <td>{new Date(session.user.last_sign_in_at).toDateString()}</td>
               <td>
-                <div className='flex justify-center'>
+                <div className='flex w-full justify-center'>
                   <button onClick={() => handleDeleteEmployee(employee.user_id)}>
                     <AiOutlineDelete className='h-6 w-5 text-red-700' />
                   </button>

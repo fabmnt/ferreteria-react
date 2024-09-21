@@ -5,5 +5,4 @@ export const useSessionStore = create((set) => ({
   employee: null,
   setSession: (session) => set({ session }),
   setEmployee: (employee) => set({ employee }),
-  clearSession: () => set({ session: null }),
 }))

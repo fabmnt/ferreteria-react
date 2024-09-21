@@ -1,13 +1,14 @@
 import { useEffect } from 'react'
 import { Route, Switch, useLocation } from 'wouter'
 import './App.css'
-import { Login } from './auth/login'
-import { Register } from './auth/register'
+import { Login } from './auth/pages/login'
+import { Register } from './auth/pages/register'
 import { Dashboard } from './dashboard/page'
 import { supabase } from './db/supabase'
-import { useSessionStore } from './hooks/session'
+import { useSessionStore } from './store/session'
 import { DashboardLayout } from './layouts/dashboard'
-import { UsersPage } from './users/components/page'
+import { UsersPage } from './users/pages/users'
+import { CreateBill } from './bills/pages/CreateBill'
 
 const App = () => {
   const setSession = useSessionStore((state) => state.setSession)
@@ -47,6 +48,10 @@ const App = () => {
         <Route
           path='/users'
           component={UsersPage}
+        />
+        <Route
+          path='/bills/create'
+          component={CreateBill}
         />
       </DashboardLayout>
     </Switch>
