@@ -20,7 +20,7 @@ export function CreateBill() {
   }
 
   return (
-    <div className='w-full pl-4'>
+    <div className='w-full'>
       <div className='mb-4'>
         <h2 className='text-lg font-semibold'>Facturación</h2>
         <p className='text-sm text-zinc-500'>Ingresa el registro de una nueva factura.</p>

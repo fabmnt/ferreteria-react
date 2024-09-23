@@ -75,7 +75,13 @@ export function LoginForm() {
         type='submit'
         className='mt-8 flex w-full items-center justify-center gap-2 rounded-md bg-purple-500 py-2 text-sm font-semibold text-white transition-colors hover:bg-purple-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 disabled:opacity-60'
       >
-        {loading && <Spinner />} <span>Iniciar sesión</span>
+        {loading && (
+          <Spinner
+            contrastClassName='text-purple-500'
+            className='text-white'
+          />
+        )}{' '}
+        <span>Iniciar sesión</span>
       </button>
     </form>
   )

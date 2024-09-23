@@ -1,0 +1,6 @@
+.dashboard {
+  grid-template-areas:
+    side-logo header header
+    side-nav main main;
+  display: grid;
+}

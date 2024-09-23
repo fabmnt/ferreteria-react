@@ -50,3 +50,11 @@ body {
     );
   background-size: 55px 55px;
 }
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+}
