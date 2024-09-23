@@ -1,6 +1,52 @@
+import { useEffect } from 'react'
+import { useLocation } from 'wouter'
 import { Spinner } from '../../components/Spinner'
+import { signIn } from '../../services/auth'
+import { useLogin } from '../hooks/use-login'
 
-export function LoginForm({ handleSubmit, loading, errorMessage }) {
+export function LoginForm() {
+  const { error, errorMessage, loading, setError, setErrorMessage, setLoading } = useLogin()
+  const [, navigate] = useLocation()
+
+  useEffect(() => {
+    if (error == null) {
+      return
+    }
+    if (error === 'invalid_credentials') {
+      setErrorMessage('Credenciales incorrectas')
+    } else {
+      setErrorMessage('Ocurrió un error inesperado, intenta de nuevo más tarde.')
+    }
+
+    const timeout = setTimeout(() => {
+      setErrorMessage(null)
+      setError(null)
+    }, 5000)
+
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [error])
+
+  const handleSubmit = async (e) => {
+    setError(null)
+    setErrorMessage(null)
+    setLoading(true)
+    e.preventDefault()
+    const form = new FormData(e.target)
+    const email = form.get('user-email')
+    const password = form.get('user-password')
+
+    const { error } = await signIn(email, password)
+
+    if (error) {
+      setError(error.code)
+      setLoading(false)
+      return
+    }
+    navigate('/')
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <label className='flex flex-col gap-2'>

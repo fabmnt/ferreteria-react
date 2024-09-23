@@ -1,8 +1,74 @@
+import { useLocation } from 'wouter'
 import { Button } from '../../components/button'
 import { Input } from '../../components/input'
 import { Spinner } from '../../components/Spinner'
+import { useRegister } from '../hooks/use-register'
+import { useEffect } from 'react'
+import { signIn, signUp } from '../../services/auth'
+import { createEmployee } from '../../services/users'
 
-export function RegisterForm({ handleSubmit, loading, errorMessage }) {
+export function RegisterForm() {
+  const [, navigate] = useLocation()
+  const { error, errorMessage, loading, setError, setErrorMessage, setLoading } = useRegister()
+
+  useEffect(() => {
+    if (error == null) {
+      return
+    }
+
+    if (error === 'user_already_exists') {
+      setErrorMessage('El correo electrónico ya está registrado.')
+    } else if (error === 'weak_password') {
+      setErrorMessage('La contraseña es muy débil.')
+    } else {
+      setErrorMessage('Ocurrió un error inesperado, intenta de nuevo más tarde.')
+    }
+
+    const timeout = setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
+
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [error])
+
+  const handleSubmit = async (e) => {
+    setLoading(true)
+    setError(null)
+    setErrorMessage(null)
+    e.preventDefault()
+    const form = new FormData(e.target)
+    const email = form.get('user-email')
+    const password = form.get('user-password')
+    const name = form.get('user-name')
+    const lastname = form.get('user-lastname')
+    const { data, error } = await signUp(email, password)
+
+    if (error) {
+      setError(error.code)
+      setLoading(false)
+      return
+    }
+    const newEmployee = { user_id: data.user.id, name, last_name: lastname, email, role_id: 3 }
+    const { error: insertError } = await createEmployee(newEmployee)
+
+    if (insertError) {
+      setError(error.code)
+      setLoading(false)
+      return
+    }
+    const { error: signInError } = await signIn(email, password)
+
+    if (signInError) {
+      setError(error.code)
+      setLoading(false)
+      return
+    }
+
+    navigate('/')
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <div className='grid grid-cols-2 gap-x-4'>

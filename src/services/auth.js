@@ -11,3 +11,15 @@ export async function deleteUser(userId) {
 
   return { error }
 }
+
+export async function signIn(email, password) {
+  const { error, data } = await supabase.auth.signInWithPassword({ email, password })
+
+  return { error, data }
+}
+
+export async function signUp(email, password) {
+  const { error, data } = await supabase.auth.signUp({ email, password })
+
+  return { error, data }
+}

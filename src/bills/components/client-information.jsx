@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { getCustomerByPhone, getCustomers } from '../../services/customers'
 import { RiSearchLine } from 'react-icons/ri'
 import { FaCheckCircle } from 'react-icons/fa'
-import { IoIosArrowDown } from 'react-icons/io'
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
+import { Input } from '../../components/input'
 
 export function ClientInformation() {
   const [existingCustomer, setExistingCustomer] = useState(true)
@@ -96,19 +97,18 @@ export function ClientInformation() {
       <div className=''>
         {existingCustomer && (
           <form
-            className='mt-4'
+            className='mt-2'
             onSubmit={handleSearchCustomer}
           >
             <label className='flex flex-col gap-1 text-sm'>
               <span className=''>Buscar por teléfono:</span>
               <div className='flex gap-1'>
-                <input
+                <Input
                   required
                   name='phone'
                   type='tel'
                   maxLength='8'
                   minLength='8'
-                  className='w-full rounded border px-2 py-1 text-sm font-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-purple-500'
                   placeholder='88880000'
                 />
                 <button type='submit'>
@@ -125,12 +125,21 @@ export function ClientInformation() {
                 {`${currentCustomer.name} ${currentCustomer.last_name}, teléfono: ${currentCustomer.phone}`}
                 <FaCheckCircle className='size-4 text-green-600' />
               </p>
-              <button
-                onClick={() => setShowCustomerDetails((prev) => !prev)}
-                className='flex items-center gap-1 text-sm font-medium'
-              >
-                <IoIosArrowDown className='h-4 w-6' /> Ver detalles
-              </button>
+              {showCustomerDetails ? (
+                <button
+                  onClick={() => setShowCustomerDetails((prev) => !prev)}
+                  className='flex items-center gap-1 text-sm font-medium'
+                >
+                  <IoIosArrowUp className='h-4 w-6' /> Ocultar detalles
+                </button>
+              ) : (
+                <button
+                  onClick={() => setShowCustomerDetails((prev) => !prev)}
+                  className='flex items-center gap-1 text-sm font-medium'
+                >
+                  <IoIosArrowDown className='h-4 w-6' /> Ver detalles
+                </button>
+              )}
             </div>
           </div>
         )}
@@ -175,22 +184,21 @@ export function ClientInformation() {
           </table>
         )}
         <form
-          className={`mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 ${!existingCustomer || showCustomerDetails ? 'block' : 'hidden'}`}
+          className={`mt-2 grid grid-cols-1 gap-4 sm:grid-cols-2 ${!existingCustomer || showCustomerDetails ? 'block' : 'hidden'}`}
         >
           <label className='flex flex-col gap-1 text-sm'>
             <span className=''>Nombres:</span>
-            <input
+            <Input
               id='customer-name'
               required
               disabled={currentCustomer}
               type='text'
-              className='rounded border px-2 py-1 text-sm font-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-purple-500'
               placeholder='Fabian'
             />
           </label>
           <label className='flex flex-col gap-1 text-sm'>
             <span className=''>Apellidos:</span>
-            <input
+            <Input
               disabled={currentCustomer}
               id='customer-last-name'
               required
@@ -201,7 +209,7 @@ export function ClientInformation() {
           </label>
           <label className='flex flex-col gap-1 text-sm'>
             <span className=''>Correo (opcional):</span>
-            <input
+            <Input
               disabled={currentCustomer}
               id='customer-email'
               type='email'
@@ -211,7 +219,7 @@ export function ClientInformation() {
           </label>
           <label className='flex flex-col gap-1 text-sm'>
             <span className=''>Teléfono:</span>
-            <input
+            <Input
               disabled={currentCustomer}
               id='customer-phone'
               type='tel'
@@ -227,7 +235,7 @@ export function ClientInformation() {
               disabled={currentCustomer}
               id='customer-address'
               placeholder='Managua, Nicaragua.'
-              className='rounded border px-2 py-1 text-sm font-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-purple-500'
+              className='rounded border px-2 py-1 text-sm font-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500'
             />
           </label>
         </form>

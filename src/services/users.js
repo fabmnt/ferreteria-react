@@ -9,7 +9,7 @@ export async function getRoles() {
 export async function getEmployee(userId) {
   const { data, error } = await supabase
     .from('employees')
-    .select(`id, user_id, name, last_name, roles (id, permissions, role)`)
+    .select(`id, user_id, name, last_name, verified, roles (id, permissions, role)`)
     .eq('user_id', userId)
 
   return { data, error }
@@ -43,4 +43,10 @@ export async function updateEmployeeRole(employeeId, roleId) {
     .eq('id', employeeId)
 
   return { error }
+}
+
+export async function createEmployee(employee) {
+  const { data, error } = await supabase.from('employees').insert([employee])
+
+  return { data, error }
 }

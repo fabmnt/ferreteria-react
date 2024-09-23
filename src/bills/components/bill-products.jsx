@@ -22,7 +22,7 @@ export function BillProducts({ openAddProductModal, products }) {
       )}
 
       {products.length > 0 && (
-        <table className='sticky top-0 z-10 w-full table-auto border-b bg-white text-left'>
+        <table className='sticky top-0 z-10 w-full table-auto border-b bg-white text-left text-sm'>
           <thead className='sticky top-0 z-10 border-b bg-white'>
             <tr>
               <th>#</th>

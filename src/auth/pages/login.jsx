@@ -1,48 +1,12 @@
-import { useEffect } from 'react'
-import { Link } from 'wouter'
-import { supabase } from '../../db/supabase'
+import { Link, useSearch } from 'wouter'
 import { CardContainer } from '../components/card-container'
 import { CardTitle } from '../components/card-title'
 import { LoginForm } from '../components/login-form'
-import { useLogin } from '../hooks/use-login'
+import { CiWarning } from 'react-icons/ci'
 
 export function Login() {
-  const { error, errorMessage, loading, setError, setErrorMessage, setLoading } = useLogin()
-
-  useEffect(() => {
-    if (error == null) {
-      return
-    }
-    if (error === 'invalid_credentials') {
-      setErrorMessage('Credenciales incorrectas')
-    } else {
-      setErrorMessage('Ocurrió un error inesperado, intenta de nuevo más tarde.')
-    }
-
-    const timeout = setTimeout(() => {
-      setErrorMessage(null)
-      setError(null)
-    }, 5000)
-
-    return () => clearTimeout(timeout)
-  }, [error])
-
-  const handleSubmit = async (e) => {
-    setError(null)
-    setErrorMessage(null)
-    setLoading(true)
-    e.preventDefault()
-    const form = new FormData(e.target)
-    const email = form.get('user-email')
-    const password = form.get('user-password')
-
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-
-    if (error) {
-      setError(error.code)
-    }
-    setLoading(false)
-  }
+  const searchParamsString = useSearch()
+  const searchParams = new URLSearchParams(searchParamsString)
 
   return (
     <div className='background-gradient flex min-h-screen w-full flex-col items-center justify-center'>
@@ -51,12 +15,18 @@ export function Login() {
           title='¡Bienvenido de Nuevo!'
           subtitle='Inicia sesión con tu cuenta para acceder al sistema.'
         />
-        <div className='mt-8'>
-          <LoginForm
-            errorMessage={errorMessage}
-            handleSubmit={handleSubmit}
-            loading={loading}
-          />
+        <div>
+          {searchParams.has('not_verified') && (
+            <div className='mt-2 flex items-center justify-between gap-2 rounded border border-red-700 bg-red-300 px-4 py-2'>
+              <CiWarning className='m-0 h-10 w-12 p-0 text-red-700' />
+              <p className='text-sm text-red-700'>
+                Tu cuenta no ha sido verificada. Por favor, contacta con el administrador.
+              </p>
+            </div>
+          )}
+        </div>
+        <div className='mt-4'>
+          <LoginForm />
         </div>
         <p className='mt-4 text-center text-sm'>
           ¿No tienes una cuenta?{' '}

@@ -79,7 +79,7 @@ export function UsersPage() {
   }
 
   return (
-    <div className='w-full pl-4'>
+    <div className='w-full'>
       <div className='mb-4'>
         <h2 className='text-xl font-semibold'>Usuarios</h2>
         <p className='text-sm text-zinc-500'>Lista de los usuarios del sistema</p>
