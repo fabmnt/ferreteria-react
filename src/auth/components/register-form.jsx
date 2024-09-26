@@ -1,7 +1,7 @@
 import { useLocation } from 'wouter'
 import { Button } from '../../components/button'
 import { Input } from '../../components/input'
-import { Spinner } from '../../components/Spinner'
+import { Spinner } from '../../components/spinner'
 import { useRegister } from '../hooks/use-register'
 import { useEffect } from 'react'
 import { signIn, signUp } from '../../services/auth'

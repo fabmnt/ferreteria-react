@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation } from 'wouter'
-import { Spinner } from '../../components/Spinner'
+import { Spinner } from '../../components/spinner'
 import { signIn } from '../../services/auth'
 import { useLogin } from '../hooks/use-login'
 

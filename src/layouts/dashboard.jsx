@@ -8,7 +8,7 @@ import { LayoutLink } from './components/link'
 import { useEffect, useState } from 'react'
 import { getEmployee } from '../services/users'
 import { logout } from '../services/auth'
-import { Spinner } from '../components/Spinner'
+import { Spinner } from '../components/spinner'
 import { TbLayoutSidebarLeftCollapse } from 'react-icons/tb'
 import { UserDropdown } from './components/user-dropdown'
 import { IoIosNotificationsOutline, IoIosHelpCircleOutline } from 'react-icons/io'
@@ -44,7 +44,7 @@ export function DashboardLayout({ children }) {
         }
 
         logout().finally(() => {
-          navigate('/login?not_verified', { replace: true })
+          navigate('/login?not_verified')
           setLoadingApp(false)
         })
       })

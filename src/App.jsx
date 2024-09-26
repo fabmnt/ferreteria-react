@@ -19,7 +19,7 @@ const App = () => {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
-      const validRoutes = ['/register']
+      const validRoutes = ['/register', '/login']
       if (session == null && !validRoutes.includes(location)) {
         navigate('/login')
       }
