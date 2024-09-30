@@ -2,7 +2,12 @@ import { AiOutlineDelete } from 'react-icons/ai'
 import { Badge } from '../../components/badge'
 import { Button, Dropdown, Modal, Select } from 'flowbite-react'
 import { BsThreeDotsVertical } from 'react-icons/bs'
-import { unverifyEmployee, updateEmployeeRole, verifyEmployee } from '../../services/users'
+import {
+  getEmployee,
+  unverifyEmployee,
+  updateEmployeeRole,
+  verifyEmployee,
+} from '../../services/users'
 import { deleteUser, logout } from '../../services/auth'
 import { useSessionStore } from '../../store/session'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
@@ -18,6 +23,7 @@ export function UsersTable({ isLoading, employees, revalidate, roles }) {
   const [employeeIdToChangeRole, setEmployeeIdToChangeRole] = useState(null)
   const [roleId, setRoleId] = useState(null)
   const session = useSessionStore((state) => state.session)
+  const setEmployee = useSessionStore((state) => state.setEmployee)
 
   const rolesTranslated = {
     admin: 'Administrador',
@@ -71,13 +77,16 @@ export function UsersTable({ isLoading, employees, revalidate, roles }) {
   const handleChangeRole = async () => {
     setIsChangingRole(true)
     const { error } = await updateEmployeeRole(employeeIdToChangeRole, roleId)
-
     if (error) {
       setIsChangingRole(false)
       setOpenChangeRoleModal(false)
       return
     }
 
+    const {
+      data: [employee],
+    } = await getEmployee(session.user.id)
+    setEmployee(employee)
     setIsChangingRole(false)
     setOpenChangeRoleModal(false)
     revalidate()
@@ -114,31 +123,31 @@ export function UsersTable({ isLoading, employees, revalidate, roles }) {
             Array.from({ length: 5 }).map((_, index) => (
               <tr key={index}>
                 <td className='h-16 pl-4'>
-                  <div className='h-6 w-12 animate-pulse rounded-lg bg-gray-200' />
+                  <div className='h-8 w-12 animate-pulse rounded-lg bg-gray-200' />
                 </td>
                 <td className='h-16'>
-                  <div className='h-6 w-24 animate-pulse rounded-lg bg-gray-200' />
+                  <div className='h-8 w-24 animate-pulse rounded-lg bg-gray-200' />
                 </td>
                 <td className='h-16'>
-                  <div className='h-6 w-24 animate-pulse rounded-lg bg-gray-200' />
+                  <div className='h-8 w-24 animate-pulse rounded-lg bg-gray-200' />
                 </td>
                 <td className='h-16'>
-                  <div className='h-6 animate-pulse rounded-lg bg-gray-200' />
+                  <div className='h-8 animate-pulse rounded-lg bg-gray-200' />
                 </td>
                 <td className='h-16'>
-                  <div className='h-6 animate-pulse rounded-lg bg-gray-200' />
+                  <div className='h-8 animate-pulse rounded-lg bg-gray-200' />
                 </td>
                 <td className='h-16'>
-                  <div className='h-6 animate-pulse rounded-lg bg-gray-200' />
+                  <div className='h-8 animate-pulse rounded-lg bg-gray-200' />
                 </td>
                 <td className='h-16'>
-                  <div className='h-6 animate-pulse rounded-lg bg-gray-200' />
+                  <div className='h-8 animate-pulse rounded-lg bg-gray-200' />
                 </td>
                 <td className='h-16'>
-                  <div className='h-6 animate-pulse rounded-lg bg-gray-200' />
+                  <div className='h-8 animate-pulse rounded-lg bg-gray-200' />
                 </td>
                 <td className='h-16'>
-                  <div className='h-6 w-16 animate-pulse rounded-lg bg-gray-200' />
+                  <div className='h-8 w-16 animate-pulse rounded-lg bg-gray-200' />
                 </td>
               </tr>
             ))}
@@ -173,7 +182,6 @@ export function UsersTable({ isLoading, employees, revalidate, roles }) {
                   <Select
                     value={employee.roles.id}
                     onChange={(e) => handleShowChangeRoleModal(employee.id, e)}
-                    defaultValue={employee.roles.id}
                   >
                     {roles.map((role) => (
                       <option

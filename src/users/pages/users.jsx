@@ -16,6 +16,7 @@ export function UsersPage() {
     if (employee.roles.role !== 'admin') {
       navigate('/')
     }
+    console.log(employee)
   }, [employee])
 
   useEffect(() => {
