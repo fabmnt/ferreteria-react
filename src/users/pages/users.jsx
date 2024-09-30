@@ -1,13 +1,31 @@
 import { useEffect, useState } from 'react'
-import { getEmployees } from '../../services/users'
+import { getEmployees, getRoles } from '../../services/users'
 import { UsersTable } from '../components/users-table'
+import { useSessionStore } from '../../store/session'
+import { useLocation } from 'wouter'
 
 export function UsersPage() {
   const [employees, setEmployees] = useState([])
+  const [roles, setRoles] = useState([])
   const [employeesStatus, setEmployeesStatus] = useState('loading')
   const [shouldRevalidate, revalidate] = useState(false)
+  const employee = useSessionStore((state) => state.employee)
+  const [, navigate] = useLocation()
 
   useEffect(() => {
+    if (employee.roles.role !== 'admin') {
+      navigate('/')
+    }
+  }, [employee])
+
+  useEffect(() => {
+    getRoles().then(({ data }) => {
+      if (data == null) {
+        return
+      }
+      setRoles(data)
+    })
+
     setEmployeesStatus('loading')
     getEmployees()
       .then(({ data }) => {
@@ -44,6 +62,7 @@ export function UsersPage() {
           isLoading={employeesStatus === 'loading'}
           employees={employees}
           revalidate={() => revalidate((prev) => !prev)}
+          roles={roles}
         />
       </div>
     </div>

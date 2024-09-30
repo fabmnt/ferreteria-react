@@ -1,18 +1,22 @@
 import { AiOutlineDelete } from 'react-icons/ai'
 import { Badge } from '../../components/badge'
-import { Button, Dropdown, Modal } from 'flowbite-react'
+import { Button, Dropdown, Modal, Select } from 'flowbite-react'
 import { BsThreeDotsVertical } from 'react-icons/bs'
-import { verifyEmployee } from '../../services/users'
+import { unverifyEmployee, updateEmployeeRole, verifyEmployee } from '../../services/users'
 import { deleteUser, logout } from '../../services/auth'
 import { useSessionStore } from '../../store/session'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { useState } from 'react'
 import { Spinner } from '../../components/spinner'
 
-export function UsersTable({ isLoading, employees, revalidate }) {
+export function UsersTable({ isLoading, employees, revalidate, roles }) {
   const [openModal, setOpenModal] = useState(false)
+  const [openChangeRoleModal, setOpenChangeRoleModal] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [isChangingRole, setIsChangingRole] = useState(false)
   const [userIdToDelete, setUserIdToDelete] = useState(null)
+  const [employeeIdToChangeRole, setEmployeeIdToChangeRole] = useState(null)
+  const [roleId, setRoleId] = useState(null)
   const session = useSessionStore((state) => state.session)
 
   const rolesTranslated = {
@@ -54,6 +58,39 @@ export function UsersTable({ isLoading, employees, revalidate }) {
   const handleShowDeleteModal = (employeeId) => {
     setUserIdToDelete(employeeId)
     setOpenModal(true)
+  }
+
+  const handleShowChangeRoleModal = async (employeeId, event) => {
+    event.preventDefault()
+    const roleId = event.target.value
+    setEmployeeIdToChangeRole(employeeId)
+    setRoleId(roleId)
+    setOpenChangeRoleModal(true)
+  }
+
+  const handleChangeRole = async () => {
+    setIsChangingRole(true)
+    const { error } = await updateEmployeeRole(employeeIdToChangeRole, roleId)
+
+    if (error) {
+      setIsChangingRole(false)
+      setOpenChangeRoleModal(false)
+      return
+    }
+
+    setIsChangingRole(false)
+    setOpenChangeRoleModal(false)
+    revalidate()
+  }
+
+  const handleUnverifyEmployee = async (employeeId) => {
+    const { error } = await unverifyEmployee(employeeId)
+
+    if (error) {
+      return
+    }
+
+    revalidate()
   }
 
   return (
@@ -132,7 +169,22 @@ export function UsersTable({ isLoading, employees, revalidate }) {
                     <Badge variant='danger'>No verificado</Badge>
                   )}
                 </td>
-                <td>{rolesTranslated[employee.roles.role]}</td>
+                <td>
+                  <Select
+                    value={employee.roles.id}
+                    onChange={(e) => handleShowChangeRoleModal(employee.id, e)}
+                    defaultValue={employee.roles.id}
+                  >
+                    {roles.map((role) => (
+                      <option
+                        key={role.id}
+                        value={role.id}
+                      >
+                        {rolesTranslated[role.role]}
+                      </option>
+                    ))}
+                  </Select>
+                </td>
                 <td>{new Date(employee.created_at).toDateString()}</td>
                 <td className=''>{new Date(session.user.last_sign_in_at).toDateString()}</td>
                 <td className=''>
@@ -157,7 +209,11 @@ export function UsersTable({ isLoading, employees, revalidate }) {
                           Verificar
                         </Dropdown.Item>
                       )}
-                      <Dropdown.Item>Editar rol</Dropdown.Item>
+                      {employee.verified && (
+                        <Dropdown.Item onClick={() => handleUnverifyEmployee(employee.id)}>
+                          Quitar verificado
+                        </Dropdown.Item>
+                      )}
                     </Dropdown>
                   </div>
                 </td>
@@ -197,6 +253,40 @@ export function UsersTable({ isLoading, employees, revalidate }) {
                 <div className='flex items-center gap-2'>
                   {isDeleting ? 'Eliminando' : 'Eliminar'}
                   {isDeleting && <Spinner />}
+                </div>
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
+
+      <Modal
+        show={openChangeRoleModal}
+        size='md'
+        onClose={() => setOpenChangeRoleModal(false)}
+        popup
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className='text-center'>
+            <HiOutlineExclamationCircle className='mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200' />
+            <h3 className='mb-5 text-lg font-normal text-gray-500 dark:text-gray-400'>
+              El rol de este usuario cambiará, ¿estás seguro?
+            </h3>
+            <div className='flex justify-center gap-4'>
+              <Button
+                color='gray'
+                onClick={() => setOpenChangeRoleModal(false)}
+              >
+                Cancelar
+              </Button>
+              <Button
+                color='blue'
+                onClick={handleChangeRole}
+              >
+                <div className='flex items-center gap-2'>
+                  {isChangingRole ? 'Actualizando' : 'Cambiar'}
+                  {isChangingRole && <Spinner />}
                 </div>
               </Button>
             </div>

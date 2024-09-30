@@ -31,6 +31,15 @@ export async function verifyEmployee(employeeId) {
   return { error }
 }
 
+export async function unverifyEmployee(employeeId) {
+  const { error } = await supabase
+    .from('employees')
+    .update({ verified: false })
+    .eq('id', employeeId)
+
+  return { error }
+}
+
 export async function deleteEmployee(employeeId) {
   const { error } = await supabase.from('employees').delete().eq('id', employeeId)
   return { error }
