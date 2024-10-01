@@ -98,6 +98,7 @@ export function CreateBill() {
             openAddProductModal={openAddProductModal}
             productsQuantity={productsQuantity}
             updateProductsQuantity={updateProductsQuantity}
+            setProducts={setBillProducts}
           />
         </div>
       </section>

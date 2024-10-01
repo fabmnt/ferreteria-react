@@ -38,16 +38,16 @@ export function BillInformation({
         </div>
       </div>
       <p className='inline-flex justify-between text-sm'>
-        Total facturado: <span className='font-normal'>{totalBilled}</span>
+        Total facturado: <span className='font-normal'>C$ {totalBilled}</span>
       </p>
       <p className='inline-flex justify-between text-sm'>
-        Total IVA: <span className='font-normal'>{totalIVA}</span>
+        Total IVA: <span className='font-normal'>C$ {totalIVA}</span>
       </p>
       <p className='inline-flex justify-between text-sm'>
-        Total descuento: <span className='font-normal'>{totalDiscount}</span>
+        Total descuento: <span className='font-normal'>C$ {totalDiscount}</span>
       </p>
       <p className='inline-flex justify-between text-sm'>
-        Total a pagar: <span className='font-normal'>{totalToPay}</span>
+        Total a pagar: <span className='font-bold'>C$ {totalToPay}</span>
       </p>
       <div className='flex items-center justify-between gap-x-4'>
         <label className='col-start-2 flex items-center gap-2 text-sm'>

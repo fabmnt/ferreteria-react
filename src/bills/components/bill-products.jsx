@@ -1,16 +1,21 @@
 import { IoIosAdd } from 'react-icons/io'
 import { Input } from '../../components/input'
+import { useState } from 'react'
+import { AiOutlineDelete } from 'react-icons/ai'
 
 export function BillProducts({
   openAddProductModal,
   products,
   productsQuantity,
   updateProductsQuantity,
+  setProducts,
 }) {
-  const hanldeUpdateQuantity = (e, productId) => {
+  const [quantities, setQuantities] = useState(productsQuantity)
+
+  const handleUpdateQuantity = (e, productId) => {
     e.preventDefault()
-    const newQuantity = e.target.value
-    const newProductsQuantity = { ...productsQuantity }
+    const inputQuantity = e.target.value
+    const newProductsQuantity = { ...quantities  }
     const product = products.find((product) => product.id === productId)
 
     if (product == null) {
@@ -18,11 +23,26 @@ export function BillProducts({
     }
 
     const { stock } = product
-    if (newQuantity > stock) {
-      return
+
+    if (Number(inputQuantity) > stock) {
+      newProductsQuantity[productId] = stock
+    } else if (Number(inputQuantity) < 1) {
+      newProductsQuantity[productId] = 1
+    } else {
+      newProductsQuantity[productId] = Number(inputQuantity)
     }
 
-    newProductsQuantity[productId] = +newQuantity
+    setQuantities(newProductsQuantity)
+    updateProductsQuantity(newProductsQuantity)
+  }
+
+  const removeProduct = (productId) => {  
+    const updateProducts = products.filter((product) => product.id !== productId)
+    setProducts(updateProducts)
+
+    const newProductsQuantity = { ...quantities }
+    delete newProductsQuantity[productId]
+    setQuantities(newProductsQuantity)
     updateProductsQuantity(newProductsQuantity)
   }
 
@@ -52,9 +72,15 @@ export function BillProducts({
             <tr>
               <th>#</th>
               <th>Producto</th>
-              <th>Precio</th>
               <th>Marca</th>
+              <th>Precio</th>
               <th>Cantidad</th>
+              <th className='w-[10ch]'>
+                Total
+              </th>
+              <th className='w-[5ch] '>
+                Acciones
+              </th>
             </tr>
           </thead>
           <tbody className=''>
@@ -65,17 +91,27 @@ export function BillProducts({
               >
                 <td>{product.id}</td>
                 <td>{product.name}</td>
-                <td>C$ {product.price}</td>
                 <td>{product.brand}</td>
+                <td>C$ {product.price}</td>
                 <td>
                   <Input
                     type='number'
                     min={1}
                     max={product.stock}
                     className='w-[6ch] px-2 py-1'
-                    defaultValue={productsQuantity[product.id] ?? 1}
-                    onInput={(e) => hanldeUpdateQuantity(e, product.id)}
+                    value={quantities[product.id] ?? 1}
+                    onInput={(e) => handleUpdateQuantity(e, product.id)}
                   />
+                </td>
+                <td>
+                  C$ {product.price * (quantities[product.id] ?? 1)}
+                </td>
+                <td className='flex justify-center'>
+                  <button
+                    onClick={() => removeProduct(product.id)}
+                  >
+                    <AiOutlineDelete className='h-6 w-5 text-red-700' />
+                  </button>
                 </td>
               </tr>
             ))}
