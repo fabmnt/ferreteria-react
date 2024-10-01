@@ -1,6 +1,31 @@
 import { IoIosAdd } from 'react-icons/io'
+import { Input } from '../../components/input'
 
-export function BillProducts({ openAddProductModal, products }) {
+export function BillProducts({
+  openAddProductModal,
+  products,
+  productsQuantity,
+  updateProductsQuantity,
+}) {
+  const hanldeUpdateQuantity = (e, productId) => {
+    e.preventDefault()
+    const newQuantity = e.target.value
+    const newProductsQuantity = { ...productsQuantity }
+    const product = products.find((product) => product.id === productId)
+
+    if (product == null) {
+      return
+    }
+
+    const { stock } = product
+    if (newQuantity > stock) {
+      return
+    }
+
+    newProductsQuantity[productId] = +newQuantity
+    updateProductsQuantity(newProductsQuantity)
+  }
+
   return (
     <>
       <div className='mb-4 flex items-center justify-between'>
@@ -22,13 +47,14 @@ export function BillProducts({ openAddProductModal, products }) {
       )}
 
       {products.length > 0 && (
-        <table className='sticky top-0 z-10 w-full table-auto border-b bg-white text-left text-sm'>
+        <table className='sticky top-0 z-10 w-full table-auto bg-white text-left text-sm'>
           <thead className='sticky top-0 z-10 border-b bg-white'>
             <tr>
               <th>#</th>
               <th>Producto</th>
               <th>Precio</th>
               <th>Marca</th>
+              <th>Cantidad</th>
             </tr>
           </thead>
           <tbody className=''>
@@ -41,6 +67,16 @@ export function BillProducts({ openAddProductModal, products }) {
                 <td>{product.name}</td>
                 <td>C$ {product.price}</td>
                 <td>{product.brand}</td>
+                <td>
+                  <Input
+                    type='number'
+                    min={1}
+                    max={product.stock}
+                    className='w-[6ch] px-2 py-1'
+                    defaultValue={productsQuantity[product.id] ?? 1}
+                    onInput={(e) => hanldeUpdateQuantity(e, product.id)}
+                  />
+                </td>
               </tr>
             ))}
 

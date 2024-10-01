@@ -5,10 +5,9 @@ import { FaCheckCircle } from 'react-icons/fa'
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 import { Input } from '../../components/input'
 
-export function ClientInformation() {
+export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
   const [existingCustomer, setExistingCustomer] = useState(true)
   const [showCustomerDetails, setShowCustomerDetails] = useState(false)
-  const [currentCustomer, setCurrentCustomer] = useState(null)
   const [lastCustomers, setLastCustomers] = useState([])
 
   useEffect(() => {
@@ -52,7 +51,7 @@ export function ClientInformation() {
   const handleExistingCustomerChange = (e) => {
     const checked = e.target.checked
     if (!checked) {
-      setCurrentCustomer(null)
+      updateCurrentCustomer(null)
     } else {
       setShowCustomerDetails(false)
     }
@@ -74,7 +73,7 @@ export function ClientInformation() {
       return
     }
 
-    setCurrentCustomer(customer)
+    updateCurrentCustomer(customer)
   }
 
   return (
@@ -162,7 +161,7 @@ export function ClientInformation() {
                 <tr
                   className='hover:cursor-pointer [&>td]:h-10 [&>td]:align-middle'
                   key={customer.id}
-                  onClick={() => setCurrentCustomer(customer)}
+                  onClick={() => updateCurrentCustomer(customer)}
                 >
                   <td>{customer.name}</td>
                   <td>{customer.last_name}</td>
@@ -174,7 +173,7 @@ export function ClientInformation() {
                       checked={currentCustomer?.id === customer.id}
                       type='radio'
                       name='customer'
-                      onChange={() => setCurrentCustomer(customer)}
+                      onChange={() => updateCurrentCustomer(customer)}
                       className='rounded-full border px-2 py-1 text-xs'
                     />
                   </td>

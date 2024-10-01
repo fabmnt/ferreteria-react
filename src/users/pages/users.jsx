@@ -16,7 +16,6 @@ export function UsersPage() {
     if (employee.roles.role !== 'admin') {
       navigate('/')
     }
-    console.log(employee)
   }, [employee])
 
   useEffect(() => {
@@ -39,16 +38,6 @@ export function UsersPage() {
         setEmployeesStatus('completed')
       })
   }, [shouldRevalidate])
-
-  // const handleUpdateEmployeeRole = async (employeeId, roleId) => {
-  //   const { error } = await updateEmployeeRole(employeeId, roleId)
-
-  //   if (error) {
-  //     return
-  //   }
-
-  //   revalidate((r) => !r)
-  // }
 
   return (
     <div className='w-full'>
