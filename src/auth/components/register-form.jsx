@@ -3,13 +3,17 @@ import { Button } from '../../components/button'
 import { Input } from '../../components/input'
 import { Spinner } from '../../components/spinner'
 import { useRegister } from '../hooks/use-register'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { signIn, signUp } from '../../services/auth'
 import { createEmployee } from '../../services/users'
+import { BiShowAlt } from "react-icons/bi";
+import { BiHide } from "react-icons/bi";
 
 export function RegisterForm() {
   const [, navigate] = useLocation()
   const { error, errorMessage, loading, setError, setErrorMessage, setLoading } = useRegister()
+
+  const [showPassword, setShowPassword] = useState(false)
 
   useEffect(() => {
     if (error == null) {
@@ -69,6 +73,10 @@ export function RegisterForm() {
     navigate('/')
   }
 
+   const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <div className='grid grid-cols-2 gap-x-4'>
@@ -102,12 +110,22 @@ export function RegisterForm() {
       </label>
       <label className='mt-4 flex flex-col gap-2'>
         <span className='text-sm font-semibold'>Contraseña</span>
+        <div className='relative'>
         <Input
           required
           placeholder='********'
           name='user-password'
-          type='password'
+          type={showPassword ? 'text' : 'password'}
         />
+        <button
+          type="button"
+          onClick={togglePasswordVisibility}
+          className='absolute inset-y-0 right-0 px-3 text-sm text-purple-500' 
+        >
+          {showPassword ? <BiShowAlt size={22} color='grey'/> : <BiHide size={22} color='grey'/>}
+        </button>
+        </div>
+
       </label>
       {errorMessage && <p className='mt-2 text-sm text-red-500'>{errorMessage}</p>}
       <Button
