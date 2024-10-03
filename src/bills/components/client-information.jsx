@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
-import { getCustomerByPhone, getCustomers } from '../../services/customers'
+import { createCustomer, getCustomerByPhone, getCustomers } from '../../services/customers'
 import { RiSearchLine } from 'react-icons/ri'
 import { FaCheckCircle } from 'react-icons/fa'
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 import { Input } from '../../components/input'
+import { Button, Spinner } from 'flowbite-react'
 
 export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
   const [existingCustomer, setExistingCustomer] = useState(true)
   const [showCustomerDetails, setShowCustomerDetails] = useState(false)
+  const [isCreatingCustomer, setIsCreatingCustomer] = useState(false)
   const [lastCustomers, setLastCustomers] = useState([])
 
   useEffect(() => {
@@ -74,6 +76,34 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
     }
 
     updateCurrentCustomer(customer)
+  }
+
+  const handleSubmitCreateCustomer = async (e) => {
+    e.preventDefault()
+    setIsCreatingCustomer(true)
+    const createCustomerForm = new FormData(e.target)
+    const name = createCustomerForm.get('customer-name')
+    const customerLastName = createCustomerForm.get('customer-last-name')
+    const email = createCustomerForm.get('customer-email')
+    const phone = createCustomerForm.get('customer-phone')
+    const address = createCustomerForm.get('customer-address')
+    const newCustomer = {
+      name,
+      last_name: customerLastName,
+      phone,
+      address,
+    }
+    const isValidEmail = email != null && email.trim().length > 5
+
+    if (isValidEmail) {
+      newCustomer.email = email
+    }
+
+    const { data, error } = await createCustomer(newCustomer)
+
+    setIsCreatingCustomer(false)
+    e.target.reset()
+    console.log(data, error)
   }
 
   return (
@@ -144,51 +174,54 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
         )}
 
         {!showCustomerDetails && existingCustomer && (
-          <table className='relative col-span-2 mt-4 max-h-[120px] w-full table-auto text-left text-sm'>
-            <caption className='mb-2 text-start text-sm'>Últimos clientes</caption>
-            <thead className='sticky top-0 z-10 border-b'>
-              <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Correo</th>
-                <th>Teléfono</th>
-                <th>Última compra</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {lastCustomers.map((customer) => (
-                <tr
-                  className='hover:cursor-pointer [&>td]:h-10 [&>td]:align-middle'
-                  key={customer.id}
-                  onClick={() => updateCurrentCustomer(customer)}
-                >
-                  <td>{customer.name}</td>
-                  <td>{customer.last_name}</td>
-                  <td>{customer.email ?? '-'} </td>
-                  <td>{customer.phone}</td>
-                  <td>{new Date(customer?.last_buy).toDateString()}</td>
-                  <td>
-                    <input
-                      checked={currentCustomer?.id === customer.id}
-                      type='radio'
-                      name='customer'
-                      onChange={() => updateCurrentCustomer(customer)}
-                      className='rounded-full border px-2 py-1 text-xs'
-                    />
-                  </td>
+          <div className='max-h-[180px] overflow-y-auto'>
+            <table className='relative col-span-2 mt-4 w-full table-auto text-left text-sm'>
+              <thead className='border-b'>
+                <tr className='[&>th]:sticky [&>th]:top-0 [&>th]:z-10 [&>th]:bg-white'>
+                  <th>Nombre</th>
+                  <th>Apellido</th>
+                  <th>Correo</th>
+                  <th>Teléfono</th>
+                  <th>Última compra</th>
+                  <th />
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {lastCustomers.map((customer) => (
+                  <tr
+                    className='hover:cursor-pointer [&>td]:h-10 [&>td]:align-middle'
+                    key={customer.id}
+                    onClick={() => updateCurrentCustomer(customer)}
+                  >
+                    <td>{customer.name}</td>
+                    <td>{customer.last_name}</td>
+                    <td>{customer.email ?? '-'} </td>
+                    <td>{customer.phone}</td>
+                    <td>{new Date(customer?.last_buy).toDateString()}</td>
+                    <td>
+                      <input
+                        checked={currentCustomer?.id === customer.id}
+                        type='radio'
+                        name='customer'
+                        onChange={() => updateCurrentCustomer(customer)}
+                        className='rounded-full border px-2 py-1 text-xs'
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
         <form
+          onSubmit={handleSubmitCreateCustomer}
           className={`mt-2 grid grid-cols-1 gap-4 sm:grid-cols-2 ${!existingCustomer || showCustomerDetails ? 'block' : 'hidden'}`}
         >
           <label className='flex flex-col gap-1 text-sm'>
             <span className=''>Nombres:</span>
             <Input
               id='customer-name'
+              name='customer-name'
               required
               disabled={currentCustomer}
               type='text'
@@ -200,6 +233,7 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
             <Input
               disabled={currentCustomer}
               id='customer-last-name'
+              name='customer-last-name'
               required
               type='text'
               className='rounded border px-2 py-1 text-sm font-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-purple-500'
@@ -211,6 +245,7 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
             <Input
               disabled={currentCustomer}
               id='customer-email'
+              name='customer-email'
               type='email'
               className='rounded border px-2 py-1 text-sm font-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-purple-500'
               placeholder='correo@correo.com'
@@ -221,6 +256,7 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
             <Input
               disabled={currentCustomer}
               id='customer-phone'
+              name='customer-phone'
               type='tel'
               maxLength='8'
               minLength='8'
@@ -233,10 +269,30 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
             <textarea
               disabled={currentCustomer}
               id='customer-address'
+              name='customer-address'
               placeholder='Managua, Nicaragua.'
-              className='rounded border px-2 py-1 text-sm font-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500'
+              className='rounded border border-zinc-300 px-2 py-1 text-sm font-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500'
             />
           </label>
+          {!existingCustomer && (
+            <div className='col-span-2 flex justify-end'>
+              <Button
+                type='submit'
+                size='sm'
+                color='blue'
+              >
+                <div className='flex items-center gap-2'>
+                  {isCreatingCustomer ? 'Guardando' : 'Guardar'}
+                  {isCreatingCustomer && (
+                    <Spinner
+                      className=''
+                      size='sm'
+                    />
+                  )}
+                </div>
+              </Button>
+            </div>
+          )}
         </form>
       </div>
     </div>

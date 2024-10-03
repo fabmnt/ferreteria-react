@@ -5,7 +5,12 @@ export async function getCustomerByPhone(phone) {
   return { data, error }
 }
 
-export async function getCustomers() {
-  const { data, error } = await supabase.from('customers').select('*')
+export async function getCustomers(limit = 5) {
+  const { data, error } = await supabase.from('customers').select('*').limit(limit)
+  return { data, error }
+}
+
+export async function createCustomer(customer) {
+  const { data, error } = await supabase.from('customers').insert([customer])
   return { data, error }
 }
