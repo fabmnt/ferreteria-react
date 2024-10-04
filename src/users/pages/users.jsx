@@ -43,7 +43,7 @@ export function UsersPage() {
     <div className='w-full'>
       <div className='mb-4 flex items-center justify-between'>
         <div className='flex flex-col'>
-          <h2 className='text-3xl font-semibold'>Usuarios</h2>
+          <h2 className='text-2xl font-semibold'>Usuarios</h2>
           <p className='text-sm text-neutral-600'>Lista de usuarios del sistema.</p>
         </div>
       </div>
