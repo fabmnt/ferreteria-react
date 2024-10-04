@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { Button, Spinner } from 'flowbite-react'
+import { useEffect, useState } from 'react'
+import { createBill, updateBillProducts } from '../../services/bills'
 import { useSessionStore } from '../../store/session'
 import { AddProductModal } from '../components/add-product-modal'
 import { BillInformation } from '../components/bill-information'
 import { BillProducts } from '../components/bill-products'
 import { ClientInformation } from '../components/client-information'
-import { Button, Spinner } from 'flowbite-react'
-import { createBill, updateBillProducts } from '../../services/bills'
 
 export function CreateBill() {
   const employee = useSessionStore((state) => state.employee)
@@ -20,10 +20,10 @@ export function CreateBill() {
     totalDiscount: '0',
     totalToPay: '0',
   })
-  const dialogRef = useRef(null)
   const [billProducts, setBillProducts] = useState([])
   const [productsQuantity, setProductsQuantity] = useState({})
   const [isCreatingNewBill, setIsCreatingNewBill] = useState(false)
+  const [showAddProductModal, setShowAddProductModal] = useState(false)
 
   useEffect(() => {
     let totalBilled = 0
@@ -59,7 +59,7 @@ export function CreateBill() {
   }
 
   const openAddProductModal = () => {
-    dialogRef.current?.showModal()
+    setShowAddProductModal(true)
   }
 
   const updateCurrentCustomer = (customer) => {
@@ -132,9 +132,9 @@ export function CreateBill() {
   }
 
   return (
-    <div className='w-full'>
+    <div className='w-full pb-8'>
       <div className='mb-4'>
-        <h2 className='text-3xl font-semibold'>Facturación</h2>
+        <h2 className='text-2xl font-semibold'>Facturación</h2>
         <p className='text-sm text-neutral-600'>Ingresa el registro de una nueva factura.</p>
       </div>
 
@@ -165,7 +165,7 @@ export function CreateBill() {
           <div className='flex flex-col gap-4'>
             <Button
               className='w-full'
-              color='gray'
+              color='light'
               onClick={handleNewBill}
             >
               Nueva factura
@@ -190,7 +190,8 @@ export function CreateBill() {
       </section>
 
       <AddProductModal
-        dialogRef={dialogRef}
+        modalOpened={showAddProductModal}
+        closeModal={() => setShowAddProductModal(false)}
         billProducts={billProducts}
         addBillProduct={addBillProduct}
       />
