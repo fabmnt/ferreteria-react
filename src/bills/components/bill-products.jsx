@@ -72,7 +72,7 @@ export function BillProducts({
       )}
 
       {products.length > 0 && (
-        <div className='mt-2 h-[200px] overflow-y-auto scroll-smooth'>
+        <div className='scroll-bar mt-2 h-[200px] overflow-y-auto scroll-smooth'>
           <table className='sticky top-0 z-10 w-full table-auto bg-white text-left text-sm'>
             <thead className='sticky top-0 z-10 border-b bg-white'>
               <tr className='text-xs [&>th]:py-2 [&>th]:font-normal [&>th]:text-neutral-600'>

@@ -59,7 +59,7 @@ export function AddProductModal({ closeModal, modalOpened, addBillProduct, billP
           />
         </div>
 
-        <section className='max-h-[400px] overflow-auto scroll-smooth'>
+        <section className='scroll-bar max-h-[400px] overflow-auto scroll-smooth'>
           <table className='relative w-full table-auto text-left text-sm'>
             <thead className='sticky top-0 z-10 border-b bg-white text-xs'>
               <tr className='[&>th]:py-2 [&>th]:font-normal [&>th]:text-neutral-600'>

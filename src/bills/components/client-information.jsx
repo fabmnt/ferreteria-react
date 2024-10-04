@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react'
-import { createCustomer, getCustomerByPhone, getCustomers } from '../../services/customers'
-import { RiSearchLine } from 'react-icons/ri'
-import { FaCheckCircle } from 'react-icons/fa'
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
-import { Input } from '../../components/input'
 import { Button, Label, Spinner } from 'flowbite-react'
+import { useEffect, useState } from 'react'
+import { FaCheckCircle } from 'react-icons/fa'
+import { RiSearchLine } from 'react-icons/ri'
+import { Input } from '../../components/input'
+import { createCustomer, getCustomerByPhone, getCustomers } from '../../services/customers'
 
 export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
   const [existingCustomer, setExistingCustomer] = useState(true)
@@ -154,7 +153,7 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
           </form>
         )}
         {!showCustomerDetails && existingCustomer && (
-          <div className='mb-4 mt-2 max-h-[180px] overflow-y-auto scroll-smooth'>
+          <div className='scroll-bar mb-4 mt-2 max-h-[180px] overflow-y-auto scroll-smooth'>
             <table className='relative col-span-2 w-full table-auto text-left text-sm'>
               <thead className='sticky text-xs'>
                 <tr className='[&>th]:sticky [&>th]:top-0 [&>th]:z-20 [&>th]:h-10 [&>th]:border-b [&>th]:bg-white [&>th]:font-normal [&>th]:text-neutral-600'>
@@ -285,15 +284,7 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
                   onClick={() => setShowCustomerDetails((prev) => !prev)}
                   className='flex items-center gap-1 text-sm font-medium'
                 >
-                  {showCustomerDetails ? (
-                    <>
-                      <IoIosArrowUp className='h-4 w-6' /> Ocultar detalles
-                    </>
-                  ) : (
-                    <>
-                      <IoIosArrowDown className='h-4 w-6' /> Ver detalles
-                    </>
-                  )}
+                  {showCustomerDetails ? <>Ocultar detalles</> : <>Ver detalles</>}
                 </button>
               )}
             </div>

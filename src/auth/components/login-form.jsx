@@ -4,6 +4,7 @@ import { useLocation } from 'wouter'
 import { Spinner } from '../../components/spinner'
 import { signIn } from '../../services/auth'
 import { useLogin } from '../hooks/use-login'
+import { Input } from '../../components/input'
 
 export function LoginForm() {
   const { error, errorMessage, loading, setError, setErrorMessage, setLoading } = useLogin()
@@ -57,23 +58,21 @@ export function LoginForm() {
     <form onSubmit={handleSubmit}>
       <label className='flex flex-col gap-2'>
         <span className='text-sm font-semibold'>Correo electrónico</span>
-        <input
+        <Input
           required
           placeholder='micorreo@correo.com'
           name='user-email'
           type='email'
-          className='rounded-md border border-zinc-300 px-2 py-1.5 text-zinc-800 placeholder:text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500'
         />
       </label>
       <label className='mt-4 flex flex-col gap-2'>
         <span className='text-sm font-semibold'>Contraseña</span>
         <div className='relative'>
-          <input
+          <Input
             required
             placeholder='********'
             name='user-password'
             type={showPassword ? 'text' : 'password'}
-            className='w-full rounded-md border border-zinc-300 px-2 py-1.5 text-zinc-800 placeholder:text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500'
           />
           <button
             type='button'
