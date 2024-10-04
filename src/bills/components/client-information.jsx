@@ -4,7 +4,7 @@ import { RiSearchLine } from 'react-icons/ri'
 import { FaCheckCircle } from 'react-icons/fa'
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 import { Input } from '../../components/input'
-import { Button, Spinner } from 'flowbite-react'
+import { Button, Label, Spinner } from 'flowbite-react'
 
 export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
   const [existingCustomer, setExistingCustomer] = useState(true)
@@ -103,25 +103,31 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
 
     setIsCreatingCustomer(false)
     e.target.reset()
-    console.log(data, error)
+
+    if (error) {
+      return
+    }
+    const [customer] = data
+
+    updateCurrentCustomer(customer)
   }
 
   return (
     <div>
       <div className='flex justify-between'>
         <h4 className='mb-2 font-semibold'>Información del cliente</h4>
-        <label className='inline-flex cursor-pointer items-center'>
-          <input
-            type='checkbox'
-            checked={existingCustomer}
-            className='peer sr-only'
-            onChange={handleExistingCustomerChange}
-          />
-          <div className="peer relative h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full" />
-          <span className='ms-3 text-sm font-medium text-gray-900 dark:text-gray-300'>
-            Cliente existente
-          </span>
-        </label>
+        <div className='flex flex-col items-end'>
+          <label className='inline-flex cursor-pointer items-center'>
+            <input
+              type='checkbox'
+              checked={existingCustomer}
+              className='peer sr-only'
+              onChange={handleExistingCustomerChange}
+            />
+            <div className="peer relative h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full" />
+          </label>
+          <Label>{existingCustomer ? 'Cliente existente' : 'Nuevo cliente'}</Label>
+        </div>
       </div>
       <div className=''>
         {existingCustomer && (
@@ -141,43 +147,17 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
                   placeholder='88880000'
                 />
                 <button type='submit'>
-                  <RiSearchLine className='size-6 text-gray-600' />
+                  <RiSearchLine className='size-6 text-neutral-600/70' />
                 </button>
               </div>
             </label>
           </form>
         )}
-        {currentCustomer && (
-          <div className='col-span-2 mt-2'>
-            <div className='flex items-center justify-between'>
-              <p className='inline-flex items-center gap-1 text-sm'>
-                {`${currentCustomer.name} ${currentCustomer.last_name}, teléfono: ${currentCustomer.phone}`}
-                <FaCheckCircle className='size-4 text-green-600' />
-              </p>
-              {showCustomerDetails ? (
-                <button
-                  onClick={() => setShowCustomerDetails((prev) => !prev)}
-                  className='flex items-center gap-1 text-sm font-medium'
-                >
-                  <IoIosArrowUp className='h-4 w-6' /> Ocultar detalles
-                </button>
-              ) : (
-                <button
-                  onClick={() => setShowCustomerDetails((prev) => !prev)}
-                  className='flex items-center gap-1 text-sm font-medium'
-                >
-                  <IoIosArrowDown className='h-4 w-6' /> Ver detalles
-                </button>
-              )}
-            </div>
-          </div>
-        )}
-
         {!showCustomerDetails && existingCustomer && (
-          <div className='max-h-[180px] overflow-y-auto'>
-            <table className='relative col-span-2 mt-4 w-full table-auto text-left text-sm'>
-              <thead className='border-b'>
-                <tr className='[&>th]:sticky [&>th]:top-0 [&>th]:z-10 [&>th]:bg-white'>
+          <div className='mb-4 mt-2 max-h-[180px] overflow-y-auto scroll-smooth'>
+            <table className='relative col-span-2 w-full table-auto text-left text-sm'>
+              <thead className='sticky text-xs'>
+                <tr className='[&>th]:sticky [&>th]:top-0 [&>th]:z-20 [&>th]:h-10 [&>th]:border-b [&>th]:bg-white [&>th]:font-normal [&>th]:text-neutral-600'>
                   <th>Nombre</th>
                   <th>Apellido</th>
                   <th>Correo</th>
@@ -236,7 +216,6 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
               name='customer-last-name'
               required
               type='text'
-              className='rounded border px-2 py-1 text-sm font-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-purple-500'
               placeholder='Montoya'
             />
           </label>
@@ -247,7 +226,6 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
               id='customer-email'
               name='customer-email'
               type='email'
-              className='rounded border px-2 py-1 text-sm font-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-purple-500'
               placeholder='correo@correo.com'
             />
           </label>
@@ -260,7 +238,6 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
               type='tel'
               maxLength='8'
               minLength='8'
-              className='rounded border px-2 py-1 text-sm font-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-purple-500'
               placeholder='88880000'
             />
           </label>
@@ -294,6 +271,36 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
             </div>
           )}
         </form>
+      </div>
+      <div>
+        {currentCustomer ? (
+          <div className='col-span-2 mt-2'>
+            <div className='flex items-center justify-between'>
+              <p className='inline-flex items-center gap-1 text-sm'>
+                {`${currentCustomer.name} ${currentCustomer.last_name}, teléfono: ${currentCustomer.phone}`}
+                <FaCheckCircle className='size-4 text-green-600' />
+              </p>
+              {existingCustomer && (
+                <button
+                  onClick={() => setShowCustomerDetails((prev) => !prev)}
+                  className='flex items-center gap-1 text-sm font-medium'
+                >
+                  {showCustomerDetails ? (
+                    <>
+                      <IoIosArrowUp className='h-4 w-6' /> Ocultar detalles
+                    </>
+                  ) : (
+                    <>
+                      <IoIosArrowDown className='h-4 w-6' /> Ver detalles
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
+          </div>
+        ) : (
+          <p className='text-sm text-neutral-600'>Seleciona o crea un nuevo cliente</p>
+        )}
       </div>
     </div>
   )
