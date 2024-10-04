@@ -79,6 +79,7 @@ export function BillProducts({
                 <th>#</th>
                 <th>Producto</th>
                 <th>Marca</th>
+                <th>Inventario</th>
                 <th>Precio</th>
                 <th>Cantidad</th>
                 <th className='w-[10ch]'>Total</th>
@@ -94,6 +95,7 @@ export function BillProducts({
                   <td>{product.id}</td>
                   <td>{product.name}</td>
                   <td>{product.brand}</td>
+                  <td>{product.stock}</td>
                   <td>C$ {product.price}</td>
                   <td>
                     <Input

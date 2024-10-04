@@ -9,6 +9,7 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
   const [existingCustomer, setExistingCustomer] = useState(true)
   const [showCustomerDetails, setShowCustomerDetails] = useState(false)
   const [isCreatingCustomer, setIsCreatingCustomer] = useState(false)
+  const [isSearchingCustomer, setIsSearchingCustomer] = useState(false)
   const [lastCustomers, setLastCustomers] = useState([])
 
   useEffect(() => {
@@ -61,20 +62,24 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
   }
 
   const handleSearchCustomer = async (e) => {
+    setIsSearchingCustomer(true)
     e.preventDefault()
     const form = new FormData(e.target)
     const phone = form.get('phone')
     const { data, error } = await getCustomerByPhone(phone)
     if (error) {
+      setIsSearchingCustomer(false)
       return
     }
     const [customer] = data
 
     if (customer == null) {
+      setIsSearchingCustomer(false)
       return
     }
 
     updateCurrentCustomer(customer)
+    setIsSearchingCustomer(false)
   }
 
   const handleSubmitCreateCustomer = async (e) => {
@@ -125,7 +130,7 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
             />
             <div className="peer relative h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full" />
           </label>
-          <Label>{existingCustomer ? 'Cliente existente' : 'Nuevo cliente'}</Label>
+          <Label>{existingCustomer ? 'Existente' : 'Nuevo'}</Label>
         </div>
       </div>
       <div className=''>
@@ -146,7 +151,11 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
                   placeholder='88880000'
                 />
                 <button type='submit'>
-                  <RiSearchLine className='size-6 text-neutral-600/70' />
+                  {isSearchingCustomer ? (
+                    <Spinner color='purple' />
+                  ) : (
+                    <RiSearchLine className='size-6 text-neutral-600/70' />
+                  )}
                 </button>
               </div>
             </label>
@@ -255,7 +264,7 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
               <Button
                 type='submit'
                 size='sm'
-                color='blue'
+                color='light'
               >
                 <div className='flex items-center gap-2'>
                   {isCreatingCustomer ? 'Guardando' : 'Guardar'}
@@ -276,7 +285,9 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
           <div className='col-span-2 mt-2'>
             <div className='flex items-center justify-between'>
               <p className='inline-flex items-center gap-1 text-sm'>
+                Cliente seleccionado:{' '}
                 {`${currentCustomer.name} ${currentCustomer.last_name}, teléfono: ${currentCustomer.phone}`}
+                .
                 <FaCheckCircle className='size-4 text-green-600' />
               </p>
               {existingCustomer && (
@@ -290,7 +301,7 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
             </div>
           </div>
         ) : (
-          <p className='text-sm text-neutral-600'>Seleciona o crea un nuevo cliente</p>
+          <p className='text-sm text-neutral-600'>Seleciona o crea un nuevo cliente.</p>
         )}
       </div>
     </div>
