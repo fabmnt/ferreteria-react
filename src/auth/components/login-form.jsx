@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react'
+import { BiHide, BiShowAlt } from 'react-icons/bi'
 import { useLocation } from 'wouter'
 import { Spinner } from '../../components/spinner'
 import { signIn } from '../../services/auth'
 import { useLogin } from '../hooks/use-login'
-import { BiShowAlt } from "react-icons/bi";
-import { BiHide } from "react-icons/bi";
 
 export function LoginForm() {
   const { error, errorMessage, loading, setError, setErrorMessage, setLoading } = useLogin()
   const [, navigate] = useLocation()
-
   const [showPassword, setShowPassword] = useState(false)
 
   useEffect(() => {
@@ -69,7 +67,7 @@ export function LoginForm() {
       </label>
       <label className='mt-4 flex flex-col gap-2'>
         <span className='text-sm font-semibold'>Contraseña</span>
-        <div className="relative">
+        <div className='relative'>
           <input
             required
             placeholder='********'
@@ -78,11 +76,21 @@ export function LoginForm() {
             className='w-full rounded-md border border-zinc-300 px-2 py-1.5 text-zinc-800 placeholder:text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500'
           />
           <button
-            type="button"
+            type='button'
             onClick={togglePasswordVisibility}
-            className="absolute inset-y-0 right-0 px-3 text-sm text-purple-500"
+            className='absolute inset-y-0 right-0 px-3 text-sm text-purple-500'
           >
-            {showPassword ? <BiShowAlt size={22} color='grey'/> : <BiHide size={22} color='grey'/>}
+            {showPassword ? (
+              <BiShowAlt
+                size={22}
+                color='grey'
+              />
+            ) : (
+              <BiHide
+                size={22}
+                color='grey'
+              />
+            )}
           </button>
         </div>
       </label>
