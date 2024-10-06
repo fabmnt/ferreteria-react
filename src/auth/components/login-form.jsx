@@ -47,7 +47,7 @@ export function LoginForm() {
       setLoading(false)
       return
     }
-    navigate('/')
+    navigate('/home')
   }
 
   const togglePasswordVisibility = () => {

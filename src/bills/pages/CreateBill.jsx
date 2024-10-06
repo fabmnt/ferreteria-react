@@ -6,6 +6,7 @@ import { AddProductModal } from '../components/add-product-modal'
 import { BillInformation } from '../components/bill-information'
 import { BillProducts } from '../components/bill-products'
 import { ClientInformation } from '../components/client-information'
+import { getTaxes } from '../../services/products'
 
 export function CreateBill() {
   const employee = useSessionStore((state) => state.employee)
@@ -14,7 +15,7 @@ export function CreateBill() {
   const [billInformation, setBillInformation] = useState({
     paymentMethod: 'cash',
     discount: 0,
-    IVA: 16,
+    IVA: 0,
     totalBilled: '0',
     totalIVA: '0',
     totalDiscount: '0',
@@ -26,13 +27,25 @@ export function CreateBill() {
   const [showAddProductModal, setShowAddProductModal] = useState(false)
 
   useEffect(() => {
+    getTaxes().then(({ data }) => {
+      if (data == null) return
+
+      const IVA = data.find((tax) => tax.name === 'IVA')
+      if (IVA != null) {
+        updateBillInformation({ IVA: IVA.percentage })
+      }
+    })
+  }, [])
+
+  useEffect(() => {
     let totalBilled = 0
 
     for (const product of billProducts) {
-      totalBilled = totalBilled + product.price * (productsQuantity[product.id] ?? 1)
+      const discount = ((product.discount ?? 0) / 100) * product.price
+      totalBilled = totalBilled + product.price * (productsQuantity[product.id] ?? 1) - discount
     }
 
-    updateBillInformation({ totalBilled: parseFloat(totalBilled.toFixed(2)) })
+    updateBillInformation({ totalBilled: totalBilled.toFixed(2) })
   }, [billProducts, productsQuantity])
 
   useEffect(() => {

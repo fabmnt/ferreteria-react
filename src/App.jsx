@@ -9,6 +9,7 @@ import { supabase } from './db/supabase'
 import { DashboardLayout } from './layouts/dashboard'
 import { useSessionStore } from './store/session'
 import { UsersPage } from './users/pages/users'
+import { ProductsPage } from './products/pages/products'
 
 const App = () => {
   const setSession = useSessionStore((state) => state.setSession)
@@ -42,12 +43,16 @@ const App = () => {
       />
       <DashboardLayout>
         <Route
-          path='/'
+          path='/home'
           component={Dashboard}
         />
         <Route
           path='/users'
           component={UsersPage}
+        />
+        <Route
+          path='/products'
+          component={ProductsPage}
         />
         <Route
           path='/bills/create'

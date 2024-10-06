@@ -14,7 +14,7 @@ export function UsersPage() {
 
   useEffect(() => {
     if (employee.roles.role !== 'admin') {
-      navigate('/')
+      navigate('/home')
     }
   }, [employee])
 
@@ -47,7 +47,7 @@ export function UsersPage() {
           <p className='text-sm text-neutral-600'>Lista de usuarios del sistema.</p>
         </div>
       </div>
-      <div className='w-full border bg-white'>
+      <div className='w-full rounded border bg-white'>
         <UsersTable
           isLoading={employeesStatus === 'loading'}
           employees={employees}

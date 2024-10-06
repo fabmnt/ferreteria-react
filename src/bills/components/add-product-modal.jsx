@@ -1,7 +1,7 @@
-import { Modal } from 'flowbite-react'
+import { Modal, TextInput } from 'flowbite-react'
 import { useEffect, useRef, useState } from 'react'
+import { CiSearch } from 'react-icons/ci'
 import { IoIosAdd } from 'react-icons/io'
-import { Input } from '../../components/input'
 import { getProducts } from '../../services/products'
 
 export function AddProductModal({ closeModal, modalOpened, addBillProduct, billProducts }) {
@@ -10,6 +10,10 @@ export function AddProductModal({ closeModal, modalOpened, addBillProduct, billP
   const [query, setQuery] = useState('')
 
   useEffect(() => {
+    if (modalOpened === false) {
+      return
+    }
+
     getProducts().then(({ data, error }) => {
       if (error) {
         return
@@ -18,7 +22,7 @@ export function AddProductModal({ closeModal, modalOpened, addBillProduct, billP
       originalProducts.current = sortedData
       setProducts(sortedData)
     })
-  }, [])
+  }, [modalOpened])
 
   useEffect(() => {
     if (query.trim().length === 0) {
@@ -49,13 +53,13 @@ export function AddProductModal({ closeModal, modalOpened, addBillProduct, billP
       dismissible
     >
       <Modal.Header>Agrega productos a la factura actual</Modal.Header>
-
       <Modal.Body>
         <div className='mb-6'>
-          <Input
+          <TextInput
+            rightIcon={CiSearch}
             onChange={(e) => setQuery(e.target.value)}
             type='search'
-            placeholder='Buscar producto'
+            placeholder='Busca un producto por nombre o marca'
           />
         </div>
 
@@ -66,6 +70,7 @@ export function AddProductModal({ closeModal, modalOpened, addBillProduct, billP
                 <th>#</th>
                 <th>Producto</th>
                 <th>Precio</th>
+                <th>Descuento</th>
                 <th>Existencias</th>
                 <th>Marca</th>
                 <th />
@@ -74,12 +79,13 @@ export function AddProductModal({ closeModal, modalOpened, addBillProduct, billP
             <tbody className=''>
               {products.map((product) => (
                 <tr
-                  className={`[&>td]:h-10 [&>td]:align-middle ${!canShowProduct(product) ? 'opacity-50' : ''}`}
+                  className={`[&>td]:h-10 [&>td]:border-b [&>td]:align-middle ${!canShowProduct(product) ? 'opacity-50' : ''}`}
                   key={product.id}
                 >
                   <td>{product.id}</td>
                   <td>{product.name}</td>
                   <td>C$ {product.price}</td>
+                  <td>{product.discount ?? 0}%</td>
                   <td>{product.stock}</td>
                   <td>{product.brand}</td>
                   <td>

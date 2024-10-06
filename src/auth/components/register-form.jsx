@@ -6,8 +6,7 @@ import { useRegister } from '../hooks/use-register'
 import { useEffect, useState } from 'react'
 import { signIn, signUp } from '../../services/auth'
 import { createEmployee } from '../../services/users'
-import { BiShowAlt } from "react-icons/bi";
-import { BiHide } from "react-icons/bi";
+import { BiShowAlt, BiHide } from 'react-icons/bi'
 
 export function RegisterForm() {
   const [, navigate] = useLocation()
@@ -70,10 +69,10 @@ export function RegisterForm() {
       return
     }
 
-    navigate('/')
+    navigate('/home')
   }
 
-   const togglePasswordVisibility = () => {
+  const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
   }
 
@@ -111,21 +110,30 @@ export function RegisterForm() {
       <label className='mt-4 flex flex-col gap-2'>
         <span className='text-sm font-semibold'>Contraseña</span>
         <div className='relative'>
-        <Input
-          required
-          placeholder='********'
-          name='user-password'
-          type={showPassword ? 'text' : 'password'}
-        />
-        <button
-          type="button"
-          onClick={togglePasswordVisibility}
-          className='absolute inset-y-0 right-0 px-3 text-sm text-purple-500' 
-        >
-          {showPassword ? <BiShowAlt size={22} color='grey'/> : <BiHide size={22} color='grey'/>}
-        </button>
+          <Input
+            required
+            placeholder='********'
+            name='user-password'
+            type={showPassword ? 'text' : 'password'}
+          />
+          <button
+            type='button'
+            onClick={togglePasswordVisibility}
+            className='absolute inset-y-0 right-0 px-3 text-sm text-purple-500'
+          >
+            {showPassword ? (
+              <BiShowAlt
+                size={22}
+                color='grey'
+              />
+            ) : (
+              <BiHide
+                size={22}
+                color='grey'
+              />
+            )}
+          </button>
         </div>
-
       </label>
       {errorMessage && <p className='mt-2 text-sm text-red-500'>{errorMessage}</p>}
       <Button

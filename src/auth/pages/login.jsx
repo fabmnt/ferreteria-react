@@ -14,7 +14,7 @@ export function Login() {
 
   useEffect(() => {
     if (session) {
-      navigate('/')
+      navigate('/home')
     }
   }, [session])
 

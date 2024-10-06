@@ -47,6 +47,13 @@ export function BillProducts({
     updateProductsQuantity(newProductsQuantity)
   }
 
+  const calculateProductTotal = (product) => {
+    const quantity = quantities[product.id] ?? 1
+    const discount = ((product.discount ?? 0) / 100) * product.price
+    const total = product.price * quantity - discount
+    return total
+  }
+
   return (
     <>
       <div className='mb-4 flex justify-between'>
@@ -77,22 +84,27 @@ export function BillProducts({
             <thead className='sticky top-0 z-10 border-b bg-white'>
               <tr className='text-xs [&>th]:py-2 [&>th]:font-normal [&>th]:text-neutral-600'>
                 <th>#</th>
-                <th>Producto</th>
-                <th>Marca</th>
+                <th className='w-[120px]'>Producto</th>
+                <th className='w-[120px]'>Marca</th>
                 <th>Inventario</th>
                 <th>Precio</th>
                 <th>Cantidad</th>
-                <th className='w-[10ch]'>Total</th>
+                <th>Descuento</th>
+                <th className=''>Total</th>
                 <th className='w-[5ch]' />
               </tr>
             </thead>
             <tbody className=''>
               {products.map((product) => (
                 <tr
-                  className='[&>td]:h-10 [&>td]:align-middle'
+                  className='[&>td]:h-10 [&>td]:border-b [&>td]:align-middle'
                   key={product.id}
                 >
-                  <td>{product.id}</td>
+                  <td>
+                    <span className='inline-block rounded bg-gray-200 px-2 py-1 text-gray-800'>
+                      #{product.id}
+                    </span>
+                  </td>
                   <td>{product.name}</td>
                   <td>{product.brand}</td>
                   <td>{product.stock}</td>
@@ -107,7 +119,8 @@ export function BillProducts({
                       onInput={(e) => handleUpdateQuantity(e, product.id)}
                     />
                   </td>
-                  <td>C$ {product.price * (quantities[product.id] ?? 1)}</td>
+                  <td>{product.discount ?? 0}%</td>
+                  <td>C$ {calculateProductTotal(product).toFixed(2)}</td>
                   <td className='flex justify-center'>
                     <button onClick={() => removeProduct(product.id)}>
                       <AiOutlineDelete className='h-6 w-5 text-red-700' />

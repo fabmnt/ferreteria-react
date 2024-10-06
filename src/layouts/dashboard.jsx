@@ -3,7 +3,7 @@ import { RxDashboard } from 'react-icons/rx'
 import { TiDocumentText } from 'react-icons/ti'
 import { useLocation } from 'wouter'
 import { useSessionStore } from '../store/session'
-import { hasRoles } from '../utils/users'
+import { hasRoles } from '../utils/roles'
 import { LayoutLink } from './components/link'
 import { useEffect, useState } from 'react'
 import { getEmployee } from '../services/users'
@@ -12,13 +12,14 @@ import { Spinner } from '../components/spinner'
 import { TbLayoutSidebarLeftCollapse } from 'react-icons/tb'
 import { UserDropdown } from './components/user-dropdown'
 import { IoIosNotificationsOutline, IoIosHelpCircleOutline } from 'react-icons/io'
+import { MdOutlineInventory2 } from 'react-icons/md'
 
 export function DashboardLayout({ children }) {
   const session = useSessionStore((state) => state.session)
   const employee = useSessionStore((state) => state.employee)
   const setEmployee = useSessionStore((state) => state.setEmployee)
   const [location, navigate] = useLocation()
-  const isActivePath = (path) => location === path
+  const isActivePath = (path) => location.startsWith(path)
   const [loadingApp, setLoadingApp] = useState(true)
 
   useEffect(() => {
@@ -106,8 +107,8 @@ export function DashboardLayout({ children }) {
           <div className='flex h-full flex-col justify-between border pt-4'>
             <nav className='flex flex-col gap-2 text-sm'>
               <LayoutLink
-                isActive={isActivePath('/')}
-                to='/'
+                isActive={isActivePath('/home')}
+                to='/home'
               >
                 <RxDashboard className='h-6 w-5' />
                 Inicio
@@ -129,6 +130,15 @@ export function DashboardLayout({ children }) {
                 >
                   <TiDocumentText className='h-6 w-5' />
                   Nueva Factura
+                </LayoutLink>
+              )}
+              {hasRoles(employee, 'admin', 'seller') && (
+                <LayoutLink
+                  isActive={isActivePath('/products')}
+                  to='/products'
+                >
+                  <MdOutlineInventory2 className='h-6 w-5' />
+                  Productos
                 </LayoutLink>
               )}
             </nav>

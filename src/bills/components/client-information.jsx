@@ -1,4 +1,4 @@
-import { Button, Label, Spinner } from 'flowbite-react'
+import { Button, Label, Spinner, TextInput } from 'flowbite-react'
 import { useEffect, useState } from 'react'
 import { FaCheckCircle } from 'react-icons/fa'
 import { RiSearchLine } from 'react-icons/ri'
@@ -142,21 +142,17 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
             <label className='flex flex-col gap-1 text-sm'>
               <span className=''>Buscar por teléfono:</span>
               <div className='flex gap-1'>
-                <Input
+                <TextInput
+                  sizing='sm'
+                  className='w-full'
+                  rightIcon={isSearchingCustomer ? Spinner : RiSearchLine}
                   required
                   name='phone'
                   type='tel'
                   maxLength='8'
                   minLength='8'
-                  placeholder='88880000'
+                  placeholder='########'
                 />
-                <button type='submit'>
-                  {isSearchingCustomer ? (
-                    <Spinner color='purple' />
-                  ) : (
-                    <RiSearchLine className='size-6 text-neutral-600/70' />
-                  )}
-                </button>
               </div>
             </label>
           </form>
@@ -177,7 +173,7 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
               <tbody>
                 {lastCustomers.map((customer) => (
                   <tr
-                    className='hover:cursor-pointer [&>td]:h-10 [&>td]:align-middle'
+                    className='hover:cursor-pointer [&>td]:h-10 [&>td]:border-b [&>td]:align-middle'
                     key={customer.id}
                     onClick={() => updateCurrentCustomer(customer)}
                   >
