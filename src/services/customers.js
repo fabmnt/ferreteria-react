@@ -5,12 +5,22 @@ export async function getCustomerByPhone(phone) {
   return { data, error }
 }
 
-export async function getCustomers(limit = 5) {
-  const { data, error } = await supabase.from('customers').select('*').limit(limit)
+export async function getCustomers() {
+  const { data, error } = await supabase.from('customers').select('*')
   return { data, error }
 }
 
 export async function createCustomer(customer) {
   const { data, error } = await supabase.from('customers').insert(customer).select()
+  return { data, error }
+}
+
+export async function updateCustomerLastBuy(customerId, lastBuy) {
+  const { data, error } = await supabase
+    .from('customers')
+    .update({ last_buy: lastBuy })
+    .eq('id', customerId)
+    .select('*')
+
   return { data, error }
 }
