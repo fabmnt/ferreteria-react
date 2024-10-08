@@ -72,7 +72,7 @@ export function AddProductModal({ closeModal, modalOpened, addBillProduct, billP
           <table className='relative w-full table-fixed text-left text-sm'>
             <thead className='sticky top-0 z-10 border-b bg-white text-xs'>
               <tr className='[&>th]:py-2 [&>th]:font-normal [&>th]:text-neutral-600'>
-                <th className='w-[40px]'>#</th>
+                <th className='w-[60px]'>#</th>
                 <th className='w-[250px]'>Producto</th>
                 <th>Precio</th>
                 <th>Descuento</th>
@@ -103,7 +103,11 @@ export function AddProductModal({ closeModal, modalOpened, addBillProduct, billP
                   className={`[&>td]:h-10 [&>td]:border-b [&>td]:align-middle ${!canShowProduct(product) ? 'opacity-50' : ''}`}
                   key={product.id}
                 >
-                  <td>{product.id}</td>
+                  <td>
+                    <span className='inline-block rounded bg-gray-200 px-2 py-1 text-gray-800'>
+                      #{product.id}
+                    </span>
+                  </td>
                   <td>{product.name}</td>
                   <td>C$ {product.price}</td>
                   <td>{product.discount ?? 0}%</td>
