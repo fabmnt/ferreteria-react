@@ -13,6 +13,7 @@ import { useSessionStore } from '../../store/session'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { useState } from 'react'
 import { Spinner } from '../../components/spinner'
+import { toast } from 'sonner'
 
 export function UsersTable({ isLoading, employees, revalidate, roles }) {
   const [openModal, setOpenModal] = useState(false)
@@ -46,6 +47,7 @@ export function UsersTable({ isLoading, employees, revalidate, roles }) {
     const { error } = await deleteUser(userId)
 
     if (error) {
+      toast.error('Ocurrió un error al eliminar el usuario, inténtelo más tarde.')
       setIsDeleting(false)
       setOpenModal(false)
       revalidate()
@@ -56,6 +58,7 @@ export function UsersTable({ isLoading, employees, revalidate, roles }) {
       await logout()
     }
 
+    toast.success('Usuario eliminado exitosamente.')
     setIsDeleting(false)
     setOpenModal(false)
     revalidate()
@@ -78,6 +81,7 @@ export function UsersTable({ isLoading, employees, revalidate, roles }) {
     setIsChangingRole(true)
     const { error } = await updateEmployeeRole(employeeIdToChangeRole, roleId)
     if (error) {
+      toast.error('Ocurrió un error al actualizar el rol, inténtelo más tarde.')
       setIsChangingRole(false)
       setOpenChangeRoleModal(false)
       return
@@ -86,6 +90,7 @@ export function UsersTable({ isLoading, employees, revalidate, roles }) {
     const {
       data: [employee],
     } = await getEmployee(session.user.id)
+    toast.success('Rol actualizado exitosamente.')
     setEmployee(employee)
     setIsChangingRole(false)
     setOpenChangeRoleModal(false)

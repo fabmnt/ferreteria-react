@@ -10,6 +10,7 @@ import { DashboardLayout } from './layouts/dashboard'
 import { useSessionStore } from './store/session'
 import { UsersPage } from './users/pages/users'
 import { ProductsPage } from './products/pages/products'
+import { ProductInfo } from './products/pages/product-info'
 
 const App = () => {
   const setSession = useSessionStore((state) => state.setSession)
@@ -56,6 +57,10 @@ const App = () => {
         <Route
           path='/products'
           component={ProductsPage}
+        />
+        <Route
+          path='/products/:id'
+          component={ProductInfo}
         />
         <Route
           path='/bills/create'

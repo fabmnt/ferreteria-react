@@ -4,6 +4,7 @@ import { FaCheckCircle } from 'react-icons/fa'
 import { RiSearchLine } from 'react-icons/ri'
 import { Input } from '../../components/input'
 import { createCustomer, getCustomerByPhone, getCustomers } from '../../services/customers'
+import { toast } from 'sonner'
 
 export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
   const [existingCustomer, setExistingCustomer] = useState(true)
@@ -117,10 +118,11 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
     e.target.reset()
 
     if (error) {
+      toast.error('Ocurrió un error al crear el cliente. Inténtalo más tarde.')
       return
     }
     const [customer] = data
-
+    toast.success('Cliente creado exitosamente.')
     updateCurrentCustomer(customer)
   }
 

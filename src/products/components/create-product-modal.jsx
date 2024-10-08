@@ -1,11 +1,12 @@
 import { Button, Label, Modal, Select, Spinner, Textarea, TextInput } from 'flowbite-react'
 import { useState } from 'react'
 import { createProduct } from '../../services/products'
+import { toast } from 'sonner'
 
 export function CreateProductModal({ opened, close, categories }) {
   const [isCreatingNewPRoduct, setIsCreatingNewProduct] = useState(false)
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     setIsCreatingNewProduct(true)
     e.preventDefault()
     const form = new FormData(e.target)
@@ -27,8 +28,19 @@ export function CreateProductModal({ opened, close, categories }) {
       description,
     }
 
-    await createProduct(newProduct)
-    setIsCreatingNewProduct(false)
+    createProduct(newProduct)
+      .then(({ error }) => {
+        if (error) {
+          throw new Error(error.message)
+        }
+        toast.success('Producto creado exitosamente.')
+      })
+      .catch(() => {
+        toast.error('Ocurrió un error al crear el producto, inténtelo más tarde.')
+      })
+      .finally(() => {
+        setIsCreatingNewProduct(false)
+      })
   }
 
   return (

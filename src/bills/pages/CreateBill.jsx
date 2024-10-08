@@ -8,6 +8,7 @@ import { BillProducts } from '../components/bill-products'
 import { ClientInformation } from '../components/client-information'
 import { getTaxes } from '../../services/products'
 import { updateCustomerLastBuy } from '../../services/customers'
+import { toast } from 'sonner'
 
 export function CreateBill() {
   const employee = useSessionStore((state) => state.employee)
@@ -90,12 +91,12 @@ export function CreateBill() {
 
   const handleCreateBill = async () => {
     if (currentCustomer == null) {
-      window.alert('Debes seleccionar un cliente.')
+      toast.warning('Debes seleccionar un cliente.')
       return
     }
 
     if (billProducts.length === 0) {
-      window.alert('Debes agregar productos a la factura.')
+      toast.warning('Debes agregar productos a la factura.')
       return
     }
     setIsCreatingNewBill(true)
@@ -112,6 +113,7 @@ export function CreateBill() {
 
     const { error: billError, data } = await createBill(newBillDetails)
     if (billError != null) {
+      toast.error('Ocurrió un error al guardar la factura. Inténtalo más tarde.')
       setIsCreatingNewBill(false)
       return
     }
@@ -133,9 +135,11 @@ export function CreateBill() {
     } = results[1]
 
     if (error) {
-      window.alert(error.message)
+      toast.error('Ocurrió un error al actualizar la información del cliente.')
+      setIsCreatingNewBill(false)
+      return
     }
-
+    toast.success('Factura guardada exitosamente.')
     setCurrentCustomer(customer)
     setIsCreatingNewBill(false)
   }
