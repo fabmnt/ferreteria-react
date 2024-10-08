@@ -8,20 +8,25 @@ export function AddProductModal({ closeModal, modalOpened, addBillProduct, billP
   const originalProducts = useRef([])
   const [products, setProducts] = useState([])
   const [query, setQuery] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     if (modalOpened === false) {
       return
     }
-
-    getProducts().then(({ data, error }) => {
-      if (error) {
-        return
-      }
-      const sortedData = [...data].sort((a, b) => a.name.localeCompare(b.name))
-      originalProducts.current = sortedData
-      setProducts(sortedData)
-    })
+    setIsLoading(true)
+    getProducts()
+      .then(({ data, error }) => {
+        if (error) {
+          return
+        }
+        const sortedData = [...data].sort((a, b) => a.name.localeCompare(b.name))
+        originalProducts.current = sortedData
+        setProducts(sortedData)
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   }, [modalOpened])
 
   useEffect(() => {
@@ -64,19 +69,35 @@ export function AddProductModal({ closeModal, modalOpened, addBillProduct, billP
         </div>
 
         <section className='scroll-bar max-h-[400px] overflow-auto scroll-smooth'>
-          <table className='relative w-full table-auto text-left text-sm'>
+          <table className='relative w-full table-fixed text-left text-sm'>
             <thead className='sticky top-0 z-10 border-b bg-white text-xs'>
               <tr className='[&>th]:py-2 [&>th]:font-normal [&>th]:text-neutral-600'>
-                <th>#</th>
-                <th>Producto</th>
+                <th className='w-[40px]'>#</th>
+                <th className='w-[250px]'>Producto</th>
                 <th>Precio</th>
                 <th>Descuento</th>
                 <th>Existencias</th>
                 <th>Marca</th>
-                <th />
+                <th className='w-[50px]' />
               </tr>
             </thead>
             <tbody className=''>
+              {isLoading &&
+                Array.from({ length: 12 }).map((_, index) => (
+                  <tr key={index}>
+                    <td
+                      colSpan='7'
+                      className='h-10 px-2 align-middle'
+                    >
+                      <div className='flex animate-pulse space-x-4'>
+                        <div className='flex-1 p-1'>
+                          <div className='h-7 w-full rounded-lg bg-neutral-200' />
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+
               {products.map((product) => (
                 <tr
                   className={`[&>td]:h-10 [&>td]:border-b [&>td]:align-middle ${!canShowProduct(product) ? 'opacity-50' : ''}`}
