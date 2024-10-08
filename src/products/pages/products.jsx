@@ -9,6 +9,7 @@ export function ProductsPage() {
   const [products, setProducts] = useState([])
   const [categories, setCategories] = useState([])
   const [showCreateProductModal, setShowCreateProductModal] = useState(false)
+  const [isLoadingProducts, setIsLoadingProducts] = useState(false)
 
   useEffect(() => {
     getCategories().then(({ data }) => {
@@ -20,12 +21,17 @@ export function ProductsPage() {
   }, [])
 
   useEffect(() => {
-    getProducts().then(({ data }) => {
-      if (data == null) {
-        return
-      }
-      setProducts(data)
-    })
+    setIsLoadingProducts(true)
+    getProducts()
+      .then(({ data }) => {
+        if (data == null) {
+          return
+        }
+        setProducts(data)
+      })
+      .finally(() => {
+        setIsLoadingProducts(false)
+      })
   }, [])
 
   const closeCreateProductModal = () => {
@@ -54,6 +60,7 @@ export function ProductsPage() {
         <ProductsTable
           products={products}
           categories={categories}
+          isLoading={isLoadingProducts}
         />
       </div>
       <CreateProductModal

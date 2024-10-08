@@ -2,7 +2,7 @@ import { Button } from 'flowbite-react'
 import { AiOutlineDelete } from 'react-icons/ai'
 import { useLocation } from 'wouter'
 
-export function ProductsTable({ products, categories }) {
+export function ProductsTable({ products, categories, isLoading }) {
   const [, navigate] = useLocation()
 
   const navigateToProduct = (productId) => {
@@ -39,6 +39,22 @@ export function ProductsTable({ products, categories }) {
         </tr>
       </thead>
       <tbody>
+        {isLoading &&
+          Array.from({ length: 12 }).map((_, index) => (
+            <tr key={index}>
+              <td
+                colSpan='9'
+                className='h-16 px-2 align-middle'
+              >
+                <div className='flex animate-pulse space-x-4'>
+                  <div className='flex-1 p-1'>
+                    <div className='h-7 w-full rounded-lg bg-neutral-200' />
+                  </div>
+                </div>
+              </td>
+            </tr>
+          ))}
+
         {products.map((product) => (
           <tr
             onClick={() => navigateToProduct(product.id)}
