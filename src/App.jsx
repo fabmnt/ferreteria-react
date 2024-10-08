@@ -42,6 +42,9 @@ const App = () => {
         component={Register}
       />
       <DashboardLayout>
+        <Route path='/'>
+          <Redirect to='/home' />
+        </Route>
         <Route
           path='/home'
           component={Dashboard}
@@ -58,9 +61,6 @@ const App = () => {
           path='/bills/create'
           component={CreateBill}
         />
-        <Route>
-          <Redirect to='/home' />
-        </Route>
       </DashboardLayout>
     </Switch>
   )
