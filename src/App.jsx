@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Route, Switch, useLocation } from 'wouter'
+import { Route, Switch, useLocation, Redirect } from 'wouter'
 import './App.css'
 import { Login } from './auth/pages/login'
 import { Register } from './auth/pages/register'
@@ -58,6 +58,9 @@ const App = () => {
           path='/bills/create'
           component={CreateBill}
         />
+        <Route>
+          <Redirect to='/home' />
+        </Route>
       </DashboardLayout>
     </Switch>
   )
