@@ -120,34 +120,17 @@ export function UsersTable({ isLoading, employees, revalidate, roles }) {
         </thead>
         <tbody>
           {isLoading &&
-            Array.from({ length: 5 }).map((_, index) => (
+            Array.from({ length: 12 }).map((_, index) => (
               <tr key={index}>
-                <td className='h-16 pl-4'>
-                  <div className='h-8 w-12 animate-pulse rounded-lg bg-gray-200' />
-                </td>
-                <td className='h-16'>
-                  <div className='h-8 w-24 animate-pulse rounded-lg bg-gray-200' />
-                </td>
-                <td className='h-16'>
-                  <div className='h-8 w-24 animate-pulse rounded-lg bg-gray-200' />
-                </td>
-                <td className='h-16'>
-                  <div className='h-8 animate-pulse rounded-lg bg-gray-200' />
-                </td>
-                <td className='h-16'>
-                  <div className='h-8 animate-pulse rounded-lg bg-gray-200' />
-                </td>
-                <td className='h-16'>
-                  <div className='h-8 animate-pulse rounded-lg bg-gray-200' />
-                </td>
-                <td className='h-16'>
-                  <div className='h-8 animate-pulse rounded-lg bg-gray-200' />
-                </td>
-                <td className='h-16'>
-                  <div className='h-8 animate-pulse rounded-lg bg-gray-200' />
-                </td>
-                <td className='h-16'>
-                  <div className='h-8 w-16 animate-pulse rounded-lg bg-gray-200' />
+                <td
+                  colSpan='9'
+                  className='h-16 px-2 align-middle'
+                >
+                  <div className='flex animate-pulse space-x-4'>
+                    <div className='flex-1 p-1'>
+                      <div className='h-7 w-full rounded-lg bg-neutral-200' />
+                    </div>
+                  </div>
                 </td>
               </tr>
             ))}
