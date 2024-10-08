@@ -7,6 +7,7 @@ import { BillInformation } from '../components/bill-information'
 import { BillProducts } from '../components/bill-products'
 import { ClientInformation } from '../components/client-information'
 import { getTaxes } from '../../services/products'
+import { updateCustomerLastBuy } from '../../services/customers'
 
 export function CreateBill() {
   const employee = useSessionStore((state) => state.employee)
@@ -121,11 +122,21 @@ export function CreateBill() {
       quantity: productsQuantity[product.id] ?? 1,
     }))
 
-    const { error } = await updateBillProducts(bill.id, products)
+    const results = await Promise.all([
+      updateBillProducts(bill.id, products),
+      updateCustomerLastBuy(currentCustomer.id, bill.created_at),
+    ])
+
+    const {
+      error,
+      data: [customer],
+    } = results[1]
+
     if (error) {
       window.alert(error.message)
     }
 
+    setCurrentCustomer(customer)
     setIsCreatingNewBill(false)
   }
 
