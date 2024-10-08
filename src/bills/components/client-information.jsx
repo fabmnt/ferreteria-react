@@ -11,15 +11,23 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
   const [isCreatingCustomer, setIsCreatingCustomer] = useState(false)
   const [isSearchingCustomer, setIsSearchingCustomer] = useState(false)
   const [lastCustomers, setLastCustomers] = useState([])
+  const [isLoadingCustomers, setIsLoadingCustomers] = useState(false)
 
   useEffect(() => {
-    getCustomers().then(({ data }) => {
-      if (data == null) {
-        return
-      }
-      const sortedCustomers = [...data].sort((a, b) => new Date(b.last_buy) - new Date(a.last_buy))
-      setLastCustomers(sortedCustomers)
-    })
+    setIsLoadingCustomers(true)
+    getCustomers()
+      .then(({ data }) => {
+        if (data == null) {
+          return
+        }
+        const sortedCustomers = [...data]
+          .sort((a, b) => new Date(b.last_buy) - new Date(a.last_buy))
+          .slice(0, 5)
+        setLastCustomers(sortedCustomers)
+      })
+      .finally(() => {
+        setIsLoadingCustomers(false)
+      })
   }, [])
 
   useEffect(() => {
@@ -159,21 +167,36 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
         )}
         {!showCustomerDetails && existingCustomer && (
           <div className='scroll-bar mb-4 mt-2 max-h-[180px] overflow-y-auto scroll-smooth'>
-            <table className='relative col-span-2 w-full table-auto text-left text-sm'>
+            <table className='relative col-span-2 w-full table-fixed text-left text-sm'>
               <thead className='sticky text-xs'>
                 <tr className='[&>th]:sticky [&>th]:top-0 [&>th]:z-20 [&>th]:h-10 [&>th]:border-b [&>th]:bg-white [&>th]:font-normal [&>th]:text-neutral-600'>
-                  <th>Nombre</th>
-                  <th>Apellido</th>
-                  <th>Correo</th>
+                  <th className='w-[80px]'>Nombre</th>
+                  <th className='w-[80px]'>Apellido</th>
+                  <th className='w-[200px]'>Correo</th>
                   <th>Teléfono</th>
                   <th>Última compra</th>
-                  <th />
+                  <th className='w-[25px]' />
                 </tr>
               </thead>
               <tbody>
+                {isLoadingCustomers &&
+                  Array.from({ length: 12 }).map((_, index) => (
+                    <tr key={index}>
+                      <td
+                        colSpan='6'
+                        className='h-10 align-middle'
+                      >
+                        <div className='flex animate-pulse'>
+                          <div className='flex-1'>
+                            <div className='h-7 w-full rounded-lg bg-neutral-200' />
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
                 {lastCustomers.map((customer) => (
                   <tr
-                    className='hover:cursor-pointer [&>td]:h-10 [&>td]:border-b [&>td]:align-middle'
+                    className='hover:cursor-pointer [&>td]:h-10 [&>td]:overflow-clip [&>td]:text-ellipsis [&>td]:border-b [&>td]:align-middle'
                     key={customer.id}
                     onClick={() => updateCurrentCustomer(customer)}
                   >
