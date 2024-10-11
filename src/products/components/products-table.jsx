@@ -2,7 +2,7 @@ import { Button } from 'flowbite-react'
 import { AiOutlineDelete } from 'react-icons/ai'
 import { useLocation } from 'wouter'
 
-export function ProductsTable({ products, categories, isLoading }) {
+export function ProductsTable({ products, categories, isLoading, onDeleteProduct }) {
   const [, navigate] = useLocation()
 
   const navigateToProduct = (productId) => {
@@ -59,7 +59,7 @@ export function ProductsTable({ products, categories, isLoading }) {
           <tr
             onClick={() => navigateToProduct(product.id)}
             key={product.id}
-            className='hover:cursor-pointer hover:bg-neutral-100 [&>td]:h-16 [&>td]:overflow-clip [&>td]:text-ellipsis [&>td]:border-b [&>td]:px-2 [&>td]:align-middle'
+            className='hover:cursor-pointer hover:bg-neutral-100 [&>td]:h-16 [&>td]:overflow-clip [&>td]:border-b [&>td]:px-2 [&>td]:align-middle'
           >
             <td>
               <span className='inline-block rounded bg-gray-200 px-2.5 py-1 text-gray-800'>
@@ -75,6 +75,10 @@ export function ProductsTable({ products, categories, isLoading }) {
             <td>{product.stock}</td>
             <td>
               <Button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onDeleteProduct(product.id)
+                }}
                 color='light'
                 size='sm'
               >

@@ -1,49 +1,66 @@
-import { Button, Label, Modal, Select, Spinner, Textarea, TextInput } from 'flowbite-react'
+import { Button, Label, Modal, Select, Textarea, TextInput } from 'flowbite-react'
+import { Spinner } from '../../components/spinner'
 import { useState } from 'react'
-import { createProduct } from '../../services/products'
+import { updateProduct } from '../../services/products'
 import { toast } from 'sonner'
+import { sortKeys } from '../../utils/utils'
 
-export function CreateProductModal({ opened, close, categories, onCreateProduct }) {
-  const [isCreatingNewPRoduct, setIsCreatingNewProduct] = useState(false)
+export function EditProductModal({ opened, close, categories, product, onUpdateProduct }) {
+  const [isUpdatingProduct, setIsUpdatingProduct] = useState(false)
 
   const handleSubmit = (e) => {
-    setIsCreatingNewProduct(true)
+    setIsUpdatingProduct(true)
     e.preventDefault()
+    const id = product.id
     const form = new FormData(e.target)
     const name = form.get('product-name').trim()
     const brand = form.get('product-brand').trim()
-    const price = +form.get('product-price').trim()
     const cost = +form.get('product-cost').trim()
+    const price = +form.get('product-price').trim()
     const stock = +form.get('product-stock').trim()
     const discount = +form.get('product-discount').trim() || 0
-    const category = form.get('product-category').trim()
+    const category = +form.get('product-category').trim()
     const description = form.get('product-description').trim()
 
-    const newProduct = {
+    const updatedProduct = {
+      id,
+      cost,
       name,
       brand,
       price,
-      cost,
       stock,
       discount,
       category_id: category,
       description,
     }
 
-    createProduct(newProduct)
-      .then(({ error }) => {
+    const updatedProductAsJSON = JSON.stringify(
+      sortKeys({
+        ...updatedProduct,
+        created_at: product.created_at,
+      }),
+    )
+    const productAsJSON = JSON.stringify(sortKeys({ ...product, discount: product.discount ?? 0 }))
+    if (updatedProductAsJSON === productAsJSON) {
+      toast.warning('No se realizaron cambios en el producto.')
+      setIsUpdatingProduct(false)
+      return
+    }
+
+    updateProduct(updatedProduct)
+      .then(({ error, data }) => {
         if (error) {
           throw new Error(error.message)
         }
-        toast.success('Producto creado exitosamente.')
-        onCreateProduct()
+        const [updatedProduct] = data
+        onUpdateProduct(updatedProduct)
+        toast.success('Producto actualizado exitosamente.')
       })
       .catch(() => {
-        toast.error('Ocurrió un error al crear el producto, inténtelo más tarde.')
+        toast.error('Ocurrió un error al actualizar el producto, inténtelo más tarde.')
       })
       .finally(() => {
-        e.target.reset()
-        setIsCreatingNewProduct(false)
+        setIsUpdatingProduct(false)
         close()
       })
   }
@@ -62,6 +79,7 @@ export function CreateProductModal({ opened, close, categories, onCreateProduct 
               <span>Nombre</span>
               <TextInput
                 required
+                defaultValue={product.name}
                 className='mt-2'
                 name='product-name'
                 placeholder='Nombre del producto'
@@ -70,6 +88,7 @@ export function CreateProductModal({ opened, close, categories, onCreateProduct 
             <Label className='col-span-1'>
               <span>Marca</span>
               <TextInput
+                defaultValue={product.brand}
                 required
                 className='mt-2'
                 name='product-brand'
@@ -79,6 +98,7 @@ export function CreateProductModal({ opened, close, categories, onCreateProduct 
             <Label className='col-span-1'>
               <span>Categoría</span>
               <Select
+                defaultValue={product.category_id}
                 required
                 name='product-category'
                 className='mt-2'
@@ -96,8 +116,9 @@ export function CreateProductModal({ opened, close, categories, onCreateProduct 
             <Label className='col-span-1'>
               <span>Precio de venta</span>
               <TextInput
-                min={1}
                 step={0.01}
+                defaultValue={product.price}
+                min={1}
                 required
                 name='product-price'
                 type='number'
@@ -109,8 +130,9 @@ export function CreateProductModal({ opened, close, categories, onCreateProduct 
             <Label className='col-span-1'>
               <span>Precio de costo</span>
               <TextInput
-                min={1}
                 step={0.01}
+                defaultValue={product.cost}
+                min={1}
                 required
                 name='product-cost'
                 type='number'
@@ -122,6 +144,7 @@ export function CreateProductModal({ opened, close, categories, onCreateProduct 
             <Label className='col-span-1'>
               <span>Existencias</span>
               <TextInput
+                defaultValue={product.stock}
                 required
                 min={0}
                 name='product-stock'
@@ -133,7 +156,7 @@ export function CreateProductModal({ opened, close, categories, onCreateProduct 
             <Label className='col-span-1'>
               <span>Descuento</span>
               <TextInput
-                required
+                defaultValue={product.discount}
                 min={0}
                 max={100}
                 name='product-discount'
@@ -147,6 +170,7 @@ export function CreateProductModal({ opened, close, categories, onCreateProduct 
             <Label className='col-span-4'>
               <span>Descripción</span>
               <Textarea
+                defaultValue={product.description}
                 required
                 name='product-description'
                 className='mt-2'
@@ -159,8 +183,8 @@ export function CreateProductModal({ opened, close, categories, onCreateProduct 
                 color='blue'
               >
                 <div className='flex items-center gap-2'>
-                  {isCreatingNewPRoduct ? 'Creando' : 'Crear producto'}
-                  {isCreatingNewPRoduct && <Spinner />}
+                  {isUpdatingProduct ? 'Actualizando' : 'Actualizar producto'}
+                  {isUpdatingProduct && <Spinner />}
                 </div>
               </Button>
             </div>
