@@ -5,12 +5,10 @@ export function LayoutLink({ children, isActive, to }) {
   return (
     <div className='relative w-full px-4'>
       <Link
-        className={(active) =>
-          cn(
-            'flex items-center gap-2 rounded-lg px-3 py-2 font-semibold tracking-tight text-neutral-600 hover:bg-gray-200',
-            { 'bg-gray-200 text-black': active },
-          )
-        }
+        className={cn(
+          'flex items-center gap-2 rounded-lg px-3 py-2 font-semibold tracking-tight text-neutral-600 hover:bg-gray-200',
+          { 'bg-gray-200 text-black': isActive },
+        )}
         to={to}
       >
         {children}

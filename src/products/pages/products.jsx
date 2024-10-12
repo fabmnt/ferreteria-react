@@ -58,8 +58,9 @@ export function ProductsPage() {
         }
         const maxPrice = Math.max(...data.map((product) => product.price))
         setFilters((prevFilters) => ({ ...prevFilters, maxPrice }))
-        setProducts(data)
-        originalProducts.current = data
+        const sortedProducts = [...data].sort((a, b) => a.id - b.id)
+        setProducts(sortedProducts)
+        originalProducts.current = sortedProducts
       })
       .finally(() => {
         setIsLoadingProducts(false)

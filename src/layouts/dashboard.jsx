@@ -19,8 +19,11 @@ export function DashboardLayout({ children }) {
   const employee = useSessionStore((state) => state.employee)
   const setEmployee = useSessionStore((state) => state.setEmployee)
   const [location, navigate] = useLocation()
-  const isActivePath = (path) => location.startsWith(path)
   const [loadingApp, setLoadingApp] = useState(true)
+
+  const isActivePath = (path) => location.startsWith(path)
+
+  console.log({ location })
 
   useEffect(() => {
     if (session == null) {
@@ -70,7 +73,7 @@ export function DashboardLayout({ children }) {
 
   return (
     <div className='flex min-h-[100dvh] w-full flex-col'>
-      <div className='flex w-full items-center justify-between border'>
+      <div className='flex w-full items-center border'>
         <div className='w-[260px] border-r px-4 pb-6 pt-4'>
           <div className='flex justify-between'>
             <div>
@@ -87,19 +90,22 @@ export function DashboardLayout({ children }) {
             </div>
           </div>
         </div>
-        <div className='mr-12 flex items-center gap-4'>
-          <button>
-            <IoIosNotificationsOutline className='size-6 text-neutral-700' />
-          </button>
-          <button>
-            <IoIosHelpCircleOutline className='size-6 text-neutral-700' />
-          </button>
-          {session && employee && (
-            <UserDropdown
-              employee={employee}
-              session={session}
-            />
-          )}
+        <div className='flex flex-1 justify-between'>
+          <div className='ml-12 place-self-center'>Badge</div>
+          <div className='mr-12 flex items-center gap-4'>
+            <button>
+              <IoIosNotificationsOutline className='size-6 text-neutral-700' />
+            </button>
+            <button>
+              <IoIosHelpCircleOutline className='size-6 text-neutral-700' />
+            </button>
+            {session && employee && (
+              <UserDropdown
+                employee={employee}
+                session={session}
+              />
+            )}
+          </div>
         </div>
       </div>
       <div className='flex h-full flex-grow'>

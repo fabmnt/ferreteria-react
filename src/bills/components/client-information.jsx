@@ -1,10 +1,10 @@
 import { Button, Label, Spinner, TextInput } from 'flowbite-react'
 import { useEffect, useState } from 'react'
+import { CiSearch } from 'react-icons/ci'
 import { FaCheckCircle } from 'react-icons/fa'
-import { RiSearchLine } from 'react-icons/ri'
+import { toast } from 'sonner'
 import { Input } from '../../components/input'
 import { createCustomer, getCustomerByPhone, getCustomers } from '../../services/customers'
-import { toast } from 'sonner'
 
 export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
   const [existingCustomer, setExistingCustomer] = useState(true)
@@ -155,7 +155,7 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
                 <TextInput
                   sizing='sm'
                   className='w-full'
-                  rightIcon={isSearchingCustomer ? Spinner : RiSearchLine}
+                  rightIcon={isSearchingCustomer ? Spinner : CiSearch}
                   required
                   name='phone'
                   type='tel'

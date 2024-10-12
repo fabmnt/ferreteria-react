@@ -78,7 +78,14 @@ export function ProductInfo() {
         <div className='mb-4 flex flex-col'>
           {isLoading && <Skeleton className='w-60' />}
           {isLoading && <Skeleton className='w-32' />}
-          {product != null && <h2 className='text-2xl font-semibold'>{product.name}</h2>}
+          {product != null && (
+            <h2 className='text-2xl font-semibold'>
+              {product.name}
+              {product.stock === 0 && (
+                <span className='ml-2 text-sm text-red-600'>Sin existencias</span>
+              )}
+            </h2>
+          )}
           {product != null && <p className='text-sm text-neutral-600'>{product.brand}</p>}
         </div>
         <div>
@@ -135,7 +142,7 @@ export function ProductInfo() {
             </strong>
           </div>
           <div className='col-span-2 flex flex-col gap-1'>
-            Existencia: <strong className='font-semibold'>{product.stock}</strong>
+            Existencias: <strong className='font-semibold'>{product.stock}</strong>
           </div>
         </section>
       )}
