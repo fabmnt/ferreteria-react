@@ -170,7 +170,7 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
         {!showCustomerDetails && existingCustomer && (
           <div className='scroll-bar mb-4 mt-2 max-h-[180px] overflow-y-auto scroll-smooth'>
             <table className='relative col-span-2 w-full table-fixed text-left text-sm'>
-              <thead className='sticky text-xs'>
+              <thead className='text-xs'>
                 <tr className='[&>th]:sticky [&>th]:top-0 [&>th]:z-20 [&>th]:h-10 [&>th]:border-b [&>th]:bg-white [&>th]:font-normal [&>th]:text-neutral-600'>
                   <th className='w-[80px]'>Nombre</th>
                   <th className='w-[80px]'>Apellido</th>

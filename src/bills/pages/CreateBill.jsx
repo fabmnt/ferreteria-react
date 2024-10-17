@@ -23,6 +23,7 @@ export function CreateBill() {
     totalDiscount: '0',
     totalToPay: '0',
   })
+  const [taxes, setTaxes] = useState({})
   const [billProducts, setBillProducts] = useState([])
   const [productsQuantity, setProductsQuantity] = useState({})
   const [isCreatingNewBill, setIsCreatingNewBill] = useState(false)
@@ -33,7 +34,9 @@ export function CreateBill() {
       if (data == null) return
 
       const IVA = data.find((tax) => tax.name === 'IVA')
+      console.log(IVA, data)
       if (IVA != null) {
+        setTaxes((prev) => ({ ...prev, IVA: IVA.percentage }))
         updateBillInformation({ IVA: IVA.percentage })
       }
     })
@@ -99,6 +102,7 @@ export function CreateBill() {
       toast.warning('Debes agregar productos a la factura.')
       return
     }
+
     setIsCreatingNewBill(true)
 
     const newBillDetails = {
@@ -125,7 +129,7 @@ export function CreateBill() {
     }))
 
     const results = await Promise.all([
-      updateBillProducts(bill.id, products),
+      updateBillProducts(bill.id, products, billProducts),
       updateCustomerLastBuy(currentCustomer.id, bill.created_at),
     ])
 
@@ -141,6 +145,17 @@ export function CreateBill() {
     }
     toast.success('Factura guardada exitosamente.')
     setCurrentCustomer(customer)
+    setBillProducts([])
+    setProductsQuantity({})
+    setBillInformation({
+      paymentMethod: 'cash',
+      discount: 0,
+      IVA: taxes.IVA,
+      totalBilled: '0',
+      totalIVA: '0',
+      totalDiscount: '0',
+      totalToPay: '0',
+    })
     setIsCreatingNewBill(false)
   }
 
@@ -151,7 +166,7 @@ export function CreateBill() {
     setBillInformation({
       paymentMethod: 'cash',
       discount: 0,
-      IVA: 16,
+      IVA: taxes.IVA,
       totalBilled: '0',
       totalIVA: '0',
       totalDiscount: '0',

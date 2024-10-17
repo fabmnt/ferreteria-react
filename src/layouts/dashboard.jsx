@@ -13,6 +13,7 @@ import { TbLayoutSidebarLeftCollapse } from 'react-icons/tb'
 import { UserDropdown } from './components/user-dropdown'
 import { IoIosNotificationsOutline, IoIosHelpCircleOutline } from 'react-icons/io'
 import { MdOutlineInventory2 } from 'react-icons/md'
+import { FiShoppingBag } from 'react-icons/fi'
 
 export function DashboardLayout({ children }) {
   const session = useSessionStore((state) => state.session)
@@ -22,8 +23,6 @@ export function DashboardLayout({ children }) {
   const [loadingApp, setLoadingApp] = useState(true)
 
   const isActivePath = (path) => location.startsWith(path)
-
-  console.log({ location })
 
   useEffect(() => {
     if (session == null) {
@@ -91,7 +90,7 @@ export function DashboardLayout({ children }) {
           </div>
         </div>
         <div className='flex flex-1 justify-between'>
-          <div className='ml-12 place-self-center'>Badge</div>
+          <div className='ml-12 place-self-center' />
           <div className='mr-12 flex items-center gap-4'>
             <button>
               <IoIosNotificationsOutline className='size-6 text-neutral-700' />
@@ -145,6 +144,15 @@ export function DashboardLayout({ children }) {
                 >
                   <MdOutlineInventory2 className='h-6 w-5' />
                   Productos
+                </LayoutLink>
+              )}
+              {hasRoles(employee, 'admin') && (
+                <LayoutLink
+                  isActive={isActivePath('/create-purchase')}
+                  to='/create-purchase'
+                >
+                  <FiShoppingBag className='h-6 w-5' />
+                  Órden de compra
                 </LayoutLink>
               )}
             </nav>

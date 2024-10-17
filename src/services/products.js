@@ -7,7 +7,9 @@ export async function getProduct(productId) {
 }
 
 export async function getProducts() {
-  const { data, error } = await supabase.from('inventory').select('*')
+  const { data, error } = await supabase
+    .from('inventory')
+    .select('*, suppliers (*), categories (*)')
 
   return { data, error }
 }
@@ -44,4 +46,37 @@ export async function deleteProduct(productId) {
   const { error } = await supabase.from('inventory').delete().eq('id', productId)
 
   return { error }
+}
+
+export async function createPurchaseOrder(order) {
+  const { error, data } = await supabase.from('orders').insert(order).select('*')
+
+  return { error, data }
+}
+
+export async function createOrderProducts(productsIDsWithQuantity, products) {
+  const { error } = await supabase.from('order_products').insert(productsIDsWithQuantity)
+
+  if (error) {
+    return { error }
+  }
+
+  const newProducts = products
+    .map((product) => ({
+      ...product,
+      stock:
+        product.stock +
+          productsIDsWithQuantity.find((p) => p.product_id === product.id)?.quantity ?? 1,
+    }))
+    .map((product) => {
+      delete product.suppliers
+      delete product.categories
+      return product
+    })
+
+  console.log({ newProducts })
+
+  const { error: updateProductsError } = await supabase.from('inventory').upsert(newProducts)
+
+  return { updateProductsError }
 }

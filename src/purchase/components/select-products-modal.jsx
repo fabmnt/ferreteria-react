@@ -1,14 +1,20 @@
 import { Button, Modal, TextInput } from 'flowbite-react'
 import { useEffect, useRef, useState } from 'react'
 import { CiSearch } from 'react-icons/ci'
-import { IoIosAdd } from 'react-icons/io'
 import { getProducts } from '../../services/products'
+import { IoIosAdd } from 'react-icons/io'
 
-export function AddProductModal({ closeModal, modalOpened, addBillProduct, billProducts }) {
-  const originalProducts = useRef([])
-  const [products, setProducts] = useState([])
+export function SelectProductsModal({
+  closeModal,
+  modalOpened,
+  onNewSelectedProduct,
+  selectedProducts,
+  supplierId,
+}) {
   const [query, setQuery] = useState('')
+  const [products, setProducts] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const originalProducts = useRef([])
 
   useEffect(() => {
     if (modalOpened === false) {
@@ -46,8 +52,13 @@ export function AddProductModal({ closeModal, modalOpened, addBillProduct, billP
     setProducts(filteredProducts)
   }, [query])
 
-  const canShowProduct = (product) => {
-    return product.stock > 0 && !billProducts.some((p) => p.id === product.id)
+  const canAddProduct = (product) => {
+    const isAlreadyAdded = selectedProducts.some((p) => p.id === product.id)
+    if (supplierId == null) {
+      return !isAlreadyAdded
+    }
+
+    return !isAlreadyAdded && product.supplier_id === supplierId
   }
 
   return (
@@ -57,7 +68,7 @@ export function AddProductModal({ closeModal, modalOpened, addBillProduct, billP
       show={modalOpened}
       dismissible
     >
-      <Modal.Header>Agrega productos a la factura actual</Modal.Header>
+      <Modal.Header>Agrega productos a la órden de compra</Modal.Header>
       <Modal.Body>
         <div className='mb-6'>
           <TextInput
@@ -68,16 +79,17 @@ export function AddProductModal({ closeModal, modalOpened, addBillProduct, billP
           />
         </div>
 
-        <section className='scroll-bar max-h-[400px] overflow-auto scroll-smooth'>
+        <section className='scroll-bar h-[400px] overflow-auto scroll-smooth'>
           <table className='relative w-full table-fixed text-left text-sm'>
             <thead className='sticky top-0 z-10 border-b bg-white text-xs'>
               <tr className='[&>th]:py-2 [&>th]:font-normal [&>th]:text-neutral-600'>
                 <th className='w-[60px]'>#</th>
                 <th className='w-[250px]'>Producto</th>
-                <th>Precio</th>
+                <th>Costo</th>
                 <th>Descuento</th>
                 <th>Existencias</th>
                 <th>Marca</th>
+                <th>Proveedor</th>
                 <th className='w-[50px]' />
               </tr>
             </thead>
@@ -100,7 +112,7 @@ export function AddProductModal({ closeModal, modalOpened, addBillProduct, billP
 
               {products.map((product) => (
                 <tr
-                  className={`[&>td]:h-10 [&>td]:border-b [&>td]:align-middle ${!canShowProduct(product) ? 'opacity-50' : ''}`}
+                  className={`[&>td]:h-10 [&>td]:border-b [&>td]:align-middle ${!canAddProduct(product) && 'opacity-50'}`}
                   key={product.id}
                 >
                   <td>
@@ -109,17 +121,18 @@ export function AddProductModal({ closeModal, modalOpened, addBillProduct, billP
                     </span>
                   </td>
                   <td>{product.name}</td>
-                  <td>C$ {product.price}</td>
+                  <td>C$ {product.cost}</td>
                   <td>{product.discount ?? 0}%</td>
                   <td>{product.stock}</td>
                   <td>{product.brand}</td>
+                  <td>{product.suppliers.name}</td>
                   <td>
                     <Button
-                      onClick={() => addBillProduct(product)}
-                      disabled={!canShowProduct(product)}
+                      disabled={!canAddProduct(product)}
                       size='sm'
                       color='light'
                       pill
+                      onClick={() => onNewSelectedProduct(product)}
                     >
                       <IoIosAdd className='size-4' />
                     </Button>

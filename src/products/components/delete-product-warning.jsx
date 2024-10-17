@@ -3,7 +3,6 @@ import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { Spinner } from '../../components/spinner'
 
 export function DeleteProductWarning({ show, close, onDeleteProduct, isDeleting, productId }) {
-  console.log({ productId })
   return (
     <Modal
       show={show}

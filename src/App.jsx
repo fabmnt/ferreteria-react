@@ -11,6 +11,7 @@ import { useSessionStore } from './store/session'
 import { UsersPage } from './users/pages/users'
 import { ProductsPage } from './products/pages/products'
 import { ProductInfo } from './products/pages/product-info'
+import { CreatePurchase } from './purchase/pages/create-purchase'
 
 const App = () => {
   const setSession = useSessionStore((state) => state.setSession)
@@ -65,6 +66,10 @@ const App = () => {
         <Route
           path='/bills/create'
           component={CreateBill}
+        />
+        <Route
+          path='/create-purchase'
+          component={CreatePurchase}
         />
       </DashboardLayout>
     </Switch>
