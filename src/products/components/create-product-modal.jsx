@@ -119,18 +119,16 @@ export function CreateProductModal({ opened, close, categories, onCreateProduct 
                 addon='C$'
               />
             </Label>
-            <Label className='col-span-1'>
-              <span>Existencias</span>
-              <TextInput
-                required
-                min={0}
-                name='product-stock'
-                type='number'
-                className='mt-2'
-                placeholder='1'
-              />
-            </Label>
-            <Label className='col-span-1'>
+            <TextInput
+              hidden
+              required
+              name='product-stock'
+              type='number'
+              className='mt-2 hidden'
+              placeholder='1'
+              value={0}
+            />
+            <Label className='col-span-2'>
               <span>Descuento</span>
               <TextInput
                 required

@@ -18,6 +18,8 @@ export async function updateBillProducts(billId, products, billProducts) {
   if (error == null) {
     const newInvetoryProducts = billProducts.map((product) => {
       const productQuantity = products.find((p) => p.id === product.id).quantity
+      delete product.categories
+      delete product.suppliers
       return {
         ...product,
         stock: product.stock - productQuantity,
@@ -31,4 +33,19 @@ export async function updateBillProducts(billId, products, billProducts) {
   }
 
   return { error }
+}
+
+export async function getBills() {
+  const { data, error } = await supabase.from('bills').select('*, customers (*), employees (*)')
+
+  return { data, error }
+}
+
+export async function getTotalProductsBilled(billId) {
+  const { count, error } = await supabase
+    .from('bill_products')
+    .select('*', { count: 'exact' })
+    .eq('bill_id', billId)
+
+  return { count, error }
 }

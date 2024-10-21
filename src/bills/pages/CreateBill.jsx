@@ -9,6 +9,7 @@ import { ClientInformation } from '../components/client-information'
 import { getTaxes } from '../../services/products'
 import { updateCustomerLastBuy } from '../../services/customers'
 import { toast } from 'sonner'
+import { Link } from 'wouter'
 
 export function CreateBill() {
   const employee = useSessionStore((state) => state.employee)
@@ -34,7 +35,6 @@ export function CreateBill() {
       if (data == null) return
 
       const IVA = data.find((tax) => tax.name === 'IVA')
-      console.log(IVA, data)
       if (IVA != null) {
         setTaxes((prev) => ({ ...prev, IVA: IVA.percentage }))
         updateBillInformation({ IVA: IVA.percentage })
@@ -104,8 +104,12 @@ export function CreateBill() {
     }
 
     setIsCreatingNewBill(true)
-
+    const totalProducts = billProducts.reduce(
+      (acc, product) => acc + (productsQuantity[product.id] ?? 1),
+      0,
+    )
     const newBillDetails = {
+      total_products: totalProducts,
       customer_id: currentCustomer.id,
       employee_id: employee.id,
       payment_method: billInformation.paymentMethod,
@@ -176,9 +180,20 @@ export function CreateBill() {
 
   return (
     <div className='w-full pb-8'>
-      <div className='mb-4'>
-        <h2 className='text-2xl font-semibold'>Facturación</h2>
-        <p className='text-sm text-neutral-600'>Ingresa el registro de una nueva factura.</p>
+      <div className='flex justify-between'>
+        <div className='mb-4'>
+          <h2 className='text-2xl font-semibold'>Facturación</h2>
+          <p className='text-sm text-neutral-600'>Ingresa el registro de una nueva factura.</p>
+        </div>
+        <div>
+          <Button
+            color='light'
+            as={Link}
+            to='/bills'
+          >
+            Ver facturas
+          </Button>
+        </div>
       </div>
 
       <section className='grid grid-cols-3 gap-4'>

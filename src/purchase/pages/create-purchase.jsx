@@ -50,7 +50,13 @@ export function CreatePurchase() {
   }
 
   const handleRemoveProduct = (productId) => {
-    setSelectedProducts((prev) => prev.filter((product) => product.id !== productId))
+    setSelectedProducts((prev) => {
+      const newProducts = prev.filter((product) => product.id !== productId)
+      if (newProducts.length === 0) {
+        setSupplier(null)
+      }
+      return newProducts
+    })
   }
 
   const handleUpdateProductQuantity = (e, productId) => {
@@ -163,7 +169,7 @@ export function CreatePurchase() {
       )}
 
       {selectedProducts.length === 0 && (
-        <div className='mt-6 flex items-center justify-center rounded bg-neutral-200/80 px-6 py-8'>
+        <div className='mt-6 flex items-center justify-center rounded border bg-white px-6 py-8'>
           <p className='text-lg text-neutral-600'>Empieza añadiendo productos a la compra.</p>
         </div>
       )}

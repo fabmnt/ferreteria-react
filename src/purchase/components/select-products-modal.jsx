@@ -140,7 +140,7 @@ export function SelectProductsModal({
                 </tr>
               ))}
 
-              {products.length === 0 && (
+              {products.length === 0 && !isLoading && (
                 <tr>
                   <td
                     colSpan='6'

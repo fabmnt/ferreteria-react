@@ -11,7 +11,7 @@ import { logout } from '../services/auth'
 import { Spinner } from '../components/spinner'
 import { TbLayoutSidebarLeftCollapse } from 'react-icons/tb'
 import { UserDropdown } from './components/user-dropdown'
-import { IoIosNotificationsOutline, IoIosHelpCircleOutline } from 'react-icons/io'
+import { IoIosNotificationsOutline, IoIosHelpCircleOutline, IoIosList } from 'react-icons/io'
 import { MdOutlineInventory2 } from 'react-icons/md'
 import { FiShoppingBag } from 'react-icons/fi'
 
@@ -22,7 +22,7 @@ export function DashboardLayout({ children }) {
   const [location, navigate] = useLocation()
   const [loadingApp, setLoadingApp] = useState(true)
 
-  const isActivePath = (path) => location.startsWith(path)
+  const isActivePath = (path) => location === path
 
   useEffect(() => {
     if (session == null) {
@@ -135,6 +135,15 @@ export function DashboardLayout({ children }) {
                 >
                   <TiDocumentText className='h-6 w-5' />
                   Nueva Factura
+                </LayoutLink>
+              )}
+              {hasRoles(employee, 'admin', 'seller') && (
+                <LayoutLink
+                  isActive={isActivePath('/bills')}
+                  to='/bills'
+                >
+                  <IoIosList className='h-6 w-5' />
+                  Facturas
                 </LayoutLink>
               )}
               {hasRoles(employee, 'admin', 'seller') && (
