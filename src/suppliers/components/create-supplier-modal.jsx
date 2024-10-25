@@ -6,12 +6,14 @@ import { toast } from 'sonner'
 export function CreateSupplierModal({ opened, close, onCreateSupplier }) {
   const [categories, setCategories] = useState([])
   const [isCreatingNewSupplier, setIsCreatingNewSupplier] = useState(false)
+  const [isLoadingCategories, setIsLoadingCategories] = useState(false)
 
   useEffect(() => {
     if (opened === false) {
       return
     }
 
+    setIsLoadingCategories(true)
     getCategories()
       .then(({ data, error }) => {
         if (error) {
@@ -22,6 +24,9 @@ export function CreateSupplierModal({ opened, close, onCreateSupplier }) {
       })
       .catch((error) => {
         toast.error(error.message)
+      })
+      .finally(() => {
+        setIsLoadingCategories(false)
       })
   }, [opened])
 
@@ -80,20 +85,24 @@ export function CreateSupplierModal({ opened, close, onCreateSupplier }) {
             </Label>
             <Label className='col-span-1'>
               <span>Categoría</span>
-              <Select
-                required
-                name='supplier-category'
-                className='mt-2'
-              >
-                {categories.map((category) => (
-                  <option
-                    key={category.id}
-                    value={category.id}
-                  >
-                    {category.name}
-                  </option>
-                ))}
-              </Select>
+              {isLoadingCategories ? (
+                <div className='mt-2 h-10 w-full animate-pulse rounded-lg bg-neutral-200' />
+              ) : (
+                <Select
+                  required
+                  name='supplier-category'
+                  className='mt-2'
+                >
+                  {categories.map((category) => (
+                    <option
+                      key={category.id}
+                      value={category.id}
+                    >
+                      {category.name}
+                    </option>
+                  ))}
+                </Select>
+              )}
             </Label>
             <Label className='col-span-2'>
               <span>Correo</span>
