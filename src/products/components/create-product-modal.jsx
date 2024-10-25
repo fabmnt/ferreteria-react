@@ -1,10 +1,33 @@
 import { Button, Label, Modal, Select, Spinner, Textarea, TextInput } from 'flowbite-react'
-import { useState } from 'react'
-import { createProduct } from '../../services/products'
+import { useEffect, useState } from 'react'
+import { createProduct, getSuppliers } from '../../services/products'
 import { toast } from 'sonner'
 
 export function CreateProductModal({ opened, close, categories, onCreateProduct }) {
   const [isCreatingNewPRoduct, setIsCreatingNewProduct] = useState(false)
+  const [suppliers, setSuppliers] = useState([])
+  const [isLoadingSuppliers, setIsLoadingSuppliers] = useState(false)
+
+  useEffect(() => {
+    if (opened === false) {
+      return
+    }
+    setIsLoadingSuppliers(true)
+    getSuppliers()
+      .then(({ data, error }) => {
+        if (error) {
+          throw new Error(error.message)
+        }
+
+        setSuppliers(data)
+      })
+      .catch(() => {
+        toast.error('Ocurrió un error al obtener los proveedores, inténtelo más tarde.')
+      })
+      .finally(() => {
+        setIsLoadingSuppliers(false)
+      })
+  }, [opened])
 
   const handleSubmit = (e) => {
     setIsCreatingNewProduct(true)
@@ -18,6 +41,7 @@ export function CreateProductModal({ opened, close, categories, onCreateProduct 
     const discount = +form.get('product-discount').trim() || 0
     const category = form.get('product-category').trim()
     const description = form.get('product-description').trim()
+    const supplier = form.get('product-supplier').trim()
 
     const newProduct = {
       name,
@@ -28,6 +52,7 @@ export function CreateProductModal({ opened, close, categories, onCreateProduct 
       discount,
       category_id: category,
       description,
+      supplier_id: supplier,
     }
 
     createProduct(newProduct)
@@ -128,7 +153,7 @@ export function CreateProductModal({ opened, close, categories, onCreateProduct 
               placeholder='1'
               value={0}
             />
-            <Label className='col-span-2'>
+            <Label className='col-span-1'>
               <span>Descuento</span>
               <TextInput
                 required
@@ -140,6 +165,27 @@ export function CreateProductModal({ opened, close, categories, onCreateProduct 
                 className='mt-2'
                 placeholder='0'
               />
+            </Label>
+            <Label className='col-span-1'>
+              <span>Proveedor</span>
+              {isLoadingSuppliers && (
+                <div className='mt-2 h-10 w-full animate-pulse rounded-lg bg-neutral-200' />
+              )}
+              {suppliers.length > 0 && !isLoadingSuppliers && (
+                <Select
+                  name='product-supplier'
+                  className='mt-2'
+                >
+                  {suppliers.map((supplier) => (
+                    <option
+                      key={supplier.id}
+                      value={supplier.id}
+                    >
+                      {supplier.name}
+                    </option>
+                  ))}
+                </Select>
+              )}
             </Label>
 
             <Label className='col-span-4'>

@@ -13,6 +13,8 @@ import { ProductsPage } from './products/pages/products'
 import { ProductInfo } from './products/pages/product-info'
 import { CreatePurchase } from './purchase/pages/create-purchase'
 import { ViewBillsPage } from './bills/pages/view-bills'
+import { BillDetailsPage } from './bills/pages/bill-details'
+import { SuppliersPage } from './suppliers/pages/suppliers-page'
 
 const App = () => {
   const setSession = useSessionStore((state) => state.setSession)
@@ -73,8 +75,16 @@ const App = () => {
           component={CreateBill}
         />
         <Route
+          path='/bills/details/:id'
+          component={BillDetailsPage}
+        />
+        <Route
           path='/create-purchase'
           component={CreatePurchase}
+        />
+        <Route
+          path='/suppliers'
+          component={SuppliersPage}
         />
       </DashboardLayout>
     </Switch>

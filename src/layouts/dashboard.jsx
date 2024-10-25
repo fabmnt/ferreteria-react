@@ -14,6 +14,7 @@ import { UserDropdown } from './components/user-dropdown'
 import { IoIosNotificationsOutline, IoIosHelpCircleOutline, IoIosList } from 'react-icons/io'
 import { MdOutlineInventory2 } from 'react-icons/md'
 import { FiShoppingBag } from 'react-icons/fi'
+import { PiUsersFour } from 'react-icons/pi'
 
 export function DashboardLayout({ children }) {
   const session = useSessionStore((state) => state.session)
@@ -162,6 +163,15 @@ export function DashboardLayout({ children }) {
                 >
                   <FiShoppingBag className='h-6 w-5' />
                   Órden de compra
+                </LayoutLink>
+              )}
+              {hasRoles(employee, 'admin') && (
+                <LayoutLink
+                  isActive={isActivePath('/suppliers')}
+                  to='/suppliers'
+                >
+                  <PiUsersFour className='h-6 w-5' />
+                  Proveedores
                 </LayoutLink>
               )}
             </nav>

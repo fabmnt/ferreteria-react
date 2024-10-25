@@ -1,12 +1,35 @@
 import { Button, Label, Modal, Select, Textarea, TextInput } from 'flowbite-react'
-import { Spinner } from '../../components/spinner'
-import { useState } from 'react'
-import { updateProduct } from '../../services/products'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import { Spinner } from '../../components/spinner'
+import { getSuppliers, updateProduct } from '../../services/products'
 import { sortKeys } from '../../utils/utils'
 
 export function EditProductModal({ opened, close, categories, product, onUpdateProduct }) {
   const [isUpdatingProduct, setIsUpdatingProduct] = useState(false)
+  const [suppliers, setSuppliers] = useState([])
+  const [isLoadingSuppliers, setIsLoadingSuppliers] = useState(false)
+
+  useEffect(() => {
+    if (opened === false) {
+      return
+    }
+    setIsLoadingSuppliers(true)
+    getSuppliers()
+      .then(({ data, error }) => {
+        if (error) {
+          throw new Error(error.message)
+        }
+
+        setSuppliers(data)
+      })
+      .catch(() => {
+        toast.error('Ocurrió un error al obtener los proveedores, inténtelo más tarde.')
+      })
+      .finally(() => {
+        setIsLoadingSuppliers(false)
+      })
+  }, [opened])
 
   const handleSubmit = (e) => {
     setIsUpdatingProduct(true)
@@ -21,6 +44,7 @@ export function EditProductModal({ opened, close, categories, product, onUpdateP
     const discount = +form.get('product-discount').trim() || 0
     const category = +form.get('product-category').trim()
     const description = form.get('product-description').trim()
+    const supplier = +form.get('product-supplier').trim()
 
     const updatedProduct = {
       id,
@@ -32,6 +56,7 @@ export function EditProductModal({ opened, close, categories, product, onUpdateP
       discount,
       category_id: category,
       description,
+      supplier_id: supplier,
     }
 
     const updatedProductAsJSON = JSON.stringify(
@@ -40,7 +65,9 @@ export function EditProductModal({ opened, close, categories, product, onUpdateP
         created_at: product.created_at,
       }),
     )
+    delete product.suppliers
     const productAsJSON = JSON.stringify(sortKeys({ ...product, discount: product.discount ?? 0 }))
+    console.log(updatedProductAsJSON, productAsJSON)
     if (updatedProductAsJSON === productAsJSON) {
       toast.warning('No se realizaron cambios en el producto.')
       setIsUpdatingProduct(false)
@@ -71,7 +98,7 @@ export function EditProductModal({ opened, close, categories, product, onUpdateP
       show={opened}
       onClose={() => close()}
     >
-      <Modal.Header>Nuevo producto</Modal.Header>
+      <Modal.Header>{product.name}</Modal.Header>
       <Modal.Body>
         <form onSubmit={handleSubmit}>
           <div className='grid grid-cols-4 gap-4'>
@@ -141,18 +168,15 @@ export function EditProductModal({ opened, close, categories, product, onUpdateP
                 addon='C$'
               />
             </Label>
-            <Label className='col-span-1'>
-              <span>Existencias</span>
-              <TextInput
-                defaultValue={product.stock}
-                required
-                min={0}
-                name='product-stock'
-                type='number'
-                className='mt-2'
-                placeholder='1'
-              />
-            </Label>
+            <TextInput
+              hidden
+              defaultValue={product.stock}
+              min={0}
+              name='product-stock'
+              type='number'
+              className='mt-2 hidden'
+              placeholder='1'
+            />
             <Label className='col-span-1'>
               <span>Descuento</span>
               <TextInput
@@ -165,6 +189,29 @@ export function EditProductModal({ opened, close, categories, product, onUpdateP
                 className='mt-2'
                 placeholder='0'
               />
+            </Label>
+
+            <Label className='col-span-1'>
+              <span>Proveedor</span>
+              {isLoadingSuppliers && (
+                <div className='mt-2 h-10 w-full animate-pulse rounded-lg bg-neutral-200' />
+              )}
+              {suppliers.length > 0 && !isLoadingSuppliers && (
+                <Select
+                  name='product-supplier'
+                  defaultValue={product.supplier_id}
+                  className='mt-2'
+                >
+                  {suppliers.map((supplier) => (
+                    <option
+                      key={supplier.id}
+                      value={supplier.id}
+                    >
+                      {supplier.name}
+                    </option>
+                  ))}
+                </Select>
+              )}
             </Label>
 
             <Label className='col-span-4'>

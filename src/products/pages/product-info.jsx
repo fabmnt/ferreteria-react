@@ -130,10 +130,10 @@ export function ProductInfo() {
             <strong className='font-semibold'>{findCategory(product.category_id)?.name}</strong>
           </div>
           <div className='flex flex-col gap-1'>
-            Precio de compra: <strong className='font-semibold'>C${product.cost}</strong>
+            Precio de compra: <strong className='font-semibold'>C$ {product.cost}</strong>
           </div>
           <div className='flex flex-col gap-1'>
-            Precio de venta: <strong className='font-semibold'>C${product.price}</strong>
+            Precio de venta: <strong className='font-semibold'>C$ {product.price}</strong>
           </div>
           <div className='col-span-2 flex flex-col gap-1'>
             Descuento:{' '}
@@ -141,8 +141,11 @@ export function ProductInfo() {
               {product.discount == null ? '0' : `${product.discount}`}%
             </strong>
           </div>
-          <div className='col-span-2 flex flex-col gap-1'>
+          <div className='col-span-1 flex flex-col gap-1'>
             Existencias: <strong className='font-semibold'>{product.stock}</strong>
+          </div>
+          <div className='col-span-1 flex flex-col gap-1'>
+            Proveedor: <strong className='font-semibold'>{product.suppliers?.name}</strong>
           </div>
         </section>
       )}

@@ -1,7 +1,10 @@
 import { supabase } from '../db/supabase'
 
 export async function getProduct(productId) {
-  const { data, error } = await supabase.from('inventory').select('*').eq('id', productId)
+  const { data, error } = await supabase
+    .from('inventory')
+    .select('*, suppliers (*)')
+    .eq('id', productId)
 
   return { data, error }
 }
@@ -37,7 +40,7 @@ export async function updateProduct(product) {
     .from('inventory')
     .update(product)
     .eq('id', product.id)
-    .select('*')
+    .select('*, suppliers (*)')
 
   return { data, error }
 }
@@ -79,4 +82,25 @@ export async function createOrderProducts(productsIDsWithQuantity, products) {
   const { error: updateProductsError } = await supabase.from('inventory').upsert(newProducts)
 
   return { updateProductsError }
+}
+
+export async function getSuppliers() {
+  const { data, error } = await supabase.from('suppliers').select('*, categories (*)')
+
+  return { data, error }
+}
+
+export async function deleteSupplier(supplierId) {
+  const { error } = await supabase.from('suppliers').delete().eq('id', supplierId)
+
+  return { error }
+}
+
+export async function createSupplier(supplier) {
+  const { data, error } = await supabase
+    .from('suppliers')
+    .insert(supplier)
+    .select('*, categories (*)')
+
+  return { data, error }
 }

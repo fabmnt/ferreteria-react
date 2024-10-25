@@ -1,7 +1,10 @@
 import { Button } from 'flowbite-react'
 import { AiOutlineDelete } from 'react-icons/ai'
+import { useLocation } from 'wouter'
 
 export function BillsTable({ bills, isLoading, onDeleteBill }) {
+  const [, navigate] = useLocation()
+
   const paymentMethodsTranslations = {
     'cash': 'Efectivo',
     'debit card': 'Tarjeta de débito',
@@ -16,7 +19,7 @@ export function BillsTable({ bills, isLoading, onDeleteBill }) {
             <th className='w-[60px]'>#</th>
             <th className='w-[180px]'>Cliente</th>
             <th className='w-[180px]'>Método de pago</th>
-            <th className='w-[160px]'>Total productos</th>
+            <th className='w-[150px]'>Total productos</th>
             <th className='w-[120px]'>Total vendido</th>
             <th className='w-[120px]'>Total IVA</th>
             <th className='w-[120px]'>Total descuento</th>
@@ -26,6 +29,20 @@ export function BillsTable({ bills, isLoading, onDeleteBill }) {
           </tr>
         </thead>
         <tbody>
+          {isLoading &&
+            Array.from({ length: 12 }).map((_, index) => (
+              <tr key={index}>
+                <td
+                  colSpan='10'
+                  className='h-16 px-2 align-middle'
+                >
+                  <div className='flex animate-pulse space-x-4'>
+                    <div className='h-7 w-full rounded-lg bg-neutral-200' />
+                  </div>
+                </td>
+              </tr>
+            ))}
+
           {bills.length === 0 && !isLoading && (
             <tr>
               <td
@@ -51,6 +68,7 @@ export function BillsTable({ bills, isLoading, onDeleteBill }) {
               employees: { name: employeeName, last_name: employeeLastName },
             }) => (
               <tr
+                onClick={() => navigate(`/bills/details/${id}`)}
                 className='hover:cursor-pointer hover:bg-neutral-100 [&>td]:h-16 [&>td]:overflow-clip [&>td]:border-b [&>td]:px-2 [&>td]:align-middle'
                 key={id}
               >
@@ -71,6 +89,10 @@ export function BillsTable({ bills, isLoading, onDeleteBill }) {
                   <Button
                     color='light'
                     size='sm'
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      onDeleteBill(id)
+                    }}
                   >
                     <AiOutlineDelete className='h-6 w-5 text-red-700' />
                   </Button>

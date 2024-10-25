@@ -49,3 +49,27 @@ export async function getTotalProductsBilled(billId) {
 
   return { count, error }
 }
+
+export async function deleteBill(billId) {
+  const { error } = await supabase.from('bills').delete().eq('id', billId)
+
+  return { error }
+}
+
+export async function getBill(billId) {
+  const {
+    data: [bill],
+    error,
+  } = await supabase.from('bills').select('*, customers (*), employees (*)').eq('id', billId)
+
+  return { data: bill, error }
+}
+
+export async function getBillProducts(billId) {
+  const { data, error } = await supabase
+    .from('bill_products')
+    .select('*, inventory (*, categories (*))')
+    .eq('bill_id', billId)
+
+  return { data, error }
+}
