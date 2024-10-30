@@ -1,7 +1,7 @@
 import { Button, TextInput } from 'flowbite-react'
 import { useEffect, useMemo, useState } from 'react'
 import { FaRegCircleCheck } from 'react-icons/fa6'
-import { IoIosRemoveCircleOutline } from 'react-icons/io'
+import { IoIosAdd, IoIosRemoveCircleOutline } from 'react-icons/io'
 import { cn } from '../../utils/cn'
 import { SelectProductsModal } from '../components/select-products-modal'
 import { toast } from 'sonner'
@@ -142,8 +142,8 @@ export function CreatePurchase() {
             color='light'
             onClick={() => setShowSelectProductsModal(true)}
           >
-            <div className='flex items-center gap-2'>
-              Añadir productos <FaRegCircleCheck />
+            <div className='flex items-center gap-1'>
+              <span>Añadir productos</span> <IoIosAdd size='24' />
             </div>
           </Button>
         </div>
