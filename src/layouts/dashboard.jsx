@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 import { IoIosHelpCircleOutline, IoIosNotificationsOutline } from 'react-icons/io'
 import { TbLayoutSidebarLeftCollapse, TbLayoutSidebarRightCollapse } from 'react-icons/tb'
 import { useLocation } from 'wouter'
+import { CurrentRoute } from '../components/current-route'
 import { Spinner } from '../components/spinner'
 import { logout } from '../services/auth'
 import { getEmployee } from '../services/users'
 import { useSessionStore } from '../store/session'
 import { Sidebar } from './components/sidebar'
 import { UserDropdown } from './components/user-dropdown'
-import { routes } from '../constants/routes'
 
 export function DashboardLayout({ children }) {
   const session = useSessionStore((state) => state.session)
@@ -64,13 +64,9 @@ export function DashboardLayout({ children }) {
     )
   }
 
-  const getRoute = (path) => {
-    return routes.find((route) => route.path === path)
-  }
-
   return (
     <div className='flex min-h-[100dvh] w-full flex-col'>
-      <div className='sticky top-0 z-10 flex w-full items-center border bg-white'>
+      <header className='sticky top-0 z-10 flex w-full items-center border bg-white'>
         <div className={`${collapsed ? 'w-[80px]' : 'w-[260px]'} border-r px-4 pb-6 pt-4`}>
           <div className={`flex ${collapsed ? 'justify-center' : 'justify-between'}`}>
             {!collapsed && (
@@ -97,11 +93,8 @@ export function DashboardLayout({ children }) {
           </div>
         </div>
         <div className='flex flex-1 justify-between'>
-          <div className='ml-12 place-self-center'>
-            <span className='rounded-lg border bg-white px-2 py-1 text-xs'>
-              {getRoute(location)?.label}
-            </span>{' '}
-            <span className='text-sm'>/</span>
+          <div className='ml-12 flex items-center gap-1 place-self-center'>
+            <CurrentRoute pathToMatch={location} />
           </div>
           <div className='mr-12 flex items-center gap-4'>
             <button>
@@ -118,13 +111,13 @@ export function DashboardLayout({ children }) {
             )}
           </div>
         </div>
-      </div>
+      </header>
       <div className='flex h-full flex-grow'>
         <Sidebar
           employee={employee}
           collapsed={collapsed}
         />
-        <div className='flex-1 overflow-y-auto bg-[#f7f9fb]'>
+        <div className='scroll-bar flex-1 overflow-y-auto bg-[#f7f9fb]'>
           <div className='px-12 pt-4'>{children}</div>
         </div>
       </div>

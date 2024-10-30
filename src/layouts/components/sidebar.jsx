@@ -15,7 +15,7 @@ export function Sidebar({ employee, collapsed }) {
 
   const isActivePath = (path) => location === path
 
-  const renderLink = (to, icon, label, roles) => {
+  const renderLink = (to, icon, label) => {
     const link = (
       <LayoutLink
         isActive={isActivePath(to)}

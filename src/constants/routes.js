@@ -1,22 +1,34 @@
 export const routes = [
   {
     path: '/home',
-    label: 'Inicio',
+    labels: ['Inicio'],
   },
   {
     path: '/users',
-    label: 'Usuarios',
+    labels: ['Usuarios'],
   },
   {
     path: '/bills',
-    label: 'Facturas',
+    labels: ['Facturas'],
   },
   {
     path: '/products',
-    label: 'Productos',
+    labels: ['Productos'],
   },
   {
     path: '/suppliers',
-    label: 'Proveedores',
+    labels: ['Proveedores'],
+  },
+  {
+    path: '/bills/create',
+    labels: ['Facturas', 'Crear nueva'],
+  },
+  {
+    path: '/products/:id',
+    labels: ['Productos', ':id'],
+  },
+  {
+    path: '/create-purchase',
+    labels: ['Órden de compra'],
   },
 ]
