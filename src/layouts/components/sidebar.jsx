@@ -42,7 +42,7 @@ export function Sidebar({ employee, collapsed }) {
 
   return (
     <aside className={`flex ${collapsed ? 'w-[80px]' : 'w-[260px]'} flex-col shadow-sm`}>
-      <div className='flex h-full flex-col justify-between border pt-4'>
+      <div className='flex h-full flex-col justify-between border-x border-l border-r pt-4'>
         <nav className='flex flex-col gap-2 text-sm'>
           {renderLink('/home', <RxDashboard className='h-6 w-5' />, 'Inicio')}
           {hasRoles(employee, 'admin') &&

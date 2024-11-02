@@ -18,6 +18,7 @@ export function BillsTable({ bills, isLoading, onDeleteBill }) {
           <tr className='[&>th]:sticky [&>th]:top-0 [&>th]:z-20 [&>th]:h-10 [&>th]:bg-white [&>th]:px-2 [&>th]:font-normal [&>th]:text-neutral-600'>
             <th className='w-[60px]'>#</th>
             <th className='w-[180px]'>Cliente</th>
+            <th className='w-[120px]'>Fecha</th>
             <th className='w-[180px]'>Método de pago</th>
             <th className='w-[150px]'>Total productos</th>
             <th className='w-[120px]'>Total vendido</th>
@@ -58,6 +59,7 @@ export function BillsTable({ bills, isLoading, onDeleteBill }) {
           {bills.map(
             ({
               id,
+              created_at: createdAt,
               customers: { name, last_name: lastName },
               payment_method: paymentMethod,
               total_products: totalProducts,
@@ -78,6 +80,7 @@ export function BillsTable({ bills, isLoading, onDeleteBill }) {
                   </span>
                 </td>
                 <td>{`${name} ${lastName}`}</td>
+                <td>{new Date(createdAt).toLocaleDateString()}</td>
                 <td>{paymentMethodsTranslations[paymentMethod]}</td>
                 <td>{totalProducts ?? 0}</td>
                 <td>C$ {totalSell.toFixed(2)}</td>
