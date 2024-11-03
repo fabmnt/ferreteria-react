@@ -38,6 +38,19 @@ export function SellsChart({ sinceDate }) {
 
   const sellInformationByDate = getSellsInformationByDate(bills, '10/20/2024')
 
+  function CustomTooltip({ active, payload, label }) {
+    if (active) {
+      return (
+        <div className='rounded bg-white p-2 shadow'>
+          <p className='text-sm'>{`Fecha: ${label}`}</p>
+          <p className='text-sm text-[#8884d8]'>{`Total: C$ ${payload[0].value}`}</p>
+        </div>
+      )
+    }
+
+    return null
+  }
+
   return (
     <ResponsiveContainer
       width='100%'
@@ -53,8 +66,18 @@ export function SellsChart({ sinceDate }) {
           dataKey='date'
           className='text-xs'
         />
-        <YAxis className='text-xs' />
-        <Tooltip label={({ payload }) => `C$${payload}`} />
+        <YAxis
+          className='text-xs'
+          // tickFormatter={(value) => `C$${value}`}
+        >
+          <Label
+            value='Total (C$)'
+            angle={-90}
+            position='insideLeft'
+            style={{ textAnchor: 'middle' }}
+          />
+        </YAxis>
+        <Tooltip content={<CustomTooltip />} />
         <Bar
           dataKey='total'
           fill='#8884d8'
