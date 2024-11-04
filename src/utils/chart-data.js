@@ -24,3 +24,33 @@ export function getSellsInformationByDate(bills, dateFrom) {
 
   return result
 }
+
+export function getMostSelledProudcts(billProducts) {
+  const result = []
+
+  for (const billProduct of billProducts) {
+    const product = result.find((item) => item.productId === billProduct.inventory.id)
+
+    if (product) {
+      product.quantity += billProduct.quantity
+    } else {
+      result.push({
+        productId: billProduct.inventory.id,
+        productName: billProduct.inventory.name,
+        quantity: billProduct.quantity,
+      })
+    }
+  }
+
+  result.sort((a, b) => b.quantity - a.quantity)
+  const mostSelledProducts = result.slice(0, 5)
+  const restProducts = result.slice(5)
+  const total = restProducts.reduce((acc, item) => acc + item.quantity, 0)
+  mostSelledProducts.push({
+    productId: 'rest',
+    productName: 'Otros',
+    quantity: total,
+  })
+
+  return mostSelledProducts
+}
