@@ -79,7 +79,7 @@ export function MostFrequentClientsTable() {
               <tr
                 key={customer.id}
                 className={cn(
-                  'hover:cursor-pointer hover:bg-neutral-100 [&>td]:h-10 [&>td]:overflow-clip [&>td]:border-b [&>td]:px-2 [&>td]:align-middle',
+                  'hover:bg-neutral-100 [&>td]:h-10 [&>td]:overflow-clip [&>td]:border-b [&>td]:px-2 [&>td]:align-middle',
                 )}
               >
                 <td>
