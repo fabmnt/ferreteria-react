@@ -4,7 +4,6 @@ import {
   BarChart,
   CartesianGrid,
   Label,
-  Legend,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -51,7 +50,9 @@ export function SellsChart({ sinceDate }) {
     return null
   }
 
-  return (
+  return isLoading ? (
+    <div className='h-full w-full animate-pulse rounded-md bg-neutral-100' />
+  ) : (
     <ResponsiveContainer
       width='100%'
       height='100%'
