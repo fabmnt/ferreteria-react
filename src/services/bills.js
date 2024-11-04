@@ -73,3 +73,9 @@ export async function getBillProducts(billId) {
 
   return { data, error }
 }
+
+export async function getAllBillProducts() {
+  const { data, error } = await supabase.from('bill_products').select('*, inventory (*)')
+
+  return { data, error }
+}
