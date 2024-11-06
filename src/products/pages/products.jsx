@@ -7,6 +7,7 @@ import { CreateProductModal } from '../components/create-product-modal'
 import { ProductsFilters } from '../components/products-filters'
 import { DeleteProductWarning } from '../components/delete-product-warning'
 import { toast } from 'sonner'
+import { useBreadcrumbs } from '../../hooks/use-breadcrumbs'
 
 export function ProductsPage() {
   const [products, setProducts] = useState([])
@@ -24,6 +25,8 @@ export function ProductsPage() {
     maxPrice: 0,
   })
   const originalProducts = useRef([])
+
+  useBreadcrumbs({ breadcrumbs: ['Productos'] })
 
   useEffect(() => {
     getCategories().then(({ data }) => {

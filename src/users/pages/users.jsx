@@ -3,6 +3,7 @@ import { getEmployees, getRoles } from '../../services/users'
 import { UsersTable } from '../components/users-table'
 import { useSessionStore } from '../../store/session'
 import { useLocation } from 'wouter'
+import { useBreadcrumbs } from '../../hooks/use-breadcrumbs'
 
 export function UsersPage() {
   const [employees, setEmployees] = useState([])
@@ -11,6 +12,7 @@ export function UsersPage() {
   const [shouldRevalidate, revalidate] = useState(false)
   const employee = useSessionStore((state) => state.employee)
   const [, navigate] = useLocation()
+  useBreadcrumbs({ breadcrumbs: ['Usuarios'] })
 
   useEffect(() => {
     if (employee.roles.role !== 'admin') {

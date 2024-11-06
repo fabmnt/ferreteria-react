@@ -6,6 +6,7 @@ import { DeleteSupplierWarning } from '../components/delete-supplier-waring'
 import { Button } from 'flowbite-react'
 import { IoIosAdd } from 'react-icons/io'
 import { CreateSupplierModal } from '../components/create-supplier-modal'
+import { useBreadcrumbs } from '../../hooks/use-breadcrumbs'
 
 export function SuppliersPage() {
   const [suppliers, setSuppliers] = useState([])
@@ -14,6 +15,8 @@ export function SuppliersPage() {
   const [isDeletingSupplier, setIsDeletingSupplier] = useState(false)
   const [supplierIdToDelete, setSupplierIdToDelete] = useState(null)
   const [showCreateSupplierModal, setShowCreateSupplierModal] = useState(false)
+
+  useBreadcrumbs({ breadcrumbs: ['Proveedores'] })
 
   useEffect(() => {
     setIsLoadingSuppliers(true)

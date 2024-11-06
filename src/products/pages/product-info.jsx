@@ -8,6 +8,7 @@ import { deleteProduct, getCategories, getProduct } from '../../services/product
 import { DeleteProductWarning } from '../components/delete-product-warning'
 import { EditProductModal } from '../components/edit-product-modal'
 import { toast } from 'sonner'
+import { useBreadcrumbs } from '../../hooks/use-breadcrumbs'
 
 export function ProductInfo() {
   const { id } = useParams()
@@ -18,6 +19,8 @@ export function ProductInfo() {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [, navigate] = useLocation()
+
+  useBreadcrumbs({ breadcrumbs: ['Productos', product?.name] })
 
   useEffect(() => {
     async function fetchProduct() {

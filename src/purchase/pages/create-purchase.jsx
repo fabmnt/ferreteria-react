@@ -1,17 +1,19 @@
 import { Button, TextInput } from 'flowbite-react'
 import { useEffect, useMemo, useState } from 'react'
-import { FaRegCircleCheck } from 'react-icons/fa6'
 import { IoIosAdd, IoIosRemoveCircleOutline } from 'react-icons/io'
-import { cn } from '../../utils/cn'
-import { SelectProductsModal } from '../components/select-products-modal'
 import { toast } from 'sonner'
 import { createOrderProducts, createPurchaseOrder } from '../../services/products'
+import { cn } from '../../utils/cn'
+import { SelectProductsModal } from '../components/select-products-modal'
+import { useBreadcrumbs } from '../../hooks/use-breadcrumbs'
 
 export function CreatePurchase() {
   const [showSelectProductsModal, setShowSelectProductsModal] = useState(false)
   const [selectedProducts, setSelectedProducts] = useState([])
   const [productsQuantities, setProductsQuantities] = useState({})
   const [supplier, setSupplier] = useState(null)
+
+  useBreadcrumbs({ breadcrumbs: ['Órden de compra', 'Nueva órden de compra'] })
 
   useEffect(() => {
     const quantities = {}

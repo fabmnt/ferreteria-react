@@ -1,31 +1,20 @@
-import { useRoute, useParams } from 'wouter'
-import { routes } from '../constants/routes'
+import { useSessionStore } from '../store/session'
 
-export function CurrentRoute({ pathToMatch }) {
-  const [match] = useRoute(pathToMatch)
-  const params = useParams()
+export function CurrentRoute() {
+  const breadcrumbs = useSessionStore((state) => state.breadcrumbs)
 
-  if (!match) {
-    return null
-  }
-
-  const labels =
-    routes.find((route) => {
-      return route.path.replace(':id', params[0] ?? '') === pathToMatch
-    })?.labels ?? []
-
-  return labels.map((label) => (
+  return breadcrumbs.map((label, index, arr) => (
     <div
-      key={label}
+      key={index}
       className='flex items-center gap-1'
     >
-      <span>/</span>
       <span
         key={label}
         className='rounded-lg border bg-white px-2 py-1 text-xs'
       >
         {label}
       </span>
+      {index + 1 !== arr.length && <span className='text-xs text-neutral-600'>{'>'}</span>}
     </div>
   ))
 }

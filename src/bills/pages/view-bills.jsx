@@ -7,6 +7,7 @@ import { deleteBill, getBills } from '../../services/bills'
 import { toast } from 'sonner'
 import { DeleteBillWarning } from '../components/delete-bill-warning'
 import { BillFilters } from '../components/bill-filters'
+import { useBreadcrumbs } from '../../hooks/use-breadcrumbs'
 
 export function ViewBillsPage() {
   const [bills, setBills] = useState([])
@@ -21,6 +22,8 @@ export function ViewBillsPage() {
     seller: '',
   })
   const originalBills = useRef([])
+
+  useBreadcrumbs({ breadcrumbs: ['Facturas'] })
 
   useEffect(() => {
     setIsLoading(true)

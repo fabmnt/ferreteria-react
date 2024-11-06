@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useLocation } from 'wouter'
 import { getBill, getBillProducts } from '../../services/bills'
 import { toast } from 'sonner'
+import { useBreadcrumbs } from '../../hooks/use-breadcrumbs'
 
 export function BillDetailsPage() {
   const { id } = useParams()
@@ -16,6 +17,8 @@ export function BillDetailsPage() {
     'cash': 'Efectivo',
     'credit card': 'Tarjeta de crédito',
   }
+
+  useBreadcrumbs({ breadcrumbs: ['Facturas', `#${id}`] })
 
   useEffect(() => {
     setIsLoadingBill(true)
@@ -117,7 +120,7 @@ export function BillDetailsPage() {
 
       <section className='mt-6 rounded border bg-white p-2 py-3'>
         <h3 className='mb-4 font-medium'>Productos vendidos</h3>
-        <div className='scroll-bar mb-4 max-h-[450px] w-full overflow-auto'>
+        <div className='scroll-bar mb-4 max-h-[280px] w-full overflow-auto'>
           <table className='w-full table-fixed text-left text-sm'>
             <thead className='border-b text-xs'>
               <tr className='[&>th]:sticky [&>th]:top-0 [&>th]:z-20 [&>th]:h-10 [&>th]:bg-white [&>th]:px-2 [&>th]:font-normal [&>th]:text-neutral-600'>

@@ -26,7 +26,7 @@ export function MostFrequentClientsTable() {
             })
           }
         }
-        setCustomers(result.sort((a, b) => b.totalBuys - a.totalBuys).slice(0, 8))
+        setCustomers(result.sort((a, b) => b.totalBuys - a.totalBuys).slice(0, 5))
       })
       .finally(() => {
         setIsLoading(false)
@@ -79,7 +79,7 @@ export function MostFrequentClientsTable() {
               <tr
                 key={customer.id}
                 className={cn(
-                  'hover:bg-neutral-100 [&>td]:h-10 [&>td]:overflow-clip [&>td]:border-b [&>td]:px-2 [&>td]:align-middle',
+                  'hover:bg-neutral-100 [&>td]:h-16 [&>td]:overflow-clip [&>td]:border-b [&>td]:px-2 [&>td]:align-middle',
                 )}
               >
                 <td>

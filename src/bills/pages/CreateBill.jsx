@@ -10,6 +10,7 @@ import { getTaxes } from '../../services/products'
 import { updateCustomerLastBuy } from '../../services/customers'
 import { toast } from 'sonner'
 import { Link } from 'wouter'
+import { useBreadcrumbs } from '../../hooks/use-breadcrumbs'
 
 export function CreateBill() {
   const employee = useSessionStore((state) => state.employee)
@@ -29,6 +30,8 @@ export function CreateBill() {
   const [productsQuantity, setProductsQuantity] = useState({})
   const [isCreatingNewBill, setIsCreatingNewBill] = useState(false)
   const [showAddProductModal, setShowAddProductModal] = useState(false)
+
+  useBreadcrumbs({ breadcrumbs: ['Facturas', 'Crear nueva factura'] })
 
   useEffect(() => {
     getTaxes().then(({ data }) => {
