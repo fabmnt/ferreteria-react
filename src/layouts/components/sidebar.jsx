@@ -45,8 +45,6 @@ export function Sidebar({ employee, collapsed }) {
       <div className='flex h-full flex-col justify-between border-x border-l border-r pt-4'>
         <nav className='flex flex-col gap-2 text-sm'>
           {renderLink('/home', <RxDashboard className='h-6 w-5' />, 'Inicio')}
-          {hasRoles(employee, 'admin') &&
-            renderLink('/users', <HiOutlineUsers className='h-6 w-5' />, 'Usuarios')}
           {hasRoles(employee, 'admin', 'seller') &&
             renderLink('/bills/create', <TiDocumentText className='h-6 w-5' />, 'Nueva Factura')}
           {hasRoles(employee, 'admin', 'seller') &&
@@ -61,6 +59,8 @@ export function Sidebar({ employee, collapsed }) {
             )}
           {hasRoles(employee, 'admin') &&
             renderLink('/suppliers', <PiUsersFour className='h-6 w-5' />, 'Proveedores')}
+          {hasRoles(employee, 'admin') &&
+            renderLink('/users', <HiOutlineUsers className='h-6 w-5' />, 'Administración')}
         </nav>
       </div>
     </aside>

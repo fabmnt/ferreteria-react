@@ -14,7 +14,7 @@ export function CurrentRoute() {
       >
         {label}
       </span>
-      {index + 1 !== arr.length && <span className='text-xs text-neutral-600'>{'>'}</span>}
+      {index + 1 !== arr.length && <span className='text-xs text-neutral-600'>/</span>}
     </div>
   ))
 }
