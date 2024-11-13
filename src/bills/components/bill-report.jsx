@@ -1,5 +1,4 @@
 export function BillReport({ __html }) {
-  console.log(__html)
   return (
     <div
       className='hidden'
