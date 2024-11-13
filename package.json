@@ -21,6 +21,7 @@
     "sonner": "1.5.0",
     "tailwind-merge": "^2.5.2",
     "wouter": "^3.3.5",
+    "xlsx": "^0.18.5",
     "zustand": "4.5.5"
   },
   "devDependencies": {

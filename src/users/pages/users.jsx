@@ -11,6 +11,7 @@ import { downloadJSON } from '../../utils/utils'
 import { BackUpRestore } from '../components/backup-restore'
 import { UsersTable } from '../components/users-table'
 import { MdOutlineFileDownload } from 'react-icons/md'
+import { TbReportSearch } from 'react-icons/tb'
 
 export function UsersPage() {
   const [employees, setEmployees] = useState([])
@@ -112,6 +113,12 @@ export function UsersPage() {
                 <BackUpRestore />
               </div>
             </div>
+          </Tabs.Item>
+          <Tabs.Item
+            title='Reportes'
+            icon={TbReportSearch}
+          >
+            <div className='px-2'>Reportes</div>
           </Tabs.Item>
         </Tabs>
       </div>
