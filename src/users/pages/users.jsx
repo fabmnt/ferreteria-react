@@ -12,6 +12,7 @@ import { BackUpRestore } from '../components/backup-restore'
 import { UsersTable } from '../components/users-table'
 import { MdOutlineFileDownload } from 'react-icons/md'
 import { TbReportSearch } from 'react-icons/tb'
+import ReporteVentas from '../components/system-reports'
 
 export function UsersPage() {
   const [employees, setEmployees] = useState([])
@@ -118,7 +119,7 @@ export function UsersPage() {
             title='Reportes'
             icon={TbReportSearch}
           >
-            <div className='px-2'>Reportes</div>
+            <ReporteVentas />
           </Tabs.Item>
         </Tabs>
       </div>
