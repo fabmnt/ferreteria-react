@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { obtenerVentasPorCliente } from '../../services/reports'
 import { Button } from 'flowbite-react'
+import * as XLSX from 'xlsx'
 
 const ReporteVentas = () => {
   const [fechaInicio, setFechaInicio] = useState('')
@@ -12,6 +13,21 @@ const ReporteVentas = () => {
     const data = await obtenerVentasPorCliente(fechaInicio, fechaFin)
     console.log('Datos obtenidos:', data) // Verifica lo que retorna
     setVentas(data)
+  }
+
+  // Función para exportar a Excel
+  const exportarAExcel = () => {
+    const ws = XLSX.utils.json_to_sheet(
+      ventas.map((bills) => ({
+        'ID': bills.id,
+        'Cliente': `${bills.customers.name} ${bills.customers.last_name}`,
+        'Fecha': bills.created_at,
+        'Total': `C$${bills.total_payed}`,
+      }))
+    )
+    const wb = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb, ws, 'Ventas por Cliente')
+    XLSX.writeFile(wb, 'reporte_ventas.xlsx')
   }
 
   return (
@@ -52,35 +68,44 @@ const ReporteVentas = () => {
 
       <div>
         {ventas.length > 0 ? (
-          <table className='w-full table-fixed text-left text-sm'>
-            <thead className='border-b text-xs'>
-              <tr className='[&>th]:h-10 [&>th]:px-2 [&>th]:font-normal [&>th]:text-neutral-600'>
-                <th className='w-16 pl-4'>#</th>
-                <th className='w-28'>Cliente</th>
-                <th className='w-28'>Fecha de compra</th>
-                <th className='w-28'>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ventas.map((bills) => (
-                <tr
-                  key={bills.id}
-                  className='border-y [&>td]:h-16 [&>td]:overflow-clip [&>td]:text-ellipsis [&>td]:px-2 [&>td]:align-middle'
-                >
-                  <td className='pl-4'>
-                    <span className='inline-block rounded bg-gray-200 px-2.5 py-1 text-gray-800'>
-                      #{bills.id}
-                    </span>
-                  </td>
-                  <td className='px-4 py-2'>
-                    {bills.customers.name} {bills.customers.last_name}
-                  </td>
-                  <td className='px-4 py-2'>{new Date(bills.created_at).toDateString()}</td>
-                  <td className='px-4 py-2'>C${bills.total_payed}</td>
+          <>
+            <table className='w-full table-fixed text-left text-sm'>
+              <thead className='border-b text-xs'>
+                <tr className='[&>th]:h-10 [&>th]:px-2 [&>th]:font-normal [&>th]:text-neutral-600'>
+                  <th className='w-16 pl-4'>#</th>
+                  <th className='w-28'>Cliente</th>
+                  <th className='w-28'>Fecha de compra</th>
+                  <th className='w-28'>Total</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {ventas.map((bills) => (
+                  <tr
+                    key={bills.id}
+                    className='border-y [&>td]:h-16 [&>td]:overflow-clip [&>td]:text-ellipsis [&>td]:px-2 [&>td]:align-middle'
+                  >
+                    <td className='pl-4'>
+                      <span className='inline-block rounded bg-gray-200 px-2.5 py-1 text-gray-800'>
+                        #{bills.id}
+                      </span>
+                    </td>
+                    <td className='px-4 py-2'>
+                      {bills.customers.name} {bills.customers.last_name}
+                    </td>
+                    <td className='px-4 py-2'>{new Date(bills.created_at).toDateString()}</td>
+                    <td className='px-4 py-2'>C${bills.total_payed}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <Button
+              onClick={exportarAExcel}
+              color='light'
+              className='mt-4'
+            >
+              Exportar a Excel
+            </Button>
+          </>
         ) : (
           <p>No hay datos disponibles para las fechas seleccionadas.</p>
         )}
