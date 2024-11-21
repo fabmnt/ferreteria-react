@@ -7,6 +7,7 @@ import { useState } from 'react'
 export function BillsTable({ bills, isLoading, onDeleteBill }) {
   const [, navigate] = useLocation()
   const [__html, setHtml] = useState('')
+  const [sortOrder, setSortOrder] = useState('asc')
   const paymentMethodsTranslations = {
     'cash': 'Efectivo',
     'debit card': 'Tarjeta de débito',
@@ -104,12 +105,23 @@ export function BillsTable({ bills, isLoading, onDeleteBill }) {
     newWindow.print()
   }
 
+  const sortedBills = [...bills].sort((a, b) => b.id - a.id)
+
+  const toggleSortOrder = () => {
+    setSortOrder((prevOrder) => (prevOrder === 'asc' ? 'desc' : 'asc'))
+  }
+
   return (
     <div className='scroll-bar mb-4 h-[450px] overflow-auto'>
       <table className='table-fixed text-left text-sm'>
         <thead className='border-b text-xs'>
           <tr className='[&>th]:sticky [&>th]:top-0 [&>th]:z-20 [&>th]:h-10 [&>th]:bg-white [&>th]:px-2 [&>th]:font-normal [&>th]:text-neutral-600'>
-            <th className='w-[60px]'>#</th>
+            <th
+              className='w-[60px] cursor-pointer'
+              onClick={toggleSortOrder}
+            >
+              #
+            </th>
             <th className='w-[180px]'>Cliente</th>
             <th className='w-[120px]'>Fecha</th>
             <th className='w-[180px]'>Método de pago</th>
@@ -137,7 +149,7 @@ export function BillsTable({ bills, isLoading, onDeleteBill }) {
               </tr>
             ))}
 
-          {bills.length === 0 && !isLoading && (
+          {sortedBills.length === 0 && !isLoading && (
             <tr>
               <td
                 colSpan='10'
@@ -149,7 +161,7 @@ export function BillsTable({ bills, isLoading, onDeleteBill }) {
               </td>
             </tr>
           )}
-          {bills.map(
+          {sortedBills.map(
             ({
               id,
               created_at: createdAt,
