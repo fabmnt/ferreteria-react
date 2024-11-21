@@ -13,10 +13,7 @@ const ReporteVentas = () => {
     const fechaFinInclusive = new Date(fechaFin)
     fechaFinInclusive.setDate(fechaFinInclusive.getDate() + 1)
     fechaFinInclusive.setHours(23, 59, 59, 999)
-    const data = await obtenerVentasPorCliente(
-      fechaInicio,
-      fechaFinInclusive.toISOString(),
-    )
+    const data = await obtenerVentasPorCliente(fechaInicio, fechaFinInclusive.toISOString())
     console.log('Datos obtenidos:', data) // Verifica lo que retorna
     const sortedData = data.sort((a, b) => a.id - b.id)
     setVentas(sortedData)
@@ -39,19 +36,19 @@ const ReporteVentas = () => {
 
   return (
     <div className='p-4'>
-      <h1 className='mb-4 text-2xl font-bold'>Reporte de Ventas por Cliente</h1>
+      <h1 className='mb-4 text-2xl font-semibold'>Reporte de Ventas por Cliente</h1>
       <form
         className='mb-4'
         onSubmit={manejarSubmit}
       >
-        <div className='flex justify-around'>
+        <div className='flex items-center justify-around'>
           <div className='mb-2'>
             <label>Fecha Inicio:</label>
             <input
               type='date'
               value={fechaInicio}
               onChange={(e) => setFechaInicio(e.target.value)}
-              className=''
+              className='rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-300'
             />
           </div>
           <div className='mb-2'>
@@ -60,16 +57,18 @@ const ReporteVentas = () => {
               type='date'
               value={fechaFin}
               onChange={(e) => setFechaFin(e.target.value)}
-              className=''
+              className='rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-300'
             />
           </div>
-          <Button
-            type='submit'
-            color='light'
-            className='flex items-center'
-          >
-            Generar Reporte
-          </Button>
+          <div className='mb-2'>
+            <Button
+              type='submit'
+              color='light'
+              className='flex items-center'
+            >
+              Generar Reporte
+            </Button>
+          </div>
         </div>
       </form>
 
