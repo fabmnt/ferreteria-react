@@ -10,9 +10,16 @@ const ReporteVentas = () => {
 
   const manejarSubmit = async (e) => {
     e.preventDefault()
-    const data = await obtenerVentasPorCliente(fechaInicio, fechaFin)
+    const fechaFinInclusive = new Date(fechaFin)
+    fechaFinInclusive.setDate(fechaFinInclusive.getDate() + 1)
+    fechaFinInclusive.setHours(23, 59, 59, 999)
+    const data = await obtenerVentasPorCliente(
+      fechaInicio,
+      fechaFinInclusive.toISOString(),
+    )
     console.log('Datos obtenidos:', data) // Verifica lo que retorna
-    setVentas(data)
+    const sortedData = data.sort((a, b) => a.id - b.id)
+    setVentas(sortedData)
   }
 
   // Función para exportar a Excel
@@ -57,7 +64,7 @@ const ReporteVentas = () => {
             />
           </div>
           <Button
-            type='summit'
+            type='submit'
             color='light'
             className='flex items-center'
           >
