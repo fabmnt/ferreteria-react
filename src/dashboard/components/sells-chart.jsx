@@ -40,9 +40,9 @@ export function SellsChart({ sinceDate }) {
   function CustomTooltip({ active, payload, label }) {
     if (active) {
       return (
-        <div className='rounded bg-white p-2 shadow'>
-          <p className='text-sm'>{`Fecha: ${label}`}</p>
-          <p className='text-sm text-[#8884d8]'>{`Total: C$ ${payload[0].value}`}</p>
+        <div className='rounded bg-white dark:bg-neutral-800 p-2 shadow'>
+          <p className='text-sm text-neutral-800 dark:text-white'>{`Fecha: ${label}`}</p>
+          <p className='text-sm text-[#107acc]'>{`Total: C$ ${payload[0].value}`}</p>
         </div>
       )
     }
@@ -51,7 +51,7 @@ export function SellsChart({ sinceDate }) {
   }
 
   return isLoading ? (
-    <div className='h-full w-full animate-pulse rounded-md bg-neutral-100' />
+    <div className='h-full w-full animate-pulse rounded-md bg-neutral-100 dark:bg-neutral-700' />
   ) : (
     <ResponsiveContainer
       width='100%'
@@ -62,26 +62,26 @@ export function SellsChart({ sinceDate }) {
         width={800}
         height={200}
       >
-        <CartesianGrid strokeDasharray='3 3' />
+        <CartesianGrid strokeDasharray='3 3' className='dark:stroke-neutral-700' />
         <XAxis
           dataKey='date'
-          className='text-xs'
+          className='text-xs text-neutral-800 dark:text-white'
         />
         <YAxis
-          className='text-xs'
-          // tickFormatter={(value) => `C$${value}`}
+          className='text-xs text-neutral-800 dark:text-white'
         >
           <Label
             value='Total (C$)'
             angle={-90}
             position='insideLeft'
             style={{ textAnchor: 'middle' }}
+            className='text-neutral-800 dark:text-white'
           />
         </YAxis>
         <Tooltip content={<CustomTooltip />} />
         <Bar
           dataKey='total'
-          fill='#8884d8'
+          fill='var(--bar-color)'
           barSize={10}
           label={({ payload }) => `C$${payload}`}
         />

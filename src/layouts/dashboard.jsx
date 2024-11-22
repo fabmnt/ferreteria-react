@@ -65,14 +65,16 @@ export function DashboardLayout({ children }) {
   }
 
   return (
-    <div className='flex min-h-[100dvh] w-full flex-col'>
-      <header className='sticky top-0 z-10 flex w-full items-center border bg-white'>
+    <div className='flex min-h-[100dvh] w-full flex-col dark:bg-neutral-900 dark:text-white'>
+      <header className='sticky top-0 z-10 flex w-full items-center border bg-white dark:bg-neutral-900'>
         <div className={`${collapsed ? 'w-[80px]' : 'w-[260px]'} border-r px-4 pb-6 pt-4`}>
           <div className={`flex ${collapsed ? 'justify-center' : 'justify-between'}`}>
             {!collapsed && (
               <div>
                 <h1 className='text-lg font-semibold'>Ferreteria</h1>
-                <p className='text-sm text-neutral-600'>Facturación e inventario.</p>
+                <p className='text-sm text-neutral-600 dark:text-neutral-400'>
+                  Facturación e inventario.
+                </p>
               </div>
             )}
             <div>
@@ -80,12 +82,12 @@ export function DashboardLayout({ children }) {
                 {collapsed ? (
                   <TbLayoutSidebarRightCollapse
                     strokeWidth={1.5}
-                    className='h-8 w-7 text-neutral-600'
+                    className='h-8 w-7 text-neutral-600 dark:text-neutral-400'
                   />
                 ) : (
                   <TbLayoutSidebarLeftCollapse
                     strokeWidth={1.5}
-                    className='h-8 w-7 text-neutral-600'
+                    className='h-8 w-7 text-neutral-600 dark:text-neutral-400'
                   />
                 )}
               </button>
@@ -98,10 +100,10 @@ export function DashboardLayout({ children }) {
           </div>
           <div className='mr-12 flex items-center gap-4'>
             <button>
-              <IoIosNotificationsOutline className='size-6 text-neutral-700' />
+              <IoIosNotificationsOutline className='size-6 text-neutral-700 dark:text-neutral-400' />
             </button>
             <button>
-              <IoIosHelpCircleOutline className='size-6 text-neutral-700' />
+              <IoIosHelpCircleOutline className='size-6 text-neutral-700 dark:text-neutral-400' />
             </button>
             {session && employee && (
               <UserDropdown
@@ -117,7 +119,7 @@ export function DashboardLayout({ children }) {
           employee={employee}
           collapsed={collapsed}
         />
-        <div className='scroll-bar flex-1 overflow-y-auto bg-[#f7f9fb]'>
+        <div className='scroll-bar flex-1 overflow-y-auto bg-[#f7f9fb] dark:bg-[#000]'>
           <div className='px-12 pt-4'>{children}</div>
         </div>
       </div>

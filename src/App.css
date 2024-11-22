@@ -51,6 +51,19 @@ body {
   background-size: 55px 55px;
 }
 
+.dark .background-gradient {
+  --color: #1f2937; /* Gris oscuro */
+  background-color: #111827; /* Fondo oscuro */
+}
+
+:root {
+  --bar-color: #107acc; /* color predeterminado (modo claro) */
+}
+
+.dark {
+  --bar-color: #15297c; /* color para el modo oscuro */
+}
+
 button:focus-visible,
 input:focus-visible,
 a:focus-visible,

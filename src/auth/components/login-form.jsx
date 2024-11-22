@@ -55,29 +55,36 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={handleSubmit}
+      className='rounded-lg bg-white p-6 shadow-md transition-all dark:bg-[#191c25] dark:shadow-lg'
+    >
       <label className='flex flex-col gap-2'>
-        <span className='text-sm font-semibold'>Correo electrónico</span>
+        <span className='text-sm font-semibold text-gray-800 dark:text-gray-200'>
+          Correo electrónico
+        </span>
         <Input
           required
           placeholder='micorreo@correo.com'
           name='user-email'
           type='email'
+          className='dark:bg-[#1f1f2e] dark:text-gray-200'
         />
       </label>
       <label className='mt-4 flex flex-col gap-2'>
-        <span className='text-sm font-semibold'>Contraseña</span>
+        <span className='text-sm font-semibold text-gray-800 dark:text-gray-200'>Contraseña</span>
         <div className='relative'>
           <Input
             required
             placeholder='********'
             name='user-password'
             type={showPassword ? 'text' : 'password'}
+            className='dark:bg-[#1f1f2e] dark:text-gray-200'
           />
           <button
             type='button'
             onClick={togglePasswordVisibility}
-            className='absolute inset-y-0 right-0 px-3 text-sm text-purple-500'
+            className='absolute inset-y-0 right-0 px-3 text-sm text-purple-500 dark:text-purple-300'
           >
             {showPassword ? (
               <BiShowAlt
@@ -93,11 +100,15 @@ export function LoginForm() {
           </button>
         </div>
       </label>
-      <div>{errorMessage && <p className='mt-2 text-sm text-red-500'>{errorMessage}</p>}</div>
+      <div>
+        {errorMessage && (
+          <p className='mt-2 text-sm text-red-500 dark:text-red-400'>{errorMessage}</p>
+        )}
+      </div>
       <button
         disabled={loading}
         type='submit'
-        className='mt-8 flex w-full items-center justify-center gap-2 rounded-md bg-purple-500 py-2 text-sm font-semibold text-white transition-colors hover:bg-purple-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 disabled:opacity-60'
+        className='mt-8 flex w-full items-center justify-center gap-2 rounded-md bg-purple-500 py-2 text-sm font-semibold text-white transition-colors hover:bg-purple-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 disabled:opacity-60 dark:bg-purple-900 dark:hover:bg-purple-700'
       >
         {loading && (
           <Spinner

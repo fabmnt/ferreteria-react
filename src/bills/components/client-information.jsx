@@ -6,7 +6,7 @@ import { toast } from 'sonner'
 import { Input } from '../../components/input'
 import { createCustomer, getCustomerByPhone, getCustomers } from '../../services/customers'
 
-export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
+export function   ClientInformation({ updateCurrentCustomer, currentCustomer }) {
   const [existingCustomer, setExistingCustomer] = useState(true)
   const [showCustomerDetails, setShowCustomerDetails] = useState(false)
   const [isCreatingCustomer, setIsCreatingCustomer] = useState(false)
@@ -161,7 +161,7 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
                   type='tel'
                   maxLength='8'
                   minLength='8'
-                  placeholder='########'
+                  placeholder='88880000'
                 />
               </div>
             </label>
@@ -234,7 +234,7 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
               required
               disabled={currentCustomer}
               type='text'
-              placeholder='Fabian'
+              placeholder='Jonh'
             />
           </label>
           <label className='flex flex-col gap-1 text-sm'>
@@ -245,7 +245,7 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
               name='customer-last-name'
               required
               type='text'
-              placeholder='Montoya'
+              placeholder='Due'
             />
           </label>
           <label className='flex flex-col gap-1 text-sm'>
@@ -322,7 +322,7 @@ export function ClientInformation({ updateCurrentCustomer, currentCustomer }) {
             </div>
           </div>
         ) : (
-          <p className='text-sm text-neutral-600'>Seleciona o crea un nuevo cliente.</p>
+          <p className='text-sm text-neutral-600'>Selecciona o crea un nuevo cliente.</p>
         )}
       </div>
     </div>

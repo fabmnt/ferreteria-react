@@ -6,8 +6,8 @@ import { getMostSelledProudcts } from '../../utils/chart-data'
 export function CustomTooltip({ active, payload }) {
   if (active) {
     return (
-      <div className='rounded bg-white p-2 shadow'>
-        <p className='text-sm'>{`Producto: ${payload[0].payload.productName}`}</p>
+      <div className='rounded bg-white dark:bg-neutral-800 p-2 shadow'>
+        <p className='text-sm text-neutral-800 dark:text-white'>{`Producto: ${payload[0].payload.productName}`}</p>
         <p className='text-sm text-[#8884d8]'>{`Cantidad: ${payload[0].value}`}</p>
       </div>
     )
@@ -16,7 +16,6 @@ export function CustomTooltip({ active, payload }) {
   return null
 }
 
-const COLORS = ['#2898ee', '#107acc', '#0cbccc', '#15297c', '#142157', '#8da9c4']
 const RADIAN = Math.PI / 180
 
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
@@ -41,8 +40,12 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
 export function MostSelledProductsChart() {
   const [billProducts, setBillProducts] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const [isDarkMode, setIsDarkMode] = useState(false)
 
   useEffect(() => {
+    // Detectar si el modo oscuro está activado
+    setIsDarkMode(document.body.classList.contains('dark'))
+
     setIsLoading(true)
     getAllBillProducts()
       .then(({ data, error }) => {
@@ -58,8 +61,15 @@ export function MostSelledProductsChart() {
 
   const mostSelledProducts = getMostSelledProudcts(billProducts)
 
+  // Definimos los colores según el modo oscuro
+  const lightColors = ['#2898ee', '#107acc', '#0cbccc', '#15297c', '#142157', '#008']
+  const darkColors = ['#6c9cd7', '#457bb1', '#1a7b8c', '#3c4e8f', '#2d3f6d', '#5b7d9c']
+
+  // Usamos el arreglo de colores basado en el modo
+  const COLORS = isDarkMode ? darkColors : lightColors
+
   return isLoading ? (
-    <div className='h-full w-full animate-pulse rounded-md bg-neutral-100' />
+    <div className='h-full w-full animate-pulse rounded-md bg-neutral-100 dark:bg-neutral-700' />
   ) : (
     <ResponsiveContainer
       width='100%'
@@ -69,7 +79,7 @@ export function MostSelledProductsChart() {
         <Pie
           className='text-sm'
           dataKey='quantity'
-          fill='#8884d8'
+          fill={isDarkMode ? '#3c4e8f' : '#8884d8'} // Color base para el gráfico
           labelLine={false}
           label={({ payload }) => payload.productName.substring(0, 16).concat('...')}
           data={mostSelledProducts}
@@ -78,7 +88,7 @@ export function MostSelledProductsChart() {
           {mostSelledProducts.map((entry, index) => (
             <Cell
               key={`cell-${index}`}
-              fill={COLORS[index % COLORS.length]}
+              fill={COLORS[index % COLORS.length]} // Asigna el color según el modo
             />
           ))}
         </Pie>
