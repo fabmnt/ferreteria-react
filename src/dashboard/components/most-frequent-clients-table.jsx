@@ -34,7 +34,7 @@ export function MostFrequentClientsTable() {
   }, [])
 
   return (
-    <div className='scroll-bar mb-4 h-[320px] overflow-auto'>
+    <div className='scroll-bar mb-4 h-[260px] overflow-auto'>
       <table className='w-full table-fixed text-left text-sm'>
         <thead className='border-b text-xs'>
           <tr className='[&>th]:sticky [&>th]:top-0 [&>th]:z-20 [&>th]:h-8 [&>th]:bg-white [&>th]:px-2 [&>th]:font-normal [&>th]:text-neutral-600'>

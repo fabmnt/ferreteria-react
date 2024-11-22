@@ -15,7 +15,7 @@ export function Dashboard() {
         </div>
       </div>
       <section className='mt-4 grid grid-cols-2 gap-4'>
-        <div className='h-[350px] rounded border bg-white p-4'>
+        <div className='h-[310px] rounded border bg-white p-4'>
           <div className='mb-2 flex items-center gap-1'>
             <h4 className='font-medium'>Total de ventas</h4>
             <p className='text-sm text-neutral-600'>Últimos 15 días</p>
@@ -24,7 +24,7 @@ export function Dashboard() {
             <SellsChart />
           </div>
         </div>
-        <div className='h-[350px] rounded border bg-white p-4'>
+        <div className='h-[310px] rounded border bg-white p-4'>
           <div className='mb-2'>
             <h4 className='font-medium'>Productos más vendidos </h4>
           </div>
@@ -32,7 +32,7 @@ export function Dashboard() {
             <MostSelledProductsChart />
           </div>
         </div>
-        <div className='col-span-2 rounded border bg-white p-4'>
+        <div className='h-[320px] col-span-2 rounded border bg-white p-4'>
           <div className='mb-2'>
             <h4 className='font-medium'>Clientes más recurrentes</h4>
           </div>
