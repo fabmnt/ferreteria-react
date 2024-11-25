@@ -23,3 +23,22 @@ export const obtenerVentasPorCliente = async (fechaInicio, fechaFin) => {
 
   return data
 }
+
+export const obtenerInventarioActual = async () => {
+  const { data, error } = await supabase.from('inventory').select(`
+      id,
+      name,
+      description,
+      stock,
+      price,
+      cost,
+      category_id (name)
+    `)
+
+  if (error) {
+    console.error('Error obteniendo el inventario:', error)
+    return null
+  }
+
+  return data
+}

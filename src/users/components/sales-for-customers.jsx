@@ -3,7 +3,7 @@ import { obtenerVentasPorCliente } from '../../services/reports'
 import { Button } from 'flowbite-react'
 import * as XLSX from 'xlsx'
 
-const ReporteVentas = () => {
+export function ReporteVentas() {
   const [fechaInicio, setFechaInicio] = useState('')
   const [fechaFin, setFechaFin] = useState('')
   const [ventas, setVentas] = useState([])
@@ -63,7 +63,7 @@ const ReporteVentas = () => {
           <div className='mb-2'>
             <Button
               type='submit'
-              color='light'
+              color='blue'
               className='flex items-center'
             >
               Generar Reporte
@@ -75,7 +75,7 @@ const ReporteVentas = () => {
       <div>
         {ventas.length > 0 ? (
           <>
-            <div className='scroll-bar mb-4 h-[350px] overflow-auto'>
+            <div className='scroll-bar mb-4 h-[310px] overflow-auto'>
               <table className='w-full table-fixed text-left text-sm'>
                 <thead className='border-b text-xs'>
                   <tr className='[&>th]:sticky [&>th]:top-0 [&>th]:z-20 [&>th]:h-10 [&>th]:bg-white [&>th]:px-2 [&>th]:font-normal [&>th]:text-neutral-600'>
@@ -121,5 +121,3 @@ const ReporteVentas = () => {
     </div>
   )
 }
-
-export default ReporteVentas
