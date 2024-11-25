@@ -5,6 +5,8 @@ import { ReporteVentas } from '../components/sales-for-customers'
 import { ReporteInventario } from '../components/current-inventory'
 import { VentasPorProducto } from '../components/sales-for-product'
 import { FaListUl } from 'react-icons/fa'
+import { ReporteGanancias } from '../components/profits'
+import { CiMoneyBill } from 'react-icons/ci'
 
 export function GetReports() {
   return (
@@ -27,6 +29,15 @@ export function GetReports() {
         >
           <VentasPorProducto />
         </Tabs.Item>
+
+        <Tabs.Item
+          active
+          title='Ganancias'
+          icon={CiMoneyBill}
+        >
+          <ReporteGanancias />
+        </Tabs.Item>
+
         <Tabs.Item
           active
           title='Inventario de productos'

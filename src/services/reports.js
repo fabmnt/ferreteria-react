@@ -100,3 +100,59 @@ export const obtenerVentasPorProducto = async (fechaInicio, fechaFin) => {
 
   return ventasPorProducto
 }
+
+export const obtenerGanancias = async (fechaInicio, fechaFin) => {
+  // Paso 1: Obtener las facturas en el rango de fechas
+  const { data: billsData, error: billsError } = await supabase
+    .from('bills')
+    .select('id, created_at')
+    .gte('created_at', fechaInicio)
+    .lte('created_at', fechaFin)
+
+  if (billsError) {
+    console.error('Error obteniendo las facturas:', billsError)
+    return null
+  }
+
+  // Paso 2: Obtener los productos vendidos en esas facturas
+  const { data: billProductsData, error: billProductsError } = await supabase
+    .from('bill_products')
+    .select('product_id, quantity, bill_id')
+    .in(
+      'bill_id',
+      billsData.map((bill) => bill.id),
+    )
+
+  if (billProductsError) {
+    console.error('Error obteniendo los productos de las facturas:', billProductsError)
+    return null
+  }
+
+  // Paso 3: Obtener los detalles de los productos, incluyendo precio y costo
+  const { data: productsData, error: productsError } = await supabase
+    .from('inventory')
+    .select('id, price, cost')
+
+  if (productsError) {
+    console.error('Error obteniendo los productos:', productsError)
+    return null
+  }
+
+  // Paso 4: Calcular las ganancias
+  let gananciasTotales = 0
+
+  // Recorremos cada producto vendido en billProductsData
+  billProductsData.forEach((productoVenta) => {
+    // Buscar el precio y costo del producto en inventory
+    const producto = productsData.find((prod) => prod.id === productoVenta.product_id)
+
+    if (producto) {
+      // Calcular la ganancia para ese producto
+      const gananciaPorProducto = (producto.price - producto.cost) * productoVenta.quantity
+      gananciasTotales += gananciaPorProducto
+    }
+  })
+
+  // Devolver el total de ganancias
+  return gananciasTotales
+}
