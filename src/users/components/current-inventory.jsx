@@ -29,8 +29,8 @@ export function ReporteInventario() {
           Nombre: item.name,
           Descripción: item.description,
           Stock: item.stock,
-          Precio: `C$${item.price}`,
           Costo: `C$${item.cost}`,
+          Precio: `C$${item.price}`,
           Categoría: item.category_id.name,
         })),
       )
@@ -69,8 +69,8 @@ export function ReporteInventario() {
                 <th className='w-40'>Nombre</th>
                 <th className='w-50'>Descripción</th>
                 <th className='w-28'>Stock</th>
-                <th className='w-28'>Precio</th>
                 <th className='w-28'>Costo</th>
+                <th className='w-28'>Precio</th>
                 <th className='w-36'>Categoría</th>
               </tr>
             </thead>
