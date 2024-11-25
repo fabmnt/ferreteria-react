@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { obtenerInventarioActual } from '../../services/reports'
 import { Button } from 'flowbite-react'
 import * as XLSX from 'xlsx'
+import { toast } from 'sonner'
 
 export function ReporteInventario() {
   const [inventario, setInventario] = useState([])
@@ -13,11 +14,14 @@ export function ReporteInventario() {
 
       if (data) {
         setInventario(data)
+        toast.success('Inventario cargado correctamente.')
       } else {
         console.error('No se obtuvieron datos de inventario.')
+        toast.error('No se obtuvieron datos de inventario.')
       }
     } catch (error) {
       console.error('Error al cargar el inventario:', error)
+      toast.error('Error al cargar el inventario.')
     }
   }
 

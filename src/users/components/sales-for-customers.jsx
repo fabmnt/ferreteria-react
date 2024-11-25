@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { obtenerVentasPorCliente } from '../../services/reports'
 import { Button } from 'flowbite-react'
 import * as XLSX from 'xlsx'
+import { toast } from 'sonner'
 
 export function ReporteVentas() {
   const [fechaInicio, setFechaInicio] = useState('')
@@ -10,13 +11,29 @@ export function ReporteVentas() {
 
   const manejarSubmit = async (e) => {
     e.preventDefault()
+
+    if (!fechaInicio || !fechaFin) {
+      toast.warning('Por favor, selecciona un rango de fechas.')
+      return
+    }
+
+    if (fechaInicio > fechaFin) {
+      toast.warning('La fecha de inicio no puede ser mayor a la fecha de fin.')
+      return
+    }
+
     const fechaFinInclusive = new Date(fechaFin)
     fechaFinInclusive.setDate(fechaFinInclusive.getDate() + 1)
     fechaFinInclusive.setHours(23, 59, 59, 999)
+
     const data = await obtenerVentasPorCliente(fechaInicio, fechaFinInclusive.toISOString())
     console.log('Datos obtenidos:', data) // Verifica lo que retorna
     const sortedData = data.sort((a, b) => a.id - b.id)
     setVentas(sortedData)
+
+    if (fechaInicio || fechaFin) {
+      toast.success('Reporte obtenido correctamente.')
+    }
   }
 
   // Función para exportar a Excel
@@ -43,7 +60,7 @@ export function ReporteVentas() {
       >
         <div className='flex items-center justify-around'>
           <div className='mb-2'>
-            <label>Fecha Inicio:</label>
+            <label>Fecha Inicio: </label>
             <input
               type='date'
               value={fechaInicio}
@@ -52,7 +69,7 @@ export function ReporteVentas() {
             />
           </div>
           <div className='mb-2'>
-            <label>Fecha Fin:</label>
+            <label>Fecha Fin: </label>
             <input
               type='date'
               value={fechaFin}

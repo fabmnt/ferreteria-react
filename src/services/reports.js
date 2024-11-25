@@ -81,33 +81,48 @@ export const obtenerVentasPorProducto = async (fechaInicio, fechaFin) => {
   }
 
   // Paso 4: Procesar y combinar los datos
-  const ventasPorProducto = productsData.map((product) => {
-    const productosVendidos = billProductsData.filter((item) => item.product_id === product.id)
+  const ventasPorProducto = productsData
+    .map((product) => {
+      const productosVendidos = billProductsData.filter((item) => item.product_id === product.id)
 
-    const cantidadVendida = productosVendidos.reduce((acc, item) => acc + item.quantity, 0)
-    const totalVentas = cantidadVendida * product.price
-    const stockRestante = product.stock - cantidadVendida
+      const cantidadVendida = productosVendidos.reduce((acc, item) => acc + item.quantity, 0)
+      const totalVentas = cantidadVendida * product.price
+      const stockRestante = product.stock - cantidadVendida
 
-    return {
-      id: product.id,
-      name: product.name,
-      description: product.description,
-      cantidad_vendida: cantidadVendida,
-      total_ventas: totalVentas,
-      stock_restante: stockRestante,
-    }
-  })
+      return {
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        cantidad_vendida: cantidadVendida,
+        total_ventas: totalVentas,
+        stock_restante: stockRestante,
+      }
+    })
+    .filter((product) => product.cantidad_vendida > 0) // Filtrar productos con cantidad vendida mayor a 0
+
+  // Ordenar por cantidad vendida más alta
+  ventasPorProducto.sort((a, b) => b.cantidad_vendida - a.cantidad_vendida)
 
   return ventasPorProducto
 }
 
-export const obtenerGanancias = async (fechaInicio, fechaFin) => {
+export const obtenerGananciasPorFecha = async (fechaInicio, fechaFin) => {
+  // Convertir las fechas a formato ISO
+  const fechaInicioISO = new Date(fechaInicio).toISOString()
+  const fechaFinObj = new Date(fechaFin)
+  fechaFinObj.setHours(23, 59, 59, 999)
+  const fechaFinISO = fechaFinObj.toISOString()
+
+  // Verificar las fechas en consola para depuración
+  console.log('Fecha de inicio:', fechaInicioISO)
+  console.log('Fecha de fin:', fechaFinISO)
+
   // Paso 1: Obtener las facturas en el rango de fechas
   const { data: billsData, error: billsError } = await supabase
     .from('bills')
-    .select('id, created_at')
-    .gte('created_at', fechaInicio)
-    .lte('created_at', fechaFin)
+    .select('id, created_at, total_payed')
+    .gte('created_at', fechaInicioISO)
+    .lte('created_at', fechaFinISO)
 
   if (billsError) {
     console.error('Error obteniendo las facturas:', billsError)
@@ -128,31 +143,54 @@ export const obtenerGanancias = async (fechaInicio, fechaFin) => {
     return null
   }
 
-  // Paso 3: Obtener los detalles de los productos, incluyendo precio y costo
+  // Paso 3: Obtener los detalles de los productos
   const { data: productsData, error: productsError } = await supabase
     .from('inventory')
-    .select('id, price, cost')
+    .select('id, name, price, cost')
 
   if (productsError) {
     console.error('Error obteniendo los productos:', productsError)
     return null
   }
 
-  // Paso 4: Calcular las ganancias
-  let gananciasTotales = 0
+  // Paso 4: Calcular ganancias, productos vendidos y total pagado por fecha
+  const gananciasPorFecha = []
 
-  // Recorremos cada producto vendido en billProductsData
-  billProductsData.forEach((productoVenta) => {
-    // Buscar el precio y costo del producto en inventory
-    const producto = productsData.find((prod) => prod.id === productoVenta.product_id)
+  // Agrupar las ventas por fecha
+  billsData.forEach((bill) => {
+    const productosVendidos = billProductsData.filter((item) => item.bill_id === bill.id)
 
-    if (producto) {
-      // Calcular la ganancia para ese producto
-      const gananciaPorProducto = (producto.price - producto.cost) * productoVenta.quantity
-      gananciasTotales += gananciaPorProducto
+    let gananciaTotal = 0
+    let totalPagado = bill.total_payed
+    let cantidadTotalVendida = 0
+
+    productosVendidos.forEach((productoVenta) => {
+      const producto = productsData.find((prod) => prod.id === productoVenta.product_id)
+
+      if (producto) {
+        const gananciaPorProducto = (producto.price - producto.cost) * productoVenta.quantity
+        gananciaTotal += gananciaPorProducto
+        cantidadTotalVendida += productoVenta.quantity
+      }
+    })
+
+    const fechaFactura = new Date(bill.created_at).toLocaleDateString()
+
+    const existenciaFecha = gananciasPorFecha.find((item) => item.fecha === fechaFactura)
+
+    if (existenciaFecha) {
+      existenciaFecha.cantidad_vendida += cantidadTotalVendida
+      existenciaFecha.total_pagado += totalPagado
+      existenciaFecha.ganancia_total += gananciaTotal
+    } else {
+      gananciasPorFecha.push({
+        fecha: fechaFactura,
+        cantidad_vendida: cantidadTotalVendida,
+        total_pagado: totalPagado,
+        ganancia_total: gananciaTotal,
+      })
     }
   })
 
-  // Devolver el total de ganancias
-  return gananciasTotales
+  return gananciasPorFecha
 }

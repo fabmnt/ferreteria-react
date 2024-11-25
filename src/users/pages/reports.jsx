@@ -5,10 +5,12 @@ import { ReporteVentas } from '../components/sales-for-customers'
 import { ReporteInventario } from '../components/current-inventory'
 import { VentasPorProducto } from '../components/sales-for-product'
 import { FaListUl } from 'react-icons/fa'
-import { ReporteGanancias } from '../components/profits'
+import { ReporteGananciasPorFecha } from '../components/profits'
 import { CiMoneyBill } from 'react-icons/ci'
+import { useBreadcrumbs } from '../../hooks/use-breadcrumbs'
 
 export function GetReports() {
+  useBreadcrumbs({ breadcrumbs: ['Administración', 'Reportes'] })
   return (
     <div className='w-full rounded border bg-white'>
       <Tabs
@@ -35,7 +37,7 @@ export function GetReports() {
           title='Ganancias'
           icon={CiMoneyBill}
         >
-          <ReporteGanancias />
+          <ReporteGananciasPorFecha />
         </Tabs.Item>
 
         <Tabs.Item

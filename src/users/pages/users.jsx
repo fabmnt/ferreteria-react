@@ -22,7 +22,7 @@ export function UsersPage() {
   const [isLoadingBackup, setIsLoadingBackup] = useState(false)
   const employee = useSessionStore((state) => state.employee)
   const [, navigate] = useLocation()
-  useBreadcrumbs({ breadcrumbs: ['Usuarios'] })
+  useBreadcrumbs({ breadcrumbs: ['Administración'] })
 
   useEffect(() => {
     if (employee.roles.role !== 'admin') {
