@@ -11,7 +11,7 @@ import {
 } from 'recharts'
 import { toast } from 'sonner'
 import { getBills } from '../../services/bills'
-import { getSellsInformationByDate } from '../../utils/chart-data'
+import { getSellsInformationLast15Days } from '../../utils/chart-data'
 
 export function SellsChart({ sinceDate }) {
   const [bills, setBills] = useState([])
@@ -35,7 +35,7 @@ export function SellsChart({ sinceDate }) {
       })
   }, [])
 
-  const sellInformationByDate = getSellsInformationByDate(bills, '10/20/2024')
+  const sellInformationByDate = getSellsInformationLast15Days(bills)
 
   function CustomTooltip({ active, payload, label }) {
     if (active) {

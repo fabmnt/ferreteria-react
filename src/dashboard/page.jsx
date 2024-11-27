@@ -21,7 +21,7 @@ export function Dashboard() {
         <div className='h-[310px] rounded border bg-white p-4 dark:border-neutral-700 dark:bg-neutral-900'>
           <div className='mb-2 flex items-center gap-1'>
             <h4 className='font-medium dark:text-gray-300'>Total de ventas</h4>
-            <p className='text-sm text-neutral-600 dark:text-neutral-400'>Últimos 30 días</p>
+            <p className='text-sm text-neutral-600 dark:text-neutral-400'>Últimos 15 días</p>
           </div>
           <div className='h-full w-full p-4'>
             <SellsChart />

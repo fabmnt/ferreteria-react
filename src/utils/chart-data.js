@@ -1,24 +1,29 @@
-import { differenceInDays } from 'date-fns'
+import { subDays } from 'date-fns'
 
-export function getSellsInformationByDate(bills, dateFrom) {
-  const sinceDate = new Date(dateFrom)
+export function getSellsInformationLast15Days(bills) {
+  const today = new Date() // Fecha actual
+  const sinceDate = subDays(today, 15) // Restamos 15 días desde hoy
+
+  // Filtramos las facturas de los últimos 15 días
   const filteredBills = bills.filter((bill) => new Date(bill.created_at) >= sinceDate)
-  const daysDifference = differenceInDays(new Date(), sinceDate)
+
+  // Preparamos un array para agrupar las facturas día por día
   const result = []
 
-  for (let i = 0; i < daysDifference + 1; i++) {
-    if (i === 0) {
-      sinceDate.setDate(sinceDate.getDate())
-    } else {
-      sinceDate.setDate(sinceDate.getDate() + 1)
-    }
-    const sellsFromCurrentDate = filteredBills.filter((bill) => {
-      return new Date(bill.created_at).toLocaleDateString() === sinceDate.toLocaleDateString()
-    })
+  for (let i = 0; i <= 15; i++) {
+    const currentDate = new Date(sinceDate)
+    currentDate.setDate(sinceDate.getDate() + i) // Iteramos día por día
+
+    // Filtramos las facturas del día actual
+    const sellsFromCurrentDate = filteredBills.filter(
+      (bill) => new Date(bill.created_at).toLocaleDateString() === currentDate.toLocaleDateString(),
+    )
+
+    // Agregamos los datos al resultado
     result.push({
-      date: new Date(sinceDate).toLocaleDateString(),
-      sells: sellsFromCurrentDate.length,
-      total: sellsFromCurrentDate.reduce((acc, bill) => acc + bill.total_payed, 0),
+      date: currentDate.toLocaleDateString(), // Fecha actual en formato legible
+      sells: sellsFromCurrentDate.length, // Número de facturas
+      total: sellsFromCurrentDate.reduce((acc, bill) => acc + bill.total_payed, 0), // Total vendido
     })
   }
 
