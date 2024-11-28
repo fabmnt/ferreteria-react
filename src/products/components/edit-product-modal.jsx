@@ -1,7 +1,6 @@
-import { Button, Label, Modal, Select, Textarea, TextInput } from 'flowbite-react'
+import { Button, Label, Modal, Select, Spinner, Textarea, TextInput } from 'flowbite-react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { Spinner } from '../../components/spinner'
 import { getSuppliers, updateProduct } from '../../services/products'
 import { sortKeys } from '../../utils/utils'
 

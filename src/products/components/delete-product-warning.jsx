@@ -1,6 +1,5 @@
-import { Button, Modal } from 'flowbite-react'
+import { Button, Modal, Spinner } from 'flowbite-react'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
-import { Spinner } from '../../components/spinner'
 
 export function DeleteProductWarning({ show, close, onDeleteProduct, isDeleting, productId }) {
   return (

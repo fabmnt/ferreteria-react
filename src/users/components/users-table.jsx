@@ -1,6 +1,6 @@
 import { AiOutlineDelete } from 'react-icons/ai'
 import { Badge } from '../../components/badge'
-import { Button, Dropdown, Modal, Select } from 'flowbite-react'
+import { Button, Dropdown, Modal, Select, Spinner } from 'flowbite-react'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import {
   getEmployee,
@@ -12,7 +12,6 @@ import { deleteUser, logout } from '../../services/auth'
 import { useSessionStore } from '../../store/session'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { useState } from 'react'
-import { Spinner } from '../../components/spinner'
 import { toast } from 'sonner'
 
 export function UsersTable({ isLoading, employees, revalidate, roles }) {

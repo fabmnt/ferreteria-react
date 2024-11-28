@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { BiHide, BiShowAlt } from 'react-icons/bi'
 import { useLocation } from 'wouter'
-import { Spinner } from '../../components/spinner'
 import { signIn } from '../../services/auth'
 import { useLogin } from '../hooks/use-login'
 import { Input } from '../../components/input'
+import { Spinner } from 'flowbite-react'
 
 export function LoginForm() {
   const { error, errorMessage, loading, setError, setErrorMessage, setLoading } = useLogin()
@@ -112,8 +112,6 @@ export function LoginForm() {
       >
         {loading && (
           <Spinner
-            contrastClassName='text-purple-500'
-            className='text-white'
           />
         )}{' '}
         <span>Iniciar sesión</span>

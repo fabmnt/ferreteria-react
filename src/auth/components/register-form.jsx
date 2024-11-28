@@ -1,12 +1,12 @@
 import { useLocation } from 'wouter'
 import { Button } from '../../components/button'
 import { Input } from '../../components/input'
-import { Spinner } from '../../components/spinner'
 import { useRegister } from '../hooks/use-register'
 import { useEffect, useState } from 'react'
 import { signIn, signUp } from '../../services/auth'
 import { createEmployee } from '../../services/users'
 import { BiShowAlt, BiHide } from 'react-icons/bi'
+import { Spinner } from 'flowbite-react'
 
 export function RegisterForm() {
   const [, navigate] = useLocation()
