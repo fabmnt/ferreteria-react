@@ -28,6 +28,7 @@
   "devDependencies": {
     "@rsbuild/core": "1.0.1-rc.4",
     "@rsbuild/plugin-react": "1.0.1-rc.4",
+    "@rspack/cli": "^1.1.4",
     "autoprefixer": "^10.4.20",
     "eslint-config-prettier": "^9.1.0",
     "postcss": "^8.4.45",
