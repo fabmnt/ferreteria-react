@@ -1,5 +1,4 @@
 import { cn } from '../utils/cn'
-import './spinner.css'
 
 export function Spinner({ contrastClassName, className }) {
   return (
