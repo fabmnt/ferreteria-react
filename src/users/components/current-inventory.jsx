@@ -92,8 +92,8 @@ export function ReporteInventario() {
                   <td className=''>{item.name}</td>
                   <td className=''>{item.description}</td>
                   <td className=''>{item.stock}</td>
-                  <td className=''>C${item.price}</td>
                   <td className=''>C${item.cost}</td>
+                  <td className=''>C${item.price}</td>
                   <td className=''>{item.category_id.name}</td>
                 </tr>
               ))}
