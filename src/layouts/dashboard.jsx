@@ -3,12 +3,12 @@ import { IoIosHelpCircleOutline, IoIosNotificationsOutline } from 'react-icons/i
 import { TbLayoutSidebarLeftCollapse, TbLayoutSidebarRightCollapse } from 'react-icons/tb'
 import { useLocation } from 'wouter'
 import { CurrentRoute } from '../components/current-route'
-import { Spinner } from '../components/spinner'
 import { logout } from '../services/auth'
 import { getEmployee } from '../services/users'
 import { useSessionStore } from '../store/session'
 import { Sidebar } from './components/sidebar'
 import { UserDropdown } from './components/user-dropdown'
+import { Spinner } from 'flowbite-react'
 
 export function DashboardLayout({ children }) {
   const session = useSessionStore((state) => state.session)
