@@ -181,7 +181,11 @@ export function UsersTable({ isLoading, employees, revalidate, roles }) {
                   </Select>
                 </td>
                 <td>{new Date(employee.created_at).toDateString()}</td>
-                <td className=''>{new Date(session.user.last_sign_in_at).toDateString()}</td>
+                <td className=''>
+                  {employee.last_sign_in_at
+                    ? new Date(employee.last_sign_in_at).toDateString()
+                    : 'Nunca'}
+                </td>
                 <td className=''>
                   <div className='flex gap-4'>
                     <button

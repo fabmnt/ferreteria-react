@@ -2,9 +2,11 @@ import { useBreadcrumbs } from '../hooks/use-breadcrumbs'
 import { MostFrequentClientsTable } from './components/most-frequent-clients-table'
 import { MostSelledProductsChart } from './components/most-selled-products-chart'
 import { SellsChart } from './components/sells-chart'
+import useTrackSignIn from '../users/hooks/useTrackSignIn'
 
 export function Dashboard() {
   useBreadcrumbs({ breadcrumbs: ['Dashboard'] })
+  useTrackSignIn()
 
   return (
     <div>

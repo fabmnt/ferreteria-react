@@ -9,7 +9,7 @@ export async function getRoles() {
 export async function getEmployee(userId) {
   const { data, error } = await supabase
     .from('employees')
-    .select(`id, user_id, name, last_name, verified, roles (id, permissions, role)`)
+    .select(`id, user_id, name, last_name, verified, roles (id, permissions, role), last_sign_in_at`)
     .eq('user_id', userId)
 
   return { data, error }
@@ -19,7 +19,7 @@ export async function getEmployees() {
   const { data, error, count } = await supabase
     .from('employees')
     .select(
-      'id, user_id, name, last_name, created_at, verified, email, roles (id, permissions, role)',
+      'id, user_id, name, last_name, created_at, verified, email, roles (id, permissions, role), last_sign_in_at',
     )
 
   return { data, error, count }
