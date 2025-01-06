@@ -180,10 +180,22 @@ export function UsersTable({ isLoading, employees, revalidate, roles }) {
                     ))}
                   </Select>
                 </td>
-                <td>{new Date(employee.created_at).toDateString()}</td>
+                <td>{new Date(employee.created_at).toLocaleDateString('es-ni', {
+                  weekday: 'short',
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                })}</td>
                 <td className=''>
                   {employee.last_sign_in_at
-                    ? new Date(employee.last_sign_in_at).toDateString()
+                    ? new Date(employee.last_sign_in_at).toLocaleDateString('es-mx', {
+                        weekday: 'short',
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                      })
                     : 'Nunca'}
                 </td>
                 <td className=''>
