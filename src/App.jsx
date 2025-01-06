@@ -15,10 +15,12 @@ import { CreatePurchase } from './purchase/pages/create-purchase'
 import { ViewBillsPage } from './bills/pages/view-bills'
 import { BillDetailsPage } from './bills/pages/bill-details'
 import { SuppliersPage } from './suppliers/pages/suppliers-page'
+import useTrackSignIn from './users/hooks/useTrackSignIn'
 
 const App = () => {
   const setSession = useSessionStore((state) => state.setSession)
   const [location, navigate] = useLocation()
+  useTrackSignIn()
 
   useEffect(() => {
     const {
