@@ -206,7 +206,12 @@ export function   ClientInformation({ updateCurrentCustomer, currentCustomer }) 
                     <td>{customer.last_name}</td>
                     <td>{customer.email ?? '-'} </td>
                     <td>{customer.phone}</td>
-                    <td>{new Date(customer?.last_buy).toDateString()}</td>
+                    <td>{new Date(customer?.last_buy).toLocaleDateString('es-ni', {
+                      weekday: 'short',
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                    })}</td>
                     <td>
                       <input
                         checked={currentCustomer?.id === customer.id}
